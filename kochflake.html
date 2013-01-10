@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta name="viewport" content="user-scalable=no,width=640" />
+    <title>Koch&lt;snow&gt;Flake</title>
+
+<script type='text/javascript'>
+/* Onload: 
+function init_page() {
+  //alert('Start canvasApp');
+  setTimeout(canvasApp,333);
+}
+(function () { 
+  window.onload = init_page;
+}());
+*/
+</script>
+
+  </head>
+
+  <body>
+
+    <div id="header-canvas">
+       <canvas id='cv' width='640' height='360'>
+         <div id='main-header'>
+           <h4>WHERE THE CANVAS AT?!!</h4>
+         </div>
+       </canvas><br>
+       <input id='zin' type='button' value='Zoom+' style='display:block;position:relative;margin-top:-120px;'
+             onclick='kscale*=1.30;' /><br>
+       <input id='zout' type='button' value='Zoom-' style='display:block;position:relative;margin-top:-20px;'
+             onclick='kscale*=0.85;' /><br>
+       <input id='stop' type='button' value='STOP' style='display:block;position:relative;margin-top:-20px;'
+             onclick='clearInterval(ki)' />
+    </div>
+
+<script type="text/javascript">
+  var DEG = Math.PI/180;
+
+  function defineKoch( kcanvas, kcolor, kr ) {
+    kcanvas.width = 640;
+    kcanvas.height = 320;
+    var ctx=kcanvas.getContext("2d"), w=kcanvas.width, h=kcanvas.height,
+            xA=kr/2, yA=kr, theta=0, a, b, c;
+    ctx.strokeStyle = kcolor;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = kr;
+    a = w / 2 - kr/2;
+    b = a/(Math.sqrt(2) + 1);
+    c = a - b;
+    ctx.fillStyle = "#000";
+    //ctx.fillRect( 0, 0, w, h );
+    ctx.beginPath();
+    ctx.moveTo( xA, yA);
+    var xB=(Math.cos(DEG*theta)*c), yB=(Math.sin(DEG*theta)*c);
+    ctx.lineTo( xA+xB, yA+yB );
+    var xC=(Math.cos(DEG*(theta+45))*c), yC=(Math.sin(DEG*(theta+45))*c);
+    ctx.lineTo( xA+xB+xC, yA+yB+yC );
+    var xD=(Math.cos(DEG*(theta-45))*c), yD=(Math.sin(DEG*(theta-45))*c);
+    ctx.lineTo( xA+xB+xC+xD, yA+yB+yC+yD );
+    ctx.lineTo( xA+(Math.cos(DEG*theta)*(a*2)), yA+(Math.sin(DEG*theta)*(a*2)) );
+    ctx.stroke();
+    return kcanvas;
+  }
+
+  function drawKoch( canvas, curve, data, kc) {
+    var ctx=canvas.getContext("2d"), A=data.shift();
+    var xA=A[0], yA=A[1], r=A[2], theta=A[3], a, b, c;
+    a = r / 2;
+    b = a/(Math.sqrt(2) + 1);
+    c = a - b;
+    ctx.save();
+    ctx.translate(xA, yA);
+    ctx.rotate(DEG*theta);
+    ctx.drawImage( curve, 0, 0, r, a);
+    ctx.restore();
+    data.push( {'0':xA,'1':yA,'2':c,'3':theta} );
+    var xB=(Math.cos(DEG*theta)*c), yB=(Math.sin(DEG*theta)*c);
+    data.push( {'0':( xA+xB ),'1':( yA+yB ),'2':c,'3':( theta+45 )} );
+    var xC=(Math.cos(DEG*(theta+45))*c), yC=(Math.sin(DEG*(theta+45))*c);
+    data.push( {'0':( xA+xB+xC ),'1':( yA+yB+yC ),'2':c,'3':( theta-45 )} );
+    var xD=(Math.cos(DEG*(theta-45))*c), yD=(Math.sin(DEG*(theta-45))*c);
+    data.push( {'0':( xA+xB+xC+xD ),'1':( yA+yB+yC+yD ),'2':c,'3':theta} );
+    ctx.strokeStyle=kc;
+    ctx.beginPath();
+    ctx.moveTo( canvas.width/2, canvas.height/2 );
+    ctx.lineTo( xA, yA );
+    ctx.closePath();
+    ctx.stroke();
+    return A;
+  }
+
+  function spinKoch (ctx) {
+    ctx.translate( kscale*640, kscale*360 );
+    ctx.rotate(DEG*(pc*6));
+    ctx.translate( -kscale*640, -kscale*360 );
+  }
+
+  var pc=1, lc=16, ki, kcolor='#FFF', kscale=0.5;
+  var kcurve = defineKoch( document.createElement("canvas"), "#000", lc/2 );
+   var ctx=document.getElementById("cv").getContext("2d"), kcan=document.createElement("canvas");
+    ctx.fillStyle = "#000";
+    ctx.fillRect( 0, 0, 640, 360);
+    kcan.width = 1280;
+    kcan.height = 720;   
+  var midp = (Math.tan(DEG*30)*kcan.width/4);
+  var data = [ {'0':kcan.width/4,'1':(kcan.height/2+midp)-3,'2':kcan.width/2,'3':0},
+                        {'0':kcan.width/4+kcan.width/2-2,'1':(kcan.height/2+midp),'2':kcan.width/2,'3':-120},
+                        {'0':kcan.width/2+2,'1':(kcan.height/2+midp)+(Math.sin(DEG*-120)*kcan.width/2),'2':kcan.width/2,'3':120},
+                     ];
+  drawKoch( kcan, kcurve, data, kcolor, ++pc);
+  drawKoch( kcan, kcurve, data, kcolor, ++pc);
+  drawKoch( kcan, kcurve, data, kcolor, ++pc);
+  ki = setInterval(function() {
+    ctx.save();
+    spinKoch(ctx);
+    if (data.length < 3072) {
+      kcolor = "hsl("+ pc%360 +", 100%, 50%)";
+      if( !(pc%4) && (pc%3) && (pc%5) && (pc%7) && (!(Math.sqrt(pc/4)%2)) ) 
+        defineKoch( kcurve, kcolor, lc*=2, console.log(lc+', '+pc) );
+      drawKoch( kcan, kcurve, data, kcolor, ++pc);
+    } else if (pc) pc++
+    ctx.drawImage( kcan, 0, 0, kscale*kcan.width, kscale*kcan.height);
+    ctx.restore();
+  }, 33);
+
+</script>
+
+  </body>
+</html>

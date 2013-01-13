@@ -9,16 +9,18 @@
   <body>
 
     <div id="header-canvas">
-       <canvas id='cv' width='640' height='360'>
+       <div id='cv' width='640' height='360'>
          <div id='main-header'>
            <h4>WHERE THE CANVAS AT?!!</h4>
          </div>
-       </canvas><br>
-       <input id='zin' type='button' value='Zoom+' style='display:block;position:relative;margin-top:-120px;'
-             onclick='kscale*=1.30;' /><br>
+       </div><br>
+       <input id='zin' type='button' value='Zoom+' style='display:block;position:relative;margin-top:-160px;'
+             onclick='kscale*=1.30;ctx.fillRect(0,0,640,360);' /><br>
        <input id='zout' type='button' value='Zoom-' style='display:block;position:relative;margin-top:-20px;'
-             onclick='kscale*=0.85;' /><br>
-       <input id='stop' type='button' value='STOP' style='display:block;position:relative;margin-top:-20px;'
+             onclick='kscale*=0.85;ctx.fillRect(0,0,640,360);' /><br>
+       <input id='spin' type='button' value='Spin-*-' style='display:block;position:relative;margin-top:-20px;'
+             onclick='spinKoch=function spinKoch(ctx){document.getElementById("spin").style.display="none";ctx.translate( kscale*640, kscale*360 );ctx.rotate(DEG*(pc*6));ctx.translate( -kscale*640, -kscale*360 );};' />
+       <input id='stop' type='button' value='STOP' style='display:block;position:relative;margin-top:-0px;'
              onclick='clearInterval(ki)' />
     </div>
 
@@ -79,15 +81,19 @@
     return A;
   }
 
-  function spinKoch (ctx) {
-    ctx.translate( kscale*640, kscale*360 );
-    ctx.rotate(DEG*(pc*6));
-    ctx.translate( -kscale*640, -kscale*360 );
-  }
+  var spinKoch = function spinKoch (ctx) {
+    //ctx.translate( kscale*640, kscale*360 );
+    //ctx.rotate(DEG*(pc*6));
+    //ctx.translate( -kscale*640, -kscale*360 );
+  };
 
   var pc=1, lc=16, ki, kcolor='#FFF', kscale=0.5;
   var kcurve = defineKoch( document.createElement("canvas"), "#000", lc/2 );
-   var ctx=document.getElementById("cv").getContext("2d"), kcan=document.createElement("canvas");
+   var ctx=document.createElement("canvas"), kcan=document.createElement("canvas");
+    ctx.width = "640";
+    ctx.height = "360";
+    document.getElementById("header-canvas").replaceChild( ctx, document.getElementById("cv") ); 
+    ctx = ctx.getContext("2d");
     ctx.fillStyle = "#000";
     ctx.fillRect( 0, 0, 640, 360);
     kcan.width = 1280;

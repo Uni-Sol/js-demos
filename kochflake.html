@@ -3,7 +3,8 @@
   <head>
     <meta name="viewport" content="user-scalable=no,width=640" />
     <title>Koch&lt;snow&gt;Flake</title>
-
+	
+    <script type="text/javascript" src="scripts/debugger.js"></script>
   </head>
 
   <body>
@@ -112,7 +113,7 @@
     if (data.length < 3072) {
       kcolor = "hsl("+ pc%360 +", 100%, 50%)";
       if( !(pc%4) && (pc%3) && (pc%5) && (pc%7) && (!(Math.sqrt(pc/4)%2)) ) 
-        defineKoch( kcurve, kcolor, lc*=2, console.log(lc+', '+pc) );
+        defineKoch( kcurve, kcolor, lc*=2, Debugger.log(lc+', '+pc) );
       drawKoch( kcan, kcurve, data, kcolor, ++pc);
     } else if (pc) pc++
     ctx.drawImage( kcan, 0, 0, kscale*kcan.width, kscale*kcan.height);

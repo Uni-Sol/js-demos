@@ -12,12 +12,25 @@ var result = function r(d) {
   return ( ( data<<p )>>>( p ) )>>>( r.pc*8 );
 };
 
-if ( (process) && (process.argv[2]) ) {
+if ( (typeof process !== 'undefined') && (process.argv[2]) ) {
   data=( (data<<16) + process.argv[2] );
   console.log( "DATA: "+ data +"\n" );
   pc = mov16( pc, value, result );
   console.log( "DATA: "+ data +"\n" );
-} else console.log( "Please provide an int argument as input data.\n" );
+} else if (typeof process !== 'undefined') { 
+  console.log( "Please provide an int argument as input data.\n" );
+} else if (typeof window !== 'undefined') {
+  data = prompt( "Please provide an int argument as input data.\n" );
+  if (typeof console === "undefined")
+    window.console = {
+	    log: function(msg) {
+			alert(msg);
+		}
+	};
+  console.log( "DATA: "+ data +"\n" );
+  pc = mov16( pc, value, result );
+  console.log( "DATA: "+ data +"\n" );
+}
 
 
 function mov16( pc, value, result ) {

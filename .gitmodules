@@ -1,0 +1,3 @@
+[submodule "processing/phono_divinoro"]
+	path = processing/phono_divinoro
+	url = git@github.com:Revlin/phono_divinoro.git

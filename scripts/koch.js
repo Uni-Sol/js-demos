@@ -82,14 +82,14 @@
 		if(evt.clientX > width/2) {
 			kscale*=1.30;
 			ctx.fillRect(0,0,640,360);
-			ctx.translate(-kscale*90, 0);			
-			tx += kscale*90;
+			//ctx.translate(-kscale*64, 0);			
+			tx += kscale*6;
 		} else {
         		kscale*=0.85;
 			ctx.fillRect(0,0,640,360);
-			ctx.translate(tx, 0);
-			if( tx !== 0) tx -= kscale*90;
-			if( tx < 0 ) tx = -kscale*90;
+			//ctx.translate(tx, 0);
+			if( tx !== 0) tx -= kscale*64;
+			if( tx < 0 ) tx = 0;
 		}
 	}, 66, evt);
     };

@@ -18,8 +18,6 @@
              onclick='kscale*=1.30;ctx.fillRect(0,0,640,360);' /><br>
        <input id='zout' type='button' value='Zoom-' style='display:block;position:relative;margin-top:-20px;'
              onclick='kscale*=0.85;ctx.fillRect(0,0,640,360);' /><br>
-       <input id='spin' type='button' value='Spin-*-' style='display:block;position:relative;margin-top:-20px;'
-             onclick='spinKoch=function spinKoch(ctx){document.getElementById("spin").style.display="none";ctx.translate( kscale*640, kscale*360 );ctx.rotate(DEG*(pc*6));ctx.translate( -kscale*640, -kscale*360 );};' />
        <input id='stop' type='button' value='STOP' style='display:block;position:relative;margin-top:-0px;'
              onclick='clearInterval(ki)' />
 

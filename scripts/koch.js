@@ -1,4 +1,73 @@
   var DEG = Math.PI/180;
+  var pc=1, lc=16, ki, kcolor='#FFF', kscale=0.5;
+
+  function load() {
+    var kcurve = defineKoch( document.createElement("canvas"), "#000", lc/2 );
+    var ctx=document.createElement("canvas"), kcan=document.createElement("canvas");
+    var old_cv = document.getElementById("layer1"); 
+    ctx.id = "layer1";
+    ctx.width = "640";
+    ctx.height = "360";
+    ctx.setAttribute( 'onmouseover', 'mouseOver=true;' );
+    ctx.setAttribute( 'onmouseout', 'clearInterval(window.zoomEvent);mouseOver=false;' );
+    ctx.setAttribute( 'onmousemove', 'zoomKoch(event);' );
+    window.mouseOver = false;
+    window.zoomEvent = 0;
+    window.tx = 0;
+    window.zoomKoch = function(evt){
+		clearInterval(window.zoomEvent);
+		if( mouseOver )	window.zoomEvent = setInterval( function(evt) {
+			var width = window.innerWidth,
+	    		height = window.innerHeight;
+			Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
+			if(evt.clientX > width/2) {
+				kscale*=1.30;
+				ctx.fillRect(0,0,640,360);
+				//ctx.translate(-kscale*64, 0);			
+				tx += kscale*6;
+			} else {
+        			kscale*=0.85;
+				ctx.fillRect(0,0,640,360);
+				//ctx.translate(tx, 0);
+				if( tx !== 0) tx -= kscale*64;
+				if( tx < 0 ) tx = 0;
+			}
+		}, 66, evt);
+    };
+    window.spinKoch = function(){
+		//var ctx = ctx || this;
+		ctx.translate( kscale*640, kscale*360 );
+		ctx.rotate(DEG*(pc*6));
+		ctx.translate( -kscale*640, -kscale*360 );
+    };
+
+    document.getElementById('uni-sol').replaceChild( ctx, old_cv );
+    ctx = ctx.getContext("2d");
+    ctx.fillStyle = "#000";
+    ctx.fillRect( 0, 0, 640, 360);
+    kcan.width = 1280;
+    kcan.height = 720;   
+    var midp = (Math.tan(DEG*30)*kcan.width/4);
+    var data = [ {'0':kcan.width/4,'1':(kcan.height/2+midp)-3,'2':kcan.width/2,'3':0},
+                        {'0':kcan.width/4+kcan.width/2-2,'1':(kcan.height/2+midp),'2':kcan.width/2,'3':-120},
+                        {'0':kcan.width/2+2,'1':(kcan.height/2+midp)+(Math.sin(DEG*-120)*kcan.width/2),'2':kcan.width/2,'3':120},
+                     ];
+    drawKoch( kcan, kcurve, data, kcolor, ++pc);
+    drawKoch( kcan, kcurve, data, kcolor, ++pc);
+    drawKoch( kcan, kcurve, data, kcolor, ++pc);
+    ki = setInterval(function() {
+      ctx.save();
+      spinKoch(ctx);
+      if (data.length < 3072) {
+        kcolor = "hsl("+ pc%360 +", 100%, 50%)";
+        if( !(pc%4) && (pc%3) && (pc%5) && (pc%7) && (!(Math.sqrt(pc/4)%2)) ) 
+          defineKoch( kcurve, kcolor, lc*=2, Debugger.log(lc+', '+pc) );
+        drawKoch( kcan, kcurve, data, kcolor, ++pc);
+      } else if (pc) pc++
+      ctx.drawImage( kcan, 0, 0, kscale*kcan.width, kscale*kcan.height);
+      ctx.restore();
+    }, 33);
+  }
 
   function defineKoch( kcanvas, kcolor, kr ) {
     kcanvas.width = 640;
@@ -59,73 +128,6 @@
     //ctx.rotate(DEG*(pc*6));
     //ctx.translate( -kscale*640, -kscale*360 );
   };
-
-  var pc=1, lc=16, ki, kcolor='#FFF', kscale=0.5;
-  var kcurve = defineKoch( document.createElement("canvas"), "#000", lc/2 );
-   var ctx=document.createElement("canvas"), kcan=document.createElement("canvas");
-    var old_cv = document.getElementById("cv"); 
-    ctx.id = "cv";
-    ctx.width = "640";
-    ctx.height = "360";
-    ctx.setAttribute( 'onmouseover', 'mouseOver=true;' );
-    ctx.setAttribute( 'onmouseout', 'clearInterval(window.zoomEvent);mouseOver=false;' );
-    ctx.setAttribute( 'onmousemove', 'zoomKoch(event);' );
-    window.mouseOver = false;
-    window.zoomEvent = 0;
-    window.tx = 0;
-    window.zoomKoch = function(evt){
-	clearInterval(window.zoomEvent);
-	if( mouseOver )	window.zoomEvent = setInterval( function(evt) {
-		var width = window.innerWidth,
-	    	height = window.innerHeight;
-		Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
-		if(evt.clientX > width/2) {
-			kscale*=1.30;
-			ctx.fillRect(0,0,640,360);
-			//ctx.translate(-kscale*64, 0);			
-			tx += kscale*6;
-		} else {
-        		kscale*=0.85;
-			ctx.fillRect(0,0,640,360);
-			//ctx.translate(tx, 0);
-			if( tx !== 0) tx -= kscale*64;
-			if( tx < 0 ) tx = 0;
-		}
-	}, 66, evt);
-    };
-    window.spinKoch = function(){
-	//var ctx = ctx || this;
-	ctx.translate( kscale*640, kscale*360 );
-	ctx.rotate(DEG*(pc*6));
-	ctx.translate( -kscale*640, -kscale*360 );
-    };
-
-    document.getElementsByTagName("body")[0].replaceChild( ctx, old_cv );
-    ctx = ctx.getContext("2d");
-    ctx.fillStyle = "#000";
-    ctx.fillRect( 0, 0, 640, 360);
-    kcan.width = 1280;
-    kcan.height = 720;   
-  var midp = (Math.tan(DEG*30)*kcan.width/4);
-  var data = [ {'0':kcan.width/4,'1':(kcan.height/2+midp)-3,'2':kcan.width/2,'3':0},
-                        {'0':kcan.width/4+kcan.width/2-2,'1':(kcan.height/2+midp),'2':kcan.width/2,'3':-120},
-                        {'0':kcan.width/2+2,'1':(kcan.height/2+midp)+(Math.sin(DEG*-120)*kcan.width/2),'2':kcan.width/2,'3':120},
-                     ];
-  drawKoch( kcan, kcurve, data, kcolor, ++pc);
-  drawKoch( kcan, kcurve, data, kcolor, ++pc);
-  drawKoch( kcan, kcurve, data, kcolor, ++pc);
-  ki = setInterval(function() {
-    ctx.save();
-    spinKoch(ctx);
-    if (data.length < 3072) {
-      kcolor = "hsl("+ pc%360 +", 100%, 50%)";
-      if( !(pc%4) && (pc%3) && (pc%5) && (pc%7) && (!(Math.sqrt(pc/4)%2)) ) 
-        defineKoch( kcurve, kcolor, lc*=2, Debugger.log(lc+', '+pc) );
-      drawKoch( kcan, kcurve, data, kcolor, ++pc);
-    } else if (pc) pc++
-    ctx.drawImage( kcan, 0, 0, kscale*kcan.width, kscale*kcan.height);
-    ctx.restore();
-  }, 33);
 
 /*
              onclick='kscale*=0.85;ctx.fillRect(0,0,640,360);' /><br>

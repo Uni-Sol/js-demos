@@ -22,11 +22,13 @@
 			Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
 			if(evt.clientX > width/2) {
 				kscale*=1.30;
+				ctx.fillStyle = 'rgba(0,0,0,0.25)';
 				ctx.fillRect(0,0,640,360);
 				//ctx.translate(-kscale*64, 0);			
 				tx += kscale*6;
 			} else {
-        			kscale*=0.85;
+        		kscale*=0.85;
+				ctx.fillStyle = 'rgba(0,0,0,0.25)';
 				ctx.fillRect(0,0,640,360);
 				//ctx.translate(tx, 0);
 				if( tx !== 0) tx -= kscale*64;

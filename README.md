@@ -9,4 +9,4 @@ Here's an equally loose index of what can be viewed online:
 (based on example code from 'Canvas Pocket Reference' by Flanagan, 2011)
 
 [MOV16 ](http://uni-sol.ca/js-demos/mov16.html) 
-(output show up in console; an emulation of a assembly MOV opperation on a 16-bit microprocessor) 
+(output shows up in console; an emulation of a assembly MOV opperation on a 16-bit microprocessor) 

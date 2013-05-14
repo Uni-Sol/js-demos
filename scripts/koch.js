@@ -6,6 +6,8 @@
     var ctx=document.createElement("canvas"), kcan=document.createElement("canvas");
     var old_cv = document.getElementById("layer1"); 
     ctx.id = "layer1";
+    ctx.alt = "Rotating Rainbowed Fractal: A Canvas drawing simulating a Koch Snowflake";
+    ctx.src = "http://"+ window.location.host +"/js-demos/kochflake.png";
     ctx.width = "640";
     ctx.height = "360";
     ctx.setAttribute( 'onmouseover', 'mouseOver=true;' );

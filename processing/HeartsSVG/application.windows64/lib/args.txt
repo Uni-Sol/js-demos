@@ -1,0 +1,3 @@
+ -Xms64m -Xmx256m
+Hearts
+Hearts.jar,core.jar,jogl-all.jar,gluegen-rt.jar,jogl-all-natives-windows-amd64.jar,gluegen-rt-natives-windows-amd64.jar,batik-awt-util.jar,batik-codec.jar,batik-dom.jar,batik-ext.jar,batik-svggen.jar,batik-util.jar,batik-xml.jar,P8gGraphicsSVG.jar

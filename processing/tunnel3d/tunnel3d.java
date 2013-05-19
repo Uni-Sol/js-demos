@@ -1,9 +1,6 @@
 import processing.core.*;
-import org.philhosoft.p8g.svg.*;
 
 public class tunnel3d extends PApplet {
-
-  static P8gGraphicsSVG svg;
 
   /* 3d tunnel vars */ 
   static int w=255,w2=w*2,x,y,q,r,s,c,u,v; 
@@ -12,8 +9,6 @@ public class tunnel3d extends PApplet {
   
   public void setup() { 
     size(w*3,w);
-    svg = (P8gGraphicsSVG) createGraphics(width, height, P8gGraphicsSVG.SVG, "tunnel3d.svg");
-    //noLoop();
     noStroke(); 
     c=0;
     uPv=new int[w*w]; 
@@ -38,18 +33,15 @@ public class tunnel3d extends PApplet {
   }
 
   public void draw() {
-    if( s == 0 ) beginRecord(svg);
+    if(! spress ) background(100,127,100);
     
-
-    //System.out.println("s is "+ (s&w) +"\n");
-    //System.out.println("mouseY is "+ mouseY +"\n");
-    //System.out.println("mY/w is "+(mouseY/(w*0.5)) +"\n");
-    int fct = 250; // Scale factor; smaller number == bigger rows; must be less than 255
-    int ofs = 4; // Start point; must be less than 255-fct
+    int fct = 31;  /* Scale factor; smaller number == bigger rows; 
+                     * must be less than 255 */
+    int ofs = 64;  /* Start point; must be less than 255-fct */
     strokeWeight(1);
     for(y=ofs;y<(fct+ofs);y++){
       noStroke();      
-      for(x=0;x<w;x++){
+      for(x=1;x<w;x++){
         if(! spress ) {
           fill( color((s+uPv[y*w+x])&0xFF, 0, 0) );
           rect( x, (y-ofs)*(w/fct), 2, w/fct ); 
@@ -61,18 +53,13 @@ public class tunnel3d extends PApplet {
         set( x+w2, (y-ofs)*(w/fct), color((s+uPv[y*w+x])&0xFF, 0, (u2lv[y*w+x])&0xFF) );
       } 
       if( fct < 64 ) {
-        stroke(255);
-        line( 0, (y-ofs)*(w/fct), w*3, (y-ofs)*(w/fct) );
+        stroke(100,127,100);
+        line( 0, (y-ofs)*(w/fct)-1, w*3, (y-ofs)*(w/fct)-1 );
       }
     }
     if( spress ) {
        s++;
        println(s);
-    }
-    if( s == 0 ) {
-       println( s );
-       endRecord();
-       println( "Done drawing\n" );
     }
     if( s == 64 ) {
       save("Tunnel.s64.png");

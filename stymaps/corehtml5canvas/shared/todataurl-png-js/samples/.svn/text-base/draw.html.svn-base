@@ -1,0 +1,18 @@
+ <!DOCTYPE html>
+ <html>
+ 	<head>
+ 		<title>My Canvas page</title>
+ 		<script src="http://todataurl-png-js.googlecode.com/svn/trunk/todataurl.js"></script>
+ 		<script>
+ 			window.addEventListener("mousedown",function(evt){
+ 				var cv=document.getElementsByTagName("canvas")[0];
+ 				var cx=cv.getContext("2d");
+ 				cx.fillRect((evt.clientX-cv.offsetLeft)/4-4,(evt.clientY-cv.offsetTop)/4-4,8,8);
+ 			},false);
+ 		</script>
+ 	</head>
+ 	<body>
+ 		<canvas width="80" height="80" style="width:320px;height:320px;border:2px solid black;background:white;"></canvas>
+ 		<input type="button" value="Set as background" onclick="var cv=document.getElementsByTagName('canvas')[0];document.documentElement.style.background='url('+cv.toDataURL()+')';" />
+ 	</body>
+ </html>

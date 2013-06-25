@@ -1,3 +1,6 @@
 [submodule "processing/phono_divinoro"]
 	path = processing/phono_divinoro
 	url = git@github.com:Revlin/phono_divinoro.git
+[submodule "jsgif"]
+	path = jsgif
+	url = git@github.com:antimatter15/jsgif.git

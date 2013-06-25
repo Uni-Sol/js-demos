@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Canvas to dataURL to CSS</title>
+		<script src="http://todataurl-png-js.googlecode.com/svn/trunk/todataurl.js"></script>
+		<script>
+			window.onload=function(){
+				var cv=document.getElementsByTagName("canvas")[0];
+				var cx=cv.getContext("2d");
+				cx.fillStyle="#fed";
+				cx.fillRect(0,0,32,32);
+				cx.fillRect(32,32,32,32);
+				document.documentElement
+					.style.backgroundImage=
+						"url("+cv.toDataURL()+")";
+			};
+		</script>
+		<style>
+			*{
+				padding:0px;
+				margin:0px;
+			}
+			html,body{
+				height:100%;
+			}
+			
+			html{
+				overflow:hidden;
+			}
+			
+			body{
+				overflow:auto;
+			}
+			
+			#content{
+				background:rgba(255,255,255,0.5);
+				padding-left:16px;
+				padding-right:16px;
+				font-family:Calibri,Verdana,Arial,sans-serif;
+				margin:auto;
+				max-width:640px;
+				height:100%;
+				box-shadow:0px 0px 32px black;
+			}
+			
+			tab{
+				display:inline;
+				margin-left:16px;
+			}
+			
+			.code{
+				margin:16px;
+				font-family:Consolas,Lucida Console,Courier New,monospace;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="content">
+			<h1>Canvas to dataURL to CSS</h1>
+			<p>This page's background is set to a checkerboard pattern, which is rendered using HTML5 Canvas. </p>
+			<div class="code">window.onload=function(){<br />
+<tab />var cv=document<br />
+<tab /><tab />.getElementsByTagName("canvas")[0];<br />
+<br />
+<tab />var cx=cv.getContext("2d");<br />
+<tab />cx.fillStyle="#fed";<br />
+<tab />cx.fillRect(0,0,32,32);<br />
+<tab />cx.fillRect(32,32,32,32);<br />
+<br />
+<tab />document.documentElement<br />
+<tab /><tab />.style.backgroundImage<br />
+<tab /><tab /><tab />="url("+cv.toDataURL()+")";<br />
+};</div>
+			<canvas width="64" height="64" style="display:none"></canvas>
+		</div>
+	</body>
+</html>

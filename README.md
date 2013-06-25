@@ -1,7 +1,7 @@
 js-demos
 ========
 
-These are some very loosely organized experiments, for the purpose of impoving my understanding
+These are some very loosely organized experiments, for the purpose of improving my understanding
 
 Here's an equally loose index of what can be viewed online:
 

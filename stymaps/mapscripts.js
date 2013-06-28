@@ -632,7 +632,7 @@ var post_scroller = {
     head_cache: "",
     post_span: "",
     t_margin: -260,
-    s_margin: -60,
+    s_margin: -76,
     s_indent: 644,
     s_delta: 3,
     s_period: 33,

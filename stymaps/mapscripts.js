@@ -1,11 +1,10 @@
 /* mapscripts.js
- * Located @ http://universalsoldier.ca/stymaps/mapscripts.js
  *
  * General functions for scripting the Stylogical Map
- * http://stymaps.universalsoldier.ca
+ * http://stymaps.blogspot.com
  *
  * Code by Revlin John 
- * lovedemands@universalsoldier.ca
+ * stylogicalmaps@gmail.com
  */
 
 /* If not present,import jQuery */

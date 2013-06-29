@@ -91,6 +91,8 @@ while (my $line = <$inputf>) {
         my $base64f;
         if ( $URLline =~ /http/s ) {
           $resline = $resline;
+        } elsif ( $URLline =~ /data/s ) {
+          $resline = $resline;
         } elsif ( $URLline =~  /(\'?)(\"?)((\w|\-|\_|\/|\.)+)/s ) {
           open $base64f, '<', $3 or die "Can't open $3: $!\n";
           lock($base64f);

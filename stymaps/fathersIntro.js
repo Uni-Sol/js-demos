@@ -268,7 +268,7 @@ canvasApp.push( function() {
   var atrack = {
     A : audioA,
     B : audioB,
-    looptime : 14.6999999999,
+    looptime : 4.7999999999,
     play : atPlayer
   };
 

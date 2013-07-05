@@ -10,7 +10,7 @@ my ( $source, $analyzer, $log, $complete, @chunks, @freqs, $frameNum, $sampleNum
 $source = $ARGV[0] || '../audio/TONES001.wav';
 $analyzer = Audio::Analyzer->new(
 	  file => $source,
-	  channels => 2,
+	  channels => 1,
 	  bits_per_sample => 16,
 	  sample_rate => 44100,
 	  fps => 15

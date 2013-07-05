@@ -3,6 +3,10 @@
  * this is an attempt to explorer that using HTML5 audio & canvas
  */
 
+var audio = window.aud1;
+var appReady = false, appStarted = false;
+audio.oncanplaythrough = function() { appReady = true; };
+
 (function() { 
   if (typeof Debugger === "function") { 
     Debugger.on = true;
@@ -11,7 +15,12 @@
   }
 } )();
 
-canvasApp = function canvasApp () {
+var canvasApp = function canvasApp () {
+if(! appReady ) {
+	Debugger.log( appReady );
+	return setTimeout(canvasApp, 33);
+}
+if( appStarted ) return appStarted;
 //alert('Running default canvasApp');
   var time = 0;
 
@@ -25,7 +34,6 @@ canvasApp = function canvasApp () {
   //Debugger.log( copy );
 	
   /* Audio visualization stuff */
-  var audio = window.aud1;
   var aidx = 0;
   var aBuffer = [];
   if( sBuffer.length > 0 ) {
@@ -39,13 +47,13 @@ canvasApp = function canvasApp () {
 	}
 	Debugger.log( "Total frames: "+ (aBuffer.length) );
   } else for( var i=0, z=2000; i<z; i++ ) aBuffer.push(0.5);
-  audio.play();
   var aCanvas = document.createElement('canvas');
   aCanvas.width = canvas.width;
   aCanvas.height = canvas.height;
   var video = (audio.videoWidth)? audio : null;
   var vx = ( video !== null )? (canvas.width/2 - video.videoWidth/2) : 0;
   //Debugger.log(video.id);
+  audio.play();
   
   /* Draw main function */
   var draw = function draw(ctx,w,h) {
@@ -163,10 +171,13 @@ canvasApp = function canvasApp () {
     var context = canvas.getContext('2d');
     drawLoop = setInterval(draw,33,context,canvas.width,canvas.height);
     Debugger.log("Draw loop started");
+	appStarted = true;
+	return appStarted;
   } catch(e) { 
     Debugger.log("drawLoop failed to start"); 
     return;
   }
 };
+
 
 window.onload = canvasApp;

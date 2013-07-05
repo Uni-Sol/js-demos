@@ -5,7 +5,8 @@
 
 var audio = window.aud1;
 var appReady = false, appStarted = false;
-audio.oncanplaythrough = function() { appReady = true; };
+audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
+  function() { appReady = true; Debugger.log("audio is ready"); } : appReady = true;
 
 (function() { 
   if (typeof Debugger === "function") { 
@@ -50,9 +51,12 @@ if( appStarted ) return appStarted;
   var aCanvas = document.createElement('canvas');
   aCanvas.width = canvas.width;
   aCanvas.height = canvas.height;
-  var video = (audio.videoWidth)? audio : null;
-  var vx = ( video !== null )? (canvas.width/2 - video.videoWidth/2) : 0;
-  //Debugger.log(video.id);
+  var video = audio;
+  var vx = 0;
+  try {
+	vx = ( video !== null )? (canvas.width/2 - video.videoWidth/2) : 0;
+	//Debugger.log(video.id);
+  } catch (e) {}
   audio.play();
   
   /* Draw main function */
@@ -64,8 +68,9 @@ if( appStarted ) return appStarted;
     ctx.clearRect(0, 0, w, h);
 	
     /* Draw video input, if any */
-    if ( (video !== null) && (video.readyState > 2) && (!video.paused) ) try {
-        ctx.drawImage(video, vx, 0, video.videoWidth, video.videoHeight);
+	try {
+    	if ( (video !== null) && (video.readyState > 2) && (!video.paused) )
+        	ctx.drawImage(video, vx, 0, video.videoWidth, video.videoHeight);
     } catch (err) {
         Debugger.log("Failed to draw "+ video.id +": "+ err.message);
     } 

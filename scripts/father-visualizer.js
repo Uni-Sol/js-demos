@@ -5,7 +5,7 @@
 
 var audio = window.aud1;
 var appReady = false, appStarted = false;
-audio.onloadstart = (typeof audio.oncanplaythrough === "object")?
+audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
   function() { 
 	Debugger.log("audio is ready"); 
 	setTimeout(function(){ 

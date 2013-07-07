@@ -5,8 +5,13 @@
 
 var audio = window.aud1;
 var appReady = false, appStarted = false;
-audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
-  function() { appReady = true; Debugger.log("audio is ready"); } : appReady = true;
+audio.onloadstart = (typeof audio.oncanplaythrough === "object")?
+  function() { 
+	Debugger.log("audio is ready"); 
+	setTimeout(function(){ 
+		appReady = true; 
+	}, 33);
+  } : appReady = true;
 
 (function() { 
   if (typeof Debugger === "function") { 
@@ -19,6 +24,7 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 var canvasApp = function canvasApp () {
 if(! appReady ) {
 	Debugger.log( appReady );
+	if( typeof audio === "object" ) audio.load();
 	return setTimeout(canvasApp, 33);
 }
 if( appStarted ) return appStarted;
@@ -112,7 +118,7 @@ if( appStarted ) return appStarted;
 		//Debugger.log( "aBuffer index: "+ idx );
 		if(! abuf[idx] ) return aidx;
 		var at = audio.currentTime;
-		if( (at * 7.46) < aidx ) return idx;
+		if( (at * 15.02) < aidx ) return idx;
 		//Debugger.log( (at * 7.46) +": "+ at +", idx: "+ idx +" \n");
 		
 		/* Plot each sample on line that moves from left to right
@@ -124,12 +130,12 @@ if( appStarted ) return appStarted;
 		var hcorrect =  h / 2;
 		if( idx < 1 ) {
 			ctx.moveTo( 0, hcorrect );
-		} else ctx.moveTo( 0, -(abuf[idx][0]*hcorrect) + hcorrect  );
+		} else ctx.moveTo( 0, -(abuf[idx][0]*h) + hcorrect  );
 		for( var i=0, z=abuf[idx].length; i<z; i++ ) {
 			//ctx.lineTo( i*4, -(abuf[idx][i]*hcorrect) + hcorrect );
 			if( i > 0 ) ctx.quadraticCurveTo(
-				(i-1)*4, -(abuf[idx][i]*hcorrect) + hcorrect,
-				i*4, -(abuf[idx][i]*hcorrect) + hcorrect
+				(i-1)*6, -(abuf[idx][i]*h) + hcorrect,
+				i*6, -(abuf[idx][i]*h) + hcorrect
 			);
 		}
 		ctx.stroke();

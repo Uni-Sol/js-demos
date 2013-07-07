@@ -4,13 +4,12 @@
  */
 
 var audio = window.aud1;
-var appReady = false, appStarted = false;
+var appReady = false, appStarted = false, audioLoad = false;
+audio.onloadstart = function() { audioLoad = true; };
 audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
   function() { 
 	Debugger.log("audio is ready"); 
-	setTimeout(function(){ 
-		appReady = true; 
-	}, 33);
+	appReady = true; 
   } : appReady = true;
 
 (function() { 
@@ -24,8 +23,8 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 var canvasApp = function canvasApp () {
 if(! appReady ) {
 	Debugger.log( appReady );
-	if( typeof audio === "object" ) audio.load();
-	return setTimeout(canvasApp, 33);
+	if( audioLoad === false ) audio.load();
+	return setTimeout(canvasApp, 333);
 }
 if( appStarted ) return appStarted;
 //alert('Running default canvasApp');

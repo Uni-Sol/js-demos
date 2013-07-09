@@ -240,7 +240,7 @@ canvasApp.push( function() {
         if (B.currentTime === 0) B.pause();
         if (A.currentTime === 0) A.pause();
         if (A.paused === true) {
-          Debugger.log('B time: '+ B.currentTime);
+          //Debugger.log('B time: '+ B.currentTime);
           if ( (this.atime-this.stime) > lp ) {
             B.currentTime = 0.01;
             A.currentTime = 0.01;
@@ -249,7 +249,7 @@ canvasApp.push( function() {
             B.pause();
           }
         } else {
-          Debugger.log('A time: '+ A.currentTime);
+          //Debugger.log('A time: '+ A.currentTime);
           if ( (this.atime-this.stime) > lp ){
             A.currentTime = 0.01;
             B.currentTime = 0.01;
@@ -261,7 +261,7 @@ canvasApp.push( function() {
         this.atime = ftime/15;
       };
 
-      setTimeout(this.A.play(), fdelay);
+      setTimeout(this.A.play, fdelay);
     } else Debugger.log('readyState is '+ this.A.readyState);
   };
 

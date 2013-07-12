@@ -10,7 +10,11 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
   function() { 
 	Debugger.log("audio is ready"); 
 	appReady = true; 
-  } : appReady = true;
+  } : 
+  (function() {
+		Debugger.log( "Inline video is not supported\n" );
+		return false;
+  })();
 
 (function() { 
   if (typeof Debugger === "function") { 
@@ -98,7 +102,7 @@ if( appStarted ) return appStarted;
 		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
 		ctx.globalCompositeOperation = "source-over";
     } catch (err) {
-        Debugger.log("Failed to draw "+ video.id +": "+ err.message);
+        //Debugger.log("Failed to draw "+ video.id +": "+ err.message);
     } 
 	
 	aidx = graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);

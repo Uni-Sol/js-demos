@@ -3,17 +3,36 @@
 /* Debugger Function */
 var Debugger = function Debugger() {};
 
+Debugger.on = false;
+
 Debugger.log = function (m) {
-  try {
-    console.log(m +"\n"); 
-  } catch (e) {
-   //alert(m);
-   }
+  if(Debugger.on)
+	try {
+		console.log(m +"\n"); 
+	} catch (e) {
+		//alert(m);
+	}
 };
 
 Debugger.typeOf = function (v) {
   return typeof v;
 };
+
+Debugger.profile = {
+	time1: 0,
+	time2: 0
+};
+
+Debugger.profile.start = function() {
+	this.time1 = (new Date).getTime();	
+	return this.time1;
+};
+
+Debugger.profile.stop = function() {
+	this.time2 = (new Date).getTime();	
+	return ( this.time2 - this.time1 );
+};
+
 
 /* BEWARE USE of the following function because it
  * WILL CLEAR user editable values like form inputs....

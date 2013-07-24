@@ -4,3 +4,6 @@
 [submodule "jsgif"]
 	path = jsgif
 	url =  https://github.com/antimatter15/jsgif.git
+[submodule "canvg"]
+	path = canvg
+	url = git@github.com:Revlin/canvg.git

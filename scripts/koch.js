@@ -61,14 +61,18 @@
     drawKoch( kcan, kcurve, data, kcolor, ++pc);
     ki = setInterval(function() {
       ctx.save();
-      spinKoch(ctx);
+      //spinKoch(ctx);
       if (data.length < 3072) {
         kcolor = "hsl("+ pc%360 +", 100%, 50%)";
         if( !(pc%4) && (pc%3) && (pc%5) && (pc%7) && (!(Math.sqrt(pc/4)%2)) ) 
           defineKoch( kcurve, kcolor, lc*=2, Debugger.log(lc+', '+pc) );
         drawKoch( kcan, kcurve, data, kcolor, ++pc);
       } else if (pc) pc++
-      ctx.drawImage( kcan, 0, 0, kscale*kcan.width, kscale*kcan.height);
+      ctx.drawImage( kcan,
+	        ( ctx.canvas.width - kscale*(kcan.width) )/2, 
+		( ctx.canvas.height - kscale*(kcan.height) )/2, 
+		kscale*kcan.width, 
+		kscale*kcan.height);
       ctx.restore();
     }, 33);
   }

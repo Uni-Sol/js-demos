@@ -1,6 +1,6 @@
-﻿/* FFT Visualizing
+﻿/* Fathers: FFT Visualizing
  * Because I know very little about sound visualization with fft data,
- * this is an attempt to explorer that using HTML5 audio & canvas
+ * this is an attempt to explore that using HTML5 audio & canvas
  */
 
 var audio = window.aud1;
@@ -10,7 +10,7 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
   function() { 
 	Debugger.log("audio is ready"); 
 	appReady = true; 
-  } : 
+  }:
   (function() {
 		Debugger.log( "Inline video is not supported\n" );
 		return false;
@@ -19,10 +19,10 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 (function() { 
   if (typeof Debugger === "function") { 
     Debugger.on = true;
-	Debugger.log( "Because I know very little about sound visualization with fft data, this is an attempt to explorer that using HTML5 audio & canvas\n" );
+	Debugger.log( "Because I know very little about sound visualization with fft data, this is an attempt to explore that using HTML5 audio & canvas\n" );
     return; 
   }
-} )();
+})();
 
 var canvasApp = function canvasApp () {
 if(! appReady ) {

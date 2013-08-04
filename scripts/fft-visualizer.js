@@ -1,6 +1,6 @@
 ﻿/* FFT Visualizing
  * Because I know very little about sound visualization with fft data,
- * this is an attempt to explorer that using HTML5 audio & canvas
+ * this is an attempt to explore that using HTML5 audio & canvas
  */
 
 var audio = window.aud1;
@@ -19,7 +19,7 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 (function() { 
   if (typeof Debugger === "function") { 
     Debugger.on = true;
-	Debugger.log( "Because I know very little about sound visualization with fft data, this is an attempt to explorer that using HTML5 audio & canvas\n" );
+	Debugger.log( "Because I know very little about sound visualization with fft data, this is an attempt to explore that using HTML5 audio & canvas\n" );
     return; 
   }
 } )();
@@ -39,9 +39,9 @@ if( appStarted ) return appStarted;
   
   /* Textual stuff */
   var announcement = document.title;
-  var title = window.text_title.innerHTML || "The Stylogical Map";
+  var title = (window.text_title) ? window.text_title.innerHTML: "The Stylogical Map";
   //Debugger.log( title );
-  var copy = window.text_copy.innerHTML.split(/[\n|\r]/);
+  var copy = (window.text_copy) ? window.text_copy.innerHTML.split(/[\n|\r]/): "";
   //Debugger.log( copy );
 	
   /* Audio visualization stuff */
@@ -68,12 +68,6 @@ if( appStarted ) return appStarted;
   var aCanvas = document.createElement('canvas');
   aCanvas.width = canvas.width;
   aCanvas.height = canvas.height;
-  var video = audio;
-  var vx = 0;
-  try {
-	vx = ( video !== null )? (canvas.width/2 - video.videoWidth/2) : 0;
-	//Debugger.log(video.id);
-  } catch (e) {}
   audio.play();
   
   /* Draw main function */
@@ -84,26 +78,6 @@ if( appStarted ) return appStarted;
 	ctx.globalCompositeOperation = "source-over";
 	ctx.globalAlpha = 1.0;
     ctx.clearRect(0, 0, w, h);
-	
-    /* Draw video input, if any */
-	try {
-		ctx.globalCompositeOperation = "lighter";
-    	if ( (video !== null) && (video.readyState > 2) && (!video.paused) )
-        	ctx.drawImage(video, vx, 0, video.videoWidth, video.videoHeight);
-		/* Composite fill blue background with tranparency tied to bass v */
-		ctx.globalCompositeOperation = "source-atop";
-		ctx.fillStyle = "rgba(0%, 0%, 100%, "+ (0.25 - vBuffer[aidx][0]*4) +")";
-		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
-		/* Now fill red background tied to snare v */
-		ctx.fillStyle = "rgba(100%, 0%, 0%, "+ (0.25 - vBuffer[aidx][5]*4) +")";
-		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
-		/* Now fill green background */
-		ctx.fillStyle = "rgba(0%, 100%, 0%, "+ (0.25 - vBuffer[aidx][12]*4) +")";
-		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
-		ctx.globalCompositeOperation = "source-over";
-    } catch (err) {
-        //Debugger.log("Failed to draw "+ video.id +": "+ err.message);
-    } 
 	
 	aidx = graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
 	ctx.drawImage(aCanvas, 0, 0);
@@ -152,7 +126,7 @@ if( appStarted ) return appStarted;
 		ctx.strokeStyle = "#ffffff";
 		ctx.fillStyle = "#afafaf";
 		ctx.beginPath();
-		var hcorrect =  h / 2, hmultiply = h*2;
+		var hcorrect =  h / 2;
 		/* Plot each sample on line that moves from left to right
 		 * until we reach the end of the screen or the end of the sample
 		 */
@@ -162,7 +136,7 @@ if( appStarted ) return appStarted;
 		
 		for( var i=0, z=abuf[idx].length, n=z/6; i<z; i++ ) {
 			/* Draw a curve of the amplitude data */
-			var curveh = -abuf[idx][i]*hmultiply;
+			var curveh = -abuf[idx][i]*h;
 			if( i > 0 ) ctx.quadraticCurveTo(
 				(i-1)*6, curveh + hcorrect,
 				i*6, curveh + hcorrect

@@ -116,16 +116,9 @@ if( appStarted ) return appStarted;
 		if( abuf.length < 1 ) return aidx;
 		if( audio.paused ) return aidx;
 		if(! (audio.readyState > 3) ) return aidx;
-		var idx = aidx;
-		//Debugger.log( "aBuffer index: "+ idx );
+		var idx = Math.floor( audio.currentTime*15 );
 		if(! abuf[idx] ) return aidx;
-		var at = Math.floor( audio.currentTime*14.98 );
-		if( at < aidx ) {
-			//Debugger.log( "audio frame: "+ at +", idx: "+ idx +" \n" );
-			return idx;
-		} else if( at > (aidx + 3) ) {
-			idx = at;
-		}
+		//Debugger.log( "aBuffer index: "+ idx );
 		
 		ctx.clearRect(0, 0, w, h);
 		
@@ -143,7 +136,7 @@ if( appStarted ) return appStarted;
 			ctx.moveTo( 0, hcorrect );
 		} else ctx.moveTo( 0, -(abuf[idx][0]*2*hcorrect) + hcorrect  );
 		
-		for( var i=0, z=abuf[idx].length, n=z/4; i<z; i++ ) {
+		for( var i=0, z=abuf[idx].length, n=z; i<z; i++ ) {
 			/* Draw a curve of the amplitude data */
 			var curveh = -abuf[idx][i]*hcorrect;
 			if( i > 0 ) ctx.quadraticCurveTo(
@@ -154,7 +147,7 @@ if( appStarted ) return appStarted;
 			var barh = h - vbuf[idx][i]*h;
 			if( (i <= n) ) {
 				var freq = Math.floor(fbuf[idx][i]);
-				ctx.fillRect( i*24, barh, 12, h );
+				ctx.fillRect( i*6+12, barh, 4, h );
 				//ctx.fillText( freq, i*24, barh-10 );
 			}
 		}

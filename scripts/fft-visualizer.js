@@ -4,16 +4,21 @@
  */
 
 var audio = window.aud1;
-var appReady = false, appStarted = false, audioLoad = false;
+var appReady = false, appStarted = false, audioLoad = false, appDelay = 0;
 audio.onloadstart = function() { audioLoad = true; };
 audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
   function() { 
 	Debugger.log("audio is ready"); 
 	appReady = true; 
+	return true;
   } : 
   (function() {
-		Debugger.log( "Inline video is not supported\n" );
-		return false;
+	/*
+	Debugger.log( "Inline video is not supported\n" );
+	return false;
+	*/
+	appReady = true; 
+	return true;
   })();
 
 (function() { 
@@ -28,8 +33,8 @@ var canvasApp = function canvasApp () {
 if(! appReady ) {
 	Debugger.log( appReady );
 	if( audioLoad === false ) audio.load();
-	return setTimeout(canvasApp, 333);
-}
+	return appDelay = setTimeout(canvasApp, 333);
+} else clearTimeout(appDelay);
 if( appStarted ) return appStarted;
 //alert('Running default canvasApp');
   var time = 0;
@@ -114,9 +119,13 @@ if( appStarted ) return appStarted;
 		var idx = aidx;
 		//Debugger.log( "aBuffer index: "+ idx );
 		if(! abuf[idx] ) return aidx;
-		var at = audio.currentTime;
-		if( (at * 15) < aidx ) return idx;
-		//Debugger.log( (at * 7.46) +": "+ at +", idx: "+ idx +" \n");
+		var at = Math.floor( audio.currentTime*14.98 );
+		if( at < aidx ) {
+			//Debugger.log( "audio frame: "+ at +", idx: "+ idx +" \n" );
+			return idx;
+		} else if( at > (aidx + 3) ) {
+			idx = at;
+		}
 		
 		ctx.clearRect(0, 0, w, h);
 		
@@ -132,11 +141,11 @@ if( appStarted ) return appStarted;
 		 */
 		if( idx < 1 ) {
 			ctx.moveTo( 0, hcorrect );
-		} else ctx.moveTo( 0, -(abuf[idx][0]*2*h) + hcorrect  );
+		} else ctx.moveTo( 0, -(abuf[idx][0]*2*hcorrect) + hcorrect  );
 		
-		for( var i=0, z=abuf[idx].length, n=z/6; i<z; i++ ) {
+		for( var i=0, z=abuf[idx].length, n=z/4; i<z; i++ ) {
 			/* Draw a curve of the amplitude data */
-			var curveh = -abuf[idx][i]*h;
+			var curveh = -abuf[idx][i]*hcorrect;
 			if( i > 0 ) ctx.quadraticCurveTo(
 				(i-1)*6, curveh + hcorrect,
 				i*6, curveh + hcorrect
@@ -144,8 +153,9 @@ if( appStarted ) return appStarted;
 			/* Draw bars for the eq levels (fft) data */
 			var barh = h - vbuf[idx][i]*h;
 			if( (i <= n) ) {
-				ctx.fillRect( i*36, barh, 12, hcorrect );
-				ctx.fillText( fbuf[idx][i], i*36, barh-10 );
+				var freq = Math.floor(fbuf[idx][i]);
+				ctx.fillRect( i*24, barh, 12, h );
+				//ctx.fillText( freq, i*24, barh-10 );
 			}
 		}
 		ctx.stroke();
@@ -191,7 +201,8 @@ if( appStarted ) return appStarted;
   /* Begin draw loop */
   try {
     var context = canvas.getContext('2d');
-    drawLoop = setInterval(draw,33,context,canvas.width,canvas.height);
+	time = 0;
+    drawLoop = setInterval(draw,31,context,canvas.width,canvas.height);
     Debugger.log("Draw loop started");
 	appStarted = true;
 	return appStarted;

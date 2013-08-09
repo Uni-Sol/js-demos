@@ -4,7 +4,7 @@
  */
 
 var audio = window.aud1;
-var appReady = false, appStarted = false, audioLoad = false;
+var appReady = false, appStarted = false, audioLoad = false, appDelay = 0;
 audio.onloadstart = function() { audioLoad = true; };
 audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
   function() { 
@@ -12,8 +12,12 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 	appReady = true; 
   }:
   (function() {
-		Debugger.log( "Inline video is not supported\n" );
-		return false;
+	/*
+	Debugger.log( "Inline video is not supported\n" );
+	return false;
+	*/
+	appReady = true; 
+	return true;
   })();
 
 (function() { 
@@ -28,8 +32,8 @@ var canvasApp = function canvasApp () {
 if(! appReady ) {
 	Debugger.log( appReady );
 	if( audioLoad === false ) audio.load();
-	return setTimeout(canvasApp, 333);
-}
+	return appDelay = setTimeout(canvasApp, 333);
+} else clearTimeout(appDelay);
 if( appStarted ) return appStarted;
 //alert('Running default canvasApp');
   var time = 0;
@@ -217,6 +221,7 @@ if( appStarted ) return appStarted;
   /* Begin draw loop */
   try {
     var context = canvas.getContext('2d');
+	time = 0;
     drawLoop = setInterval(draw,33,context,canvas.width,canvas.height);
     Debugger.log("Draw loop started");
 	appStarted = true;

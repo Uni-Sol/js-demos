@@ -4,12 +4,15 @@
  */
 
 var audio = window.aud1;
-var appReady = false, appStarted = false, audioLoad = false, appDelay = 0;
+var audioLoad = false, audioReady = false, 
+	audioName = audio.children[0].src.match(/[\/|\\]*([\w|\-|]+)\.\w\w\w$/)[1],
+	fftReady = false, fftProgress = -1, fftLoader = 0,
+	appStarted = false, appDelay = 0;
 audio.onloadstart = function() { audioLoad = true; };
 audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
   function() { 
 	Debugger.log("audio is ready"); 
-	appReady = true; 
+	audioReady = true; 
 	return true;
   } : 
   (function() {
@@ -17,26 +20,27 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 	Debugger.log( "Inline video is not supported\n" );
 	return false;
 	*/
-	appReady = true; 
+	audioReady = true; 
 	return true;
   })();
 
-(function() { 
-  if (typeof Debugger === "function") { 
-    Debugger.on = true;
-	Debugger.log( "Because I know very little about sound visualization with fft data, this is an attempt to explore that using HTML5 audio & canvas\n" );
-    return; 
-  }
-} )();
-
 var canvasApp = function canvasApp () {
-if(! appReady ) {
-	Debugger.log( appReady );
+if(! audioReady ) {
+	Debugger.log( audioReady );
 	if( audioLoad === false ) audio.load();
+	return appDelay = setTimeout(canvasApp, 333);
+} else if(! fftReady ) {
+	//fftReady = true;
+	if( fftProgress < 0 ) { 
+		fftLoad(audioName, fftProgress);
+	} else if( fftProgress > 10 ) {
+		fftReady = true;
+	}
+	Debugger.log( "Progress "+ fftProgress +"%" );
 	return appDelay = setTimeout(canvasApp, 333);
 } else clearTimeout(appDelay);
 if( appStarted ) return appStarted;
-//alert('Running default canvasApp');
+
   var time = 0;
 
   /* Get canvas properties */
@@ -51,9 +55,9 @@ if( appStarted ) return appStarted;
 	
   /* Audio visualization stuff */
   var aidx = 0;
-  var aBuffer = [];
-  var fBuffer = [];
-  var vBuffer = [];
+  var aBuffer = canvasApp.aBuffer = [];
+  var fBuffer = canvasApp.fBuffer = [];
+  var vBuffer = canvasApp.vBuffer = [];
   if( sBuffer.length > 0 ) {
 	for( var i=1, z=sBuffer.length; i<z; i++ ) {
 		var a=[], f=[], v=[];
@@ -68,15 +72,38 @@ if( appStarted ) return appStarted;
 		vBuffer.push(v);
 		//Debugger.log( "V*h="+ aBuffer[i-1]*canvas.height +" w="+ canvas.width +" h="+ canvas.height +" \n" );
 	}
-	Debugger.log( "Total frames: "+ (aBuffer.length) );
+	//Debugger.log( "Total frames: "+ (aBuffer.length) );
   } else for( var i=0, z=2000; i<z; i++ ) aBuffer.push(0.5);
   var aCanvas = document.createElement('canvas');
   aCanvas.width = canvas.width;
   aCanvas.height = canvas.height;
   audio.play();
+ 
+  function fftLoad ( aname, pr ) {
+	var part;
+	if( pr < 0 ) {
+		part = fftProgress = 0;
+	} else {
+		part = pr;
+	}
+	if( part === 100 ) {
+		clearTimeout(fftLoader);
+		return true;
+	} else {
+		var sr = document.createElement('script'),
+			fname = (part < 10)? 
+				"data/"+ aname +"-0"+ part +".js":
+				"data/"+ aname +"-"+ part +".js";	
+		sr.src = fname;
+		document.body.appendChild(sr);
+		//Debugger.log( fname+ " requested\n" );
+		fftLoader = setTimeout( fftLoad, 33, aname, ++part );
+	}
+	return true;
+  }
   
   /* Draw main function */
-  var draw = function draw(ctx,w,h) {
+  function draw (ctx,w,h) {
     var t = time%32;
 	var actx = aCanvas.getContext('2d');
 
@@ -108,7 +135,7 @@ if( appStarted ) return appStarted;
     if (time == "undefined") {
       time = 0;
     }
-  };
+  }
   
   /* Graph samples */
   function graphSamples( ctx, audio, abuf, fbuf, vbuf, aidx, w, h ) {
@@ -116,8 +143,11 @@ if( appStarted ) return appStarted;
 		if( abuf.length < 1 ) return aidx;
 		if( audio.paused ) return aidx;
 		if(! (audio.readyState > 3) ) return aidx;
-		var idx = Math.floor( audio.currentTime*15 );
-		if(! abuf[idx] ) return aidx;
+		var idx = Math.floor( audio.currentTime*15.02 );
+		if(! abuf[idx] ) {
+			Debugger.log( "abuf["+ idx +"] has not been recieved\n" );
+			return aidx;
+		}
 		//Debugger.log( "aBuffer index: "+ idx );
 		
 		ctx.clearRect(0, 0, w, h);
@@ -205,5 +235,4 @@ if( appStarted ) return appStarted;
   }
 };
 
-
-window.onload = canvasApp;
+Debugger.log( "Because I know very little about sound visualization with fft data, this is an attempt to explore that using HTML5 audio & canvas\n" );

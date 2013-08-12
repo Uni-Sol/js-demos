@@ -3,6 +3,7 @@
  * this is an attempt to explore that using HTML5 audio & canvas
  */
 
+var sBuffer = [];
 var audio = window.aud1;
 var audioLoad = false, audioReady = false, 
 	audioName = audio.children[0].src.match(/[\/|\\]*([\w|\-|]+)\.\w\w\w$/)[1],
@@ -25,11 +26,7 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
   })();
 
 var canvasApp = function canvasApp () {
-if(! audioReady ) {
-	Debugger.log( audioReady );
-	if( audioLoad === false ) audio.load();
-	return appDelay = setTimeout(canvasApp, 333);
-} else if(! fftReady ) {
+if(! fftReady ) {
 	//fftReady = true;
 	if( fftProgress < 0 ) { 
 		fftLoad(audioName, fftProgress);
@@ -37,6 +34,10 @@ if(! audioReady ) {
 		fftReady = true;
 	}
 	Debugger.log( "Progress "+ fftProgress +"%" );
+	return appDelay = setTimeout(canvasApp, 333);
+} else if(! audioReady ) {
+	Debugger.log( audioReady );
+	if( audioLoad === false ) audio.load();
 	return appDelay = setTimeout(canvasApp, 333);
 } else clearTimeout(appDelay);
 if( appStarted ) return appStarted;
@@ -143,7 +144,7 @@ if( appStarted ) return appStarted;
 		if( abuf.length < 1 ) return aidx;
 		if( audio.paused ) return aidx;
 		if(! (audio.readyState > 3) ) return aidx;
-		var idx = Math.floor( audio.currentTime*15.02 );
+		var idx = Math.floor( audio.currentTime*15.03 );
 		if(! abuf[idx] ) {
 			Debugger.log( "abuf["+ idx +"] has not been recieved\n" );
 			return aidx;

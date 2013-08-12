@@ -535,7 +535,7 @@ sBuffer.push([
   var fBuffer = canvasApp.fBuffer;
   var vBuffer = canvasApp.vBuffer;
   Debugger.log( "Progress "+ fftProgress +"%" );
-  if( fftProgress < 20 ) {
+  if( fftProgress < 10 ) {
 	return;
   }
   

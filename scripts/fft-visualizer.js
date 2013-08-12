@@ -236,4 +236,31 @@ if( appStarted ) return appStarted;
   }
 };
 
+canvasApp.updateFFT = function() {
+  window.fftProgress++;
+  var aBuffer = canvasApp.aBuffer;
+  var fBuffer = canvasApp.fBuffer;
+  var vBuffer = canvasApp.vBuffer;
+  Debugger.log( "Progress "+ fftProgress +"%" );
+  if( fftProgress < 10 ) {
+	return;
+  }
+  
+  if( sBuffer.length > 0 ) {
+	for( var i=(aBuffer.length-1), z=sBuffer.length; i<z; i++ ) {
+		var a=[], f=[], v=[];
+		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
+			var afv = sBuffer[i][j].split(',');
+			a.push( afv[0] );
+			f.push( afv[1] );
+			v.push( afv[2] );
+		}
+		aBuffer.push(a);
+		fBuffer.push(f);
+		vBuffer.push(v);
+	}
+	Debugger.log( "Total frames: "+ (aBuffer.length) );
+  }
+};
+
 Debugger.log( "Because I know very little about sound visualization with fft data, this is an attempt to explore that using HTML5 audio & canvas\n" );

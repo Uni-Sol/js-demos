@@ -27,9 +27,9 @@ $complete = 0;
 $frameNum = 0;
 $sampleNum = 0;
 $frameSampleNum = 0;
-my $sofar;
 
 while( defined(my $chunk = $analyzer->next) ) {
+	my $sofar = $analyzer->progress;
 	print $log <<TXT;
 
 sBuffer.push([
@@ -66,32 +66,7 @@ TXT
 	if( $sofar > 99 ){
 		print $log <<TXT;
 
-(function() {
-  window.fftProgress++;
-  var aBuffer = canvasApp.aBuffer;
-  var fBuffer = canvasApp.fBuffer;
-  var vBuffer = canvasApp.vBuffer;
-  Debugger.log( "Progress "+ fftProgress +"%" );
-  if( fftProgress < 10 ) {
-	return;
-  }
-  
-  if( sBuffer.length > 0 ) {
-	for( var i=(aBuffer.length-1), z=sBuffer.length; i<z; i++ ) {
-		var a=[], f=[], v=[];
-		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
-			var afv = sBuffer[i][j].split(',');
-			a.push( afv[0] );
-			f.push( afv[1] );
-			v.push( afv[2] );
-		}
-		aBuffer.push(a);
-		fBuffer.push(f);
-		vBuffer.push(v);
-	}
-	Debugger.log( "Total frames: "+ (aBuffer.length) );
-  }
-})();
+canvasApp.updateFFT($complete);
 TXT
 		close $log;
 		print $sofar ."%\n" ;
@@ -99,41 +74,14 @@ TXT
 	} elsif( $sofar > $complete ) {
 		print $log <<TXT;
 
-(function() {
-  window.fftProgress++;
-  var aBuffer = canvasApp.aBuffer;
-  var fBuffer = canvasApp.fBuffer;
-  var vBuffer = canvasApp.vBuffer;
-  Debugger.log( "Progress "+ fftProgress +"%" );
-  if( fftProgress < 10 ) {
-	return;
-  }
-  
-  if( sBuffer.length > 0 ) {
-	for( var i=(aBuffer.length-1), z=sBuffer.length; i<z; i++ ) {
-		var a=[], f=[], v=[];
-		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
-			var afv = sBuffer[i][j].split(',');
-			a.push( afv[0] );
-			f.push( afv[1] );
-			v.push( afv[2] );
-		}
-		aBuffer.push(a);
-		fBuffer.push(f);
-		vBuffer.push(v);
-	}
-	Debugger.log( "Total frames: "+ (aBuffer.length) );
-  }
-})();
+canvasApp.updateFFT($complete);
 TXT
 		close $log;
 		print $sofar ."%\n" ;
 		open $log, '>data/'.$output.'-0'.$sofar.'.js' if( $sofar < 10 );
 		open $log, '>data/'.$output.'-'.$sofar.'.js' if( $sofar >=10 );
 	}
-	print $sofar ."%\n" ;
 	$complete = $sofar;
-	$sofar = $analyzer->progress;
 }
 
 close $log;

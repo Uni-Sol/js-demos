@@ -16,7 +16,6 @@ $analyzer = Audio::Analyzer->new(
 	  bits_per_sample => 16,
 	  sample_rate => 44100,
 	  fps => 15,
-	  scaler => 'Audio::Analyzer::AutoScaler'
 	);
 
 open $log, '>data/'.$output.'-00.js';
@@ -24,7 +23,7 @@ print $log <<TXT;
 var sBuffer = ['pcm,frequency,magnitude'];
 TXT
 $complete = 0;
-$frameNum = 0;
+$frameNum = 1;
 $sampleNum = 0;
 $frameSampleNum = 0;
 
@@ -32,7 +31,7 @@ while( defined(my $chunk = $analyzer->next) ) {
 	my $sofar = $analyzer->progress;
 	print $log <<TXT;
 
-sBuffer.push([
+sBuffer[$frameNum]=[
 TXT
 	#useful information
 	@pcm = @{$chunk->pcm->[0]};
@@ -57,7 +56,7 @@ TXT
 		print $log "\'". join( ",", ($v, $f, $m) ) ."\',\n"; # Temp using zero freq values
 	}
 	print $log <<TXT;
-]);
+];
 
 TXT
 

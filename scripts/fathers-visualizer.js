@@ -1,4 +1,4 @@
-﻿/* Fathers: FFT Visualizing
+/* Fathers: FFT Visualizing
  * Because I know very little about sound visualization with fft data,
  * this is an attempt to explore that using HTML5 audio & canvas
  */
@@ -141,12 +141,12 @@ if( appStarted ) return appStarted;
 		if( abuf.length < 1 ) return aidx;
 		if( audio.paused ) return aidx;
 		if(! (audio.readyState > 3) ) return aidx;
-		var idx = aidx;
+		var idx = Math.floor( audio.currentTime*15.018 );
+		if(! abuf[idx] ) {
+			Debugger.log( "abuf["+ idx +"] has not been recieved\n" );
+			return aidx;
+		}
 		//Debugger.log( "aBuffer index: "+ idx );
-		if(! abuf[idx] ) return aidx;
-		var at = audio.currentTime;
-		if( (at * 15) < aidx ) return idx;
-		//Debugger.log( (at * 7.46) +": "+ at +", idx: "+ idx +" \n");
 		
 		ctx.clearRect(0, 0, w, h);
 		

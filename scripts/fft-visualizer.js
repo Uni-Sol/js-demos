@@ -1,9 +1,12 @@
-﻿/* FFT Visualizing
+/* FFT Visualizing
  * Because I know very little about sound visualization with fft data,
  * this is an attempt to explore that using HTML5 audio & canvas
  */
 
 var sBuffer = [];
+  var aBuffer = canvasApp.aBuffer = [];
+  var fBuffer = canvasApp.fBuffer = [];
+  var vBuffer = canvasApp.vBuffer = [];
 var audio = window.aud1;
 var audioLoad = false, audioReady = false, 
 	audioName = audio.children[0].src.match(/[\/|\\]*([\w|\-|]+)\.\w\w\w$/)[1],
@@ -56,9 +59,6 @@ if( appStarted ) return appStarted;
 	
   /* Audio visualization stuff */
   var aidx = 0;
-  var aBuffer = canvasApp.aBuffer = [];
-  var fBuffer = canvasApp.fBuffer = [];
-  var vBuffer = canvasApp.vBuffer = [];
   if( sBuffer.length > 0 ) {
 	for( var i=1, z=sBuffer.length; i<z; i++ ) {
 		var a=[], f=[], v=[];
@@ -144,7 +144,7 @@ if( appStarted ) return appStarted;
 		if( abuf.length < 1 ) return aidx;
 		if( audio.paused ) return aidx;
 		if(! (audio.readyState > 3) ) return aidx;
-		var idx = Math.floor( audio.currentTime*15.03 );
+		var idx = Math.floor( audio.currentTime*15.02 );
 		if(! abuf[idx] ) {
 			Debugger.log( "abuf["+ idx +"] has not been recieved\n" );
 			return aidx;
@@ -236,11 +236,17 @@ if( appStarted ) return appStarted;
   }
 };
 
-canvasApp.updateFFT = function() {
+canvasApp.updateFFT = function(prog) {
   window.fftProgress++;
-  var aBuffer = canvasApp.aBuffer;
-  var fBuffer = canvasApp.fBuffer;
-  var vBuffer = canvasApp.vBuffer;
+  var aBuffer = this.aBuffer;
+  var fBuffer = this.fBuffer;
+  var vBuffer = this.vBuffer;
+  if( 
+	  typeof sBuffer !== 'object' ||
+	  typeof aBuffer !== 'object' ||
+	  typeof fBuffer !== 'object' ||
+	  typeof vBuffer !== 'object'
+	) return Debugger.log( "canvas Buffers are undefined");
   Debugger.log( "Progress "+ fftProgress +"%" );
   if( fftProgress < 10 ) {
 	return;

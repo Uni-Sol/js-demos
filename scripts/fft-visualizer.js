@@ -38,7 +38,7 @@ statsBox.innerHTML = '<img src="images/bw-loader.gif" /><br />Loading... ';
 var canvasApp = function canvasApp(cv) {
 
   /* Get canvas properties */
-  var canvas = canvasApp.cv = cv;
+  var canvas = (typeof canvasApp.cv === "object")? canvasApp.cv: canvasApp.cv = cv ;
   Debugger.log( "Using canvas '"+ canvas.id +"'\n" );
   
   /* Insert loader just after the canvas */
@@ -114,7 +114,7 @@ if( appStarted ) return appStarted;
 		part = pr;
 	}
 	Debugger.log( "Part: "+ part );
-	if( part > 100 ) {
+	if( part > 99 ) {
 		clearTimeout(fftLoader);
 		return true;
 	} else {

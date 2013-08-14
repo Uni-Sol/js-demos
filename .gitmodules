@@ -7,3 +7,6 @@
 [submodule "canvg"]
 	path = canvg
         url = https://github.com/Revlin/canvg.git
+[submodule "processing/fractal_music"]
+	path = processing/fractal_music
+	url = https://github.com/Revlin/fractal_music.git

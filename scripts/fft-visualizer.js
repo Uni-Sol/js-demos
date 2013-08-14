@@ -4,9 +4,6 @@
  */
 
 var sBuffer = [];
-  var aBuffer = canvasApp.aBuffer = [];
-  var fBuffer = canvasApp.fBuffer = [];
-  var vBuffer = canvasApp.vBuffer = [];
 var audio = window.aud1;
 var audioLoad = false, audioReady = false, 
 	audioName = audio.children[0].src.match(/[\/|\\]*([\w|\-|]+)\.\w\w\w$/)[1],
@@ -59,6 +56,9 @@ if( appStarted ) return appStarted;
 	
   /* Audio visualization stuff */
   var aidx = 0;
+  var aBuffer = canvasApp.aBuffer = [];
+  var fBuffer = canvasApp.fBuffer = [];
+  var vBuffer = canvasApp.vBuffer = [];
   if( sBuffer.length > 0 ) {
 	for( var i=1, z=sBuffer.length; i<z; i++ ) {
 		var a=[], f=[], v=[];
@@ -255,6 +255,7 @@ canvasApp.updateFFT = function(prog) {
   if( sBuffer.length > 0 ) {
 	for( var i=(aBuffer.length-1), z=sBuffer.length; i<z; i++ ) {
 		var a=[], f=[], v=[];
+		if( typeof sBuffer[i] !== 'object' ) return;
 		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
 			var afv = sBuffer[i][j].split(',');
 			a.push( afv[0] );

@@ -82,11 +82,12 @@ if( appStarted ) return appStarted;
 	for( var i=1, z=sBuffer.length; i<z; i++ ) {
 		var a=[], f=[], v=[];
 		if( typeof sBuffer[i] !== 'object' ) {
-			fftLoad(audioName, fftProgress);
+			--fftProgress;
 			fftReady = false;
 			appStarted = false;
 			Debugger.log( "Progress "+ fftProgress +"%" );
-			return appDelay = setTimeout(canvasApp, 333);
+			canvas.parentNode.appendChild(statsBox);
+			return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
 		}
 		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
 			var afv = sBuffer[i][j].split(',');
@@ -114,7 +115,7 @@ if( appStarted ) return appStarted;
 		part = pr;
 	}
 	Debugger.log( "Part: "+ part );
-	if( part > 99 ) {
+	if( (pr > 99) || (part > 99) ) {
 		clearTimeout(fftLoader);
 		return true;
 	} else {
@@ -125,7 +126,8 @@ if( appStarted ) return appStarted;
 		sr.src = fname;
 		document.body.appendChild(sr);
 		//Debugger.log( fname+ " requested\n" );
-		fftLoader = setTimeout( fftLoad, 33, aname, ++part );
+		if( part < 99 )
+		  fftLoader = setTimeout( fftLoad, 33, aname, ++part );
 	}
 	return true;
   }

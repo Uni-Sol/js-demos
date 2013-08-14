@@ -24,28 +24,47 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 	audioReady = true; 
 	return true;
   })();
+  
+var statsBox = document.createElement('div');
+statsBox.style.width = statsBox.style.minWidth = statsBox.style.maxWidth = 
+statsBox.style.height = statsBox.style.minHeight = statsBox.style.maxHeight = "120px";
+statsBox.style.position = "relative";
+statsBox.style.marginTop = "-180px";
+statsBox.style.marginLeft = "320px";
+statsBox.style.color = "#FFFFFF";
+statsBox.style.textAlign = "center";
+statsBox.innerHTML = '<img src="images/bw-loader.gif" /><br />Loading... ';
 
-var canvasApp = function canvasApp () {
+var canvasApp = function canvasApp(cv) {
+
+  /* Get canvas properties */
+  var canvas = canvasApp.cv = cv;
+  Debugger.log( "Using canvas '"+ canvas.id +"'\n" );
+  
+  /* Insert loader just after the canvas */
+  canvas.parentNode.appendChild(statsBox);
+  
 if(! fftReady ) {
 	//fftReady = true;
-	if( fftProgress < 0 ) { 
-		fftLoad(audioName, fftProgress);
-	} else if( fftProgress > 10 ) {
-		fftReady = true;
-	}
 	Debugger.log( "Progress "+ fftProgress +"%" );
-	return appDelay = setTimeout(canvasApp, 333);
+	statsBox.innerHTML = statsBox.innerHTML.match(/.+\.\.\./)[0] + fftProgress +"%";
+	if( fftProgress > 10 ) {
+		fftReady = true;
+		statsBox.parentNode.removeChild(statsBox);
+	} else if( fftProgress < 0 ) { 
+		fftLoad(audioName, fftProgress);
+		return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
+	} else {
+		return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
+	}
 } else if(! audioReady ) {
 	Debugger.log( audioReady );
 	if( audioLoad === false ) audio.load();
-	return appDelay = setTimeout(canvasApp, 333);
+	return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
 } else clearTimeout(appDelay);
 if( appStarted ) return appStarted;
 
   var time = 0;
-
-  /* Get canvas properties */
-  var canvas = window.cv;
   
   /* Textual stuff */
   var announcement = document.title;
@@ -55,7 +74,7 @@ if( appStarted ) return appStarted;
   //Debugger.log( copy );
 	
   /* Audio visualization stuff */
-  var aidx = 0;
+  var aidx = canvasApp.aidx = 0;
   var aBuffer = canvasApp.aBuffer = [];
   var fBuffer = canvasApp.fBuffer = [];
   var vBuffer = canvasApp.vBuffer = [];
@@ -94,7 +113,8 @@ if( appStarted ) return appStarted;
 	} else {
 		part = pr;
 	}
-	if( part === 100 ) {
+	Debugger.log( "Part: "+ part );
+	if( part > 100 ) {
 		clearTimeout(fftLoader);
 		return true;
 	} else {
@@ -119,7 +139,8 @@ if( appStarted ) return appStarted;
 	ctx.globalAlpha = 1.0;
     ctx.clearRect(0, 0, w, h);
 	
-	aidx = graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
+	aidx = canvasApp.aidx = 
+	  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
 	ctx.drawImage(aCanvas, 0, 0);
 	
 	/* Text */
@@ -190,8 +211,8 @@ if( appStarted ) return appStarted;
 			}
 		}
 		ctx.stroke();
-		
 		return ++idx;
+		
 	} catch(e) {
 		Debugger.log( "graphSamples failed: " + e.message );
 		return aidx;
@@ -244,7 +265,8 @@ if( appStarted ) return appStarted;
 };
 
 canvasApp.updateFFT = function(prog) {
-  window.fftProgress++;
+  if( fftProgress < 100 ) window.fftProgress++;
+  var aidx = this.aidx;
   var aBuffer = this.aBuffer;
   var fBuffer = this.fBuffer;
   var vBuffer = this.vBuffer;
@@ -257,7 +279,8 @@ canvasApp.updateFFT = function(prog) {
   Debugger.log( "Progress "+ fftProgress +"%" );
   
   if( sBuffer.length > 0 ) {
-	for( var i=(aBuffer.length-1), z=sBuffer.length; i<z; i++ ) {
+	var idx = ( aidx > aBuffer.length )? aidx: (aBuffer.length-1);
+	for( var i=idx, z=sBuffer.length; i<z; i++ ) {
 		var a=[], f=[], v=[];
 		if( typeof sBuffer[i] !== 'object' ) return;
 		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
@@ -273,5 +296,3 @@ canvasApp.updateFFT = function(prog) {
 	Debugger.log( "Total frames: "+ (aBuffer.length) );
   }
 };
-
-Debugger.log( "Because I know very little about sound visualization with fft data, this is an attempt to explore that using HTML5 audio & canvas\n" );

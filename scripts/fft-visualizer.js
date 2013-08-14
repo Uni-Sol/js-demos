@@ -85,7 +85,7 @@ if( appStarted ) return appStarted;
 			--fftProgress;
 			fftReady = false;
 			appStarted = false;
-			Debugger.log( "Progress "+ fftProgress +"%" );
+			Debugger.log( "sBuffer has hole at "+ i +"\n" );
 			canvas.parentNode.appendChild(statsBox);
 			return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
 		}
@@ -279,6 +279,7 @@ canvasApp.updateFFT = function(prog) {
 	  typeof vBuffer !== 'object'
 	) return Debugger.log( "canvas Buffers are undefined");
   Debugger.log( "Progress "+ fftProgress +"%" );
+  if( fftProgress < 10 ) return;
   
   if( sBuffer.length > 0 ) {
 	var idx = ( aidx > aBuffer.length )? aidx: (aBuffer.length-1);

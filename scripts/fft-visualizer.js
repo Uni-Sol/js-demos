@@ -248,6 +248,9 @@ canvasApp.updateFFT = function(prog) {
   var aBuffer = this.aBuffer;
   var fBuffer = this.fBuffer;
   var vBuffer = this.vBuffer;
+  if( fftProgress < 10 ) {
+	return;
+  }
   if( 
 	  typeof sBuffer !== 'object' ||
 	  typeof aBuffer !== 'object' ||
@@ -255,9 +258,6 @@ canvasApp.updateFFT = function(prog) {
 	  typeof vBuffer !== 'object'
 	) return Debugger.log( "canvas Buffers are undefined");
   Debugger.log( "Progress "+ fftProgress +"%" );
-  if( fftProgress < 10 ) {
-	return;
-  }
   
   if( sBuffer.length > 0 ) {
 	for( var i=(aBuffer.length-1), z=sBuffer.length; i<z; i++ ) {

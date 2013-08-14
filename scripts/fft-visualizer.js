@@ -62,6 +62,13 @@ if( appStarted ) return appStarted;
   if( sBuffer.length > 0 ) {
 	for( var i=1, z=sBuffer.length; i<z; i++ ) {
 		var a=[], f=[], v=[];
+		if( typeof sBuffer[i] !== 'object' ) {
+			fftLoad(audioName, fftProgress);
+			fftReady = false;
+			appStarted = false;
+			Debugger.log( "Progress "+ fftProgress +"%" );
+			return appDelay = setTimeout(canvasApp, 333);
+		}
 		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
 			var afv = sBuffer[i][j].split(',');
 			a.push( afv[0] );

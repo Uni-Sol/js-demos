@@ -248,9 +248,6 @@ canvasApp.updateFFT = function(prog) {
   var aBuffer = this.aBuffer;
   var fBuffer = this.fBuffer;
   var vBuffer = this.vBuffer;
-  if( fftProgress < 10 ) {
-	return;
-  }
   if( 
 	  typeof sBuffer !== 'object' ||
 	  typeof aBuffer !== 'object' ||

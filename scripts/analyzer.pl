@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 use feature ':5.14';
-#use Math::BigFloat;
+use Math::BigFloat;
 
 use Audio::Analyzer;
 
@@ -45,14 +45,14 @@ TXT
 		
 		#print $source.', s:'.$sampleNum.', f:'.$frameSampleNum.', frame'.$frameNum." \n";
 		my $v = ( $pcm[$i] / 65536);
-		#$v = Math::BigFloat->new($v);
-		#$v->ffround(-3);
+		$v = Math::BigFloat->new($v);
+		$v->ffround(-4);
 		my $f = $freqs[$i];
-		#$f = Math::BigFloat->new($f);
-		#$f->ffround(0);
+		$f = Math::BigFloat->new($f);
+		$f->ffround(0);
 		my $m = $fft[$i];
-		#$m = Math::BigFloat->new($m);
-		#$m->ffround(-3);
+		$m = Math::BigFloat->new($m);
+		$m->ffround(-4);
 		print $log "\'". join( ",", ($v, $f, $m) ) ."\',\n"; # Temp using zero freq values
 	}
 	print $log <<TXT;

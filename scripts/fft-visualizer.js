@@ -83,7 +83,7 @@ if( appStarted ) return appStarted;
 		var a=[], f=[], v=[];
 		if( typeof sBuffer[i] !== 'object' ) {
 			Debugger.log( "sBuffer has hole at "+ i +"\n" );
-			continue;
+			break;
 		/*
 			--fftProgress;
 			fftReady = false;

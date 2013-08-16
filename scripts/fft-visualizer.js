@@ -39,7 +39,7 @@ var canvasApp = function canvasApp(cv) {
 
   /* Get canvas properties */
   var canvas = (typeof canvasApp.cv === "object")? canvasApp.cv: canvasApp.cv = cv ;
-  Debugger.log( "Using canvas '"+ canvas.id +"'\n" );
+  //Debugger.log( "Using canvas '"+ canvas.id +"'\n" );
   
   /* Insert loader just after the canvas */
   canvas.parentNode.appendChild(statsBox);
@@ -82,12 +82,15 @@ if( appStarted ) return appStarted;
 	for( var i=1, z=sBuffer.length; i<z; i++ ) {
 		var a=[], f=[], v=[];
 		if( typeof sBuffer[i] !== 'object' ) {
+			Debugger.log( "sBuffer has hole at "+ i +"\n" );
+			continue;
+		/*
 			--fftProgress;
 			fftReady = false;
 			appStarted = false;
-			Debugger.log( "sBuffer has hole at "+ i +"\n" );
 			canvas.parentNode.appendChild(statsBox);
 			return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
+		*/
 		}
 		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
 			var afv = sBuffer[i][j].split(',');
@@ -114,7 +117,6 @@ if( appStarted ) return appStarted;
 	} else {
 		part = pr;
 	}
-	Debugger.log( "Part: "+ part );
 	if( (pr > 99) || (part > 99) ) {
 		clearTimeout(fftLoader);
 		return true;
@@ -125,7 +127,6 @@ if( appStarted ) return appStarted;
 				"data/"+ aname +"-"+ part +".js";	
 		sr.src = fname;
 		document.body.appendChild(sr);
-		//Debugger.log( fname+ " requested\n" );
 		if( part < 99 )
 		  fftLoader = setTimeout( fftLoad, 33, aname, ++part );
 	}

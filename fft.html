@@ -20,10 +20,11 @@
        </canvas>
     </div>
 
-    <div id="stream">
-      <audio id="aud1" preload="auto" style="display:none">
-        <source src="audio/fft-track.mp3" type="audio/mp3" />
-        <source src="audio/fft-track.ogg" type="audio/ogg" />
+    <div id="stream" style="text-align: center">
+	<br />
+      <audio id="aud1" preload="auto" controls="true">
+        <source src="audio/fft-track.mp3" />
+        <source src="audio/fft-track.ogg" />
       </audio>
     </div>
 	
@@ -37,7 +38,7 @@
 		canvasApp(window.cv);
 	};
 	if (typeof Debugger === "function") { 
-		Debugger.on = false;
+		Debugger.on = true;
 		return; 
 	} else {
 		window.Debugger = {

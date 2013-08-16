@@ -19,8 +19,9 @@
        </canvas>
     </div>
 
-    <div id="stream">
-      <audio id="aud1" preload="auto">
+    <div id="stream" style="text-align: center">
+	<br />
+      <audio id="aud1" preload="auto" controls="true">
         <source src="audio/tones001.mp3" />
         <source src="audio/tones001.ogg" />
       </audio>
@@ -32,7 +33,9 @@
 	<script type="text/javascript" src="scripts/fft-visualizer.js"></script>
 	<script type="text/javascript">
 (function() { 
-	window.onload = canvasApp;
+	window.onload = function(){
+		canvasApp(window.cv);
+	};
 	if (typeof Debugger === "function") { 
 		Debugger.on = true;
 		return; 
@@ -42,7 +45,8 @@
 				/* no debugger.js */
 			}
 		};
-	}	
+	}
+	Debugger.log( "Because I know very little about sound visualization with fft data, this is an attempt to explore that using HTML5 audio & canvas\n" );
 } )();
 	</script>
 	

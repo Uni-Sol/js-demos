@@ -43,7 +43,29 @@ var canvasApp = function canvasApp(cv) {
   
   /* Insert loader just after the canvas */
   canvas.parentNode.appendChild(statsBox);
-  
+  var fftLoad = canvasApp.fftLoad = function fftLoad ( aname, pr, single ) {
+	var part;
+	if( pr < 0 ) {
+		part = fftProgress = 0;
+	} else {
+		part = pr;
+	}
+	if( (pr > 99) || (part > 99) ) {
+		clearTimeout(fftLoader);
+		return true;
+	} else {
+		var sr = document.createElement('script'),
+			fname = (part < 10)? 
+				"data/"+ aname +"-0"+ part +".js":
+				"data/"+ aname +"-"+ part +".js";	
+		sr.src = fname;
+		document.body.appendChild(sr);
+		if( (part < 99) && (!single) )
+		  fftLoader = setTimeout( fftLoad, 99, aname, ++part );
+	}
+	return true;
+  };
+    
 if(! fftReady ) {
 	//fftReady = true;
 	Debugger.log( "Progress "+ fftProgress +"%" );
@@ -83,20 +105,17 @@ if( appStarted ) return appStarted;
 		var a=[], f=[], v=[];
 		if( typeof sBuffer[i] !== 'object' ) {
 			Debugger.log( "sBuffer has hole at "+ i +"\n" );
-			break;
-		/*
-			--fftProgress;
+			fftLoad(audioName, --fftProgress, true);
 			fftReady = false;
 			appStarted = false;
 			canvas.parentNode.appendChild(statsBox);
 			return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
-		*/
 		}
 		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
 			var afv = sBuffer[i][j].split(',');
-			a.push( afv[0] );
-			f.push( afv[1] );
-			v.push( afv[2] );
+			a[j] = afv[0];
+			f[j] = afv[1];
+			v[j] = afv[2];
 		}
 		aBuffer.push(a);
 		fBuffer.push(f);
@@ -110,29 +129,6 @@ if( appStarted ) return appStarted;
   aCanvas.height = canvas.height;
   audio.play();
  
-  function fftLoad ( aname, pr ) {
-	var part;
-	if( pr < 0 ) {
-		part = fftProgress = 0;
-	} else {
-		part = pr;
-	}
-	if( (pr > 99) || (part > 99) ) {
-		clearTimeout(fftLoader);
-		return true;
-	} else {
-		var sr = document.createElement('script'),
-			fname = (part < 10)? 
-				"data/"+ aname +"-0"+ part +".js":
-				"data/"+ aname +"-"+ part +".js";	
-		sr.src = fname;
-		document.body.appendChild(sr);
-		if( part < 99 )
-		  fftLoader = setTimeout( fftLoad, 33, aname, ++part );
-	}
-	return true;
-  }
-  
   /* Draw main function */
   function draw (ctx,w,h) {
     var t = time%32;
@@ -273,6 +269,7 @@ canvasApp.updateFFT = function(prog) {
   var aBuffer = this.aBuffer;
   var fBuffer = this.fBuffer;
   var vBuffer = this.vBuffer;
+  var firstBreak = false;
   if( 
 	  typeof sBuffer !== 'object' ||
 	  typeof aBuffer !== 'object' ||
@@ -286,12 +283,17 @@ canvasApp.updateFFT = function(prog) {
 	var idx = ( aidx > aBuffer.length )? aidx: (aBuffer.length-1);
 	for( var i=idx, z=sBuffer.length; i<z; i++ ) {
 		var a=[], f=[], v=[];
-		if( typeof sBuffer[i] !== 'object' ) return;
+		if( (typeof sBuffer[i] !== 'object') && (!firstBreak) ) {
+			canvasApp.fftLoad(audioName, --fftProgress, true);
+			firstBreak = true;
+			continue;
+		} else continue;
+
 		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
 			var afv = sBuffer[i][j].split(',');
-			a.push( afv[0] );
-			f.push( afv[1] );
-			v.push( afv[2] );
+			a[j] = afv[0];
+			f[j] = afv[1];
+			v[j] = afv[2];
 		}
 		aBuffer.push(a);
 		fBuffer.push(f);

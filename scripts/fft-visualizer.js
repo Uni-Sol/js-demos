@@ -105,10 +105,11 @@ if( appStarted ) return appStarted;
 		var a=[], f=[], v=[];
 		if( typeof sBuffer[i] !== 'object' ) {
 			Debugger.log( "sBuffer has hole at "+ i +"\n" );
-			for( var p=0, z=11; p<z; p++ ) {
+			for( var p=0, z=11, buf=true; p<z; p++ ) {
 				if( (p < 10) && (!fftProgress[p]) ) {
+				  buf = false;
 				  fftLoad(audioName, p, true);
-				} else {
+				} else if(! buf ) {
 					fftReady = false;
 					appStarted = false;
 					canvas.parentNode.appendChild(statsBox);

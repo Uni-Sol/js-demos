@@ -118,6 +118,7 @@ if( appStarted ) return appStarted;
 					return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
 				}
 			}
+			continue;
 		}
 		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
 			var afv = sBuffer[i][j].split(',');

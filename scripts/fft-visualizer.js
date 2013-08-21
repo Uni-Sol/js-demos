@@ -290,7 +290,7 @@ canvasApp.updateFFT = function(prog) {
 		if( (typeof sBuffer[i] !== 'object') ) {
 			Debugger.log( "sBuffer has hole at "+ i +"\n" );
 			for( var p in fftProgress ) {
-				if( (p < prog) && (!fftProgres[p]) )
+				if( (p < prog) && (!fftProgress[p]) )
 				  fftLoad(audioName, p, true);
 			}
 			continue;

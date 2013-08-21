@@ -106,7 +106,7 @@ if( appStarted ) return appStarted;
 		if( typeof sBuffer[i] !== 'object' ) {
 			Debugger.log( "sBuffer has hole at "+ i +"\n" );
 			for( var p in fftProgress ) {
-				if( (p < 10) && (!fftProgres[p]) )
+				if( (p < 10) && (!fftProgress[p]) )
 				  fftLoad(audioName, p, true);
 			}
 			fftReady = false;

@@ -71,9 +71,11 @@ if(! fftReady ) {
 	Debugger.log( "Progress "+ fftProgress.length +"%" );
 	statsBox.innerHTML = statsBox.innerHTML.match(/.+\.\.\./)[0] + fftProgress.length +"%";
 	if( fftProgress < 0 ) { 
-		fftLoad(audioName, fftProgress);
+		for( var p=fftProgress, z=10; p<z; p++) {
+			fftLoad(audioName, p, true);
+		}
 		return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
-	} else if( fftProgress.length > 10 ) {
+	} else if( fftProgress.length > 9 ) {
 		fftReady = true;
 		statsBox.parentNode.removeChild(statsBox);
 	} else {
@@ -128,6 +130,7 @@ if( appStarted ) return appStarted;
 		vBuffer.push(v);
 		//Debugger.log( "V*h="+ aBuffer[i-1]*canvas.height +" w="+ canvas.width +" h="+ canvas.height +" \n" );
 	}
+	fftLoad(audioName, 10);
 	//Debugger.log( "Total frames: "+ (aBuffer.length) );
   } else for( var i=0, z=2000; i<z; i++ ) aBuffer.push(0.5);
   var aCanvas = document.createElement('canvas');

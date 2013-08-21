@@ -105,14 +105,16 @@ if( appStarted ) return appStarted;
 		var a=[], f=[], v=[];
 		if( typeof sBuffer[i] !== 'object' ) {
 			Debugger.log( "sBuffer has hole at "+ i +"\n" );
-			for( var p in fftProgress ) {
-				if( (p < 10) && (!fftProgress[p]) )
+			for( var p=0, z=11; p<z; p++ ) {
+				if( (p < 10) && (!fftProgress[p]) ) {
 				  fftLoad(audioName, p, true);
+				} else {
+					fftReady = false;
+					appStarted = false;
+					canvas.parentNode.appendChild(statsBox);
+					return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
+				}
 			}
-			fftReady = false;
-			appStarted = false;
-			canvas.parentNode.appendChild(statsBox);
-			return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
 		}
 		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
 			var afv = sBuffer[i][j].split(',');

@@ -285,13 +285,22 @@ canvasApp.updateFFT = function(prog) {
   
   if( sBuffer.length > 0 ) {
 	var idx = ( aidx > aBuffer.length )? aidx: (aBuffer.length-1);
+	for( var i=0, z=aBuffer.length; i<z; i++ ) {
+		if(! aBuffer[i] ) {
+			idx = i;
+			break;
+		}
+	}
 	for( var i=idx, z=sBuffer.length; i<z; i++ ) {
 		var a=[], f=[], v=[];
 		if( (typeof sBuffer[i] !== 'object') ) {
-			Debugger.log( "sBuffer has hole at "+ i +"\n" );
-			for( var p in fftProgress ) {
-				if( (p < prog) && (!fftProgress[p]) )
-				  fftLoad(audioName, p, true);
+			if(! firstBreak ) {
+				Debugger.log( "sBuffer has hole at "+ i +"\n" );
+				for( var p in fftProgress ) {
+					if( (p < prog) && (!fftProgress[p]) )
+					  fftLoad(audioName, p, true);
+				}
+				firstBreak = true;
 			}
 			continue;
 		}

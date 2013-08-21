@@ -46,7 +46,8 @@ var canvasApp = function canvasApp(cv) {
   var fftLoad = canvasApp.fftLoad = function fftLoad ( aname, pr, single ) {
 	var part;
 	if( pr < 0 ) {
-		part = fftProgress = 0;
+		fftProgress = [];
+		part = fftProgress.length;
 	} else {
 		part = pr;
 	}
@@ -67,15 +68,14 @@ var canvasApp = function canvasApp(cv) {
   };
     
 if(! fftReady ) {
-	//fftReady = true;
-	Debugger.log( "Progress "+ fftProgress +"%" );
-	statsBox.innerHTML = statsBox.innerHTML.match(/.+\.\.\./)[0] + fftProgress +"%";
-	if( fftProgress > 10 ) {
-		fftReady = true;
-		statsBox.parentNode.removeChild(statsBox);
-	} else if( fftProgress < 0 ) { 
+	Debugger.log( "Progress "+ fftProgress.length +"%" );
+	statsBox.innerHTML = statsBox.innerHTML.match(/.+\.\.\./)[0] + fftProgress.length +"%";
+	if( fftProgress < 0 ) { 
 		fftLoad(audioName, fftProgress);
 		return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
+	} else if( fftProgress.length > 10 ) {
+		fftReady = true;
+		statsBox.parentNode.removeChild(statsBox);
 	} else {
 		return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
 	}
@@ -105,7 +105,10 @@ if( appStarted ) return appStarted;
 		var a=[], f=[], v=[];
 		if( typeof sBuffer[i] !== 'object' ) {
 			Debugger.log( "sBuffer has hole at "+ i +"\n" );
-			fftLoad(audioName, --fftProgress, true);
+			for( var p in fftProgress ) {
+				if( (p < 10) && (!fftProgres[p]) )
+				  fftLoad(audioName, p, true);
+			}
 			fftReady = false;
 			appStarted = false;
 			canvas.parentNode.appendChild(statsBox);
@@ -264,7 +267,8 @@ if( appStarted ) return appStarted;
 };
 
 canvasApp.updateFFT = function(prog) {
-  if( fftProgress < 100 ) window.fftProgress++;
+  fftProgress[prog] = true;
+  Debugger.log( fftProgress[prog] );
   var aidx = this.aidx;
   var aBuffer = this.aBuffer;
   var fBuffer = this.fBuffer;
@@ -276,18 +280,21 @@ canvasApp.updateFFT = function(prog) {
 	  typeof fBuffer !== 'object' ||
 	  typeof vBuffer !== 'object'
 	) return Debugger.log( "canvas Buffers are undefined");
-  Debugger.log( "Progress "+ fftProgress +"%" );
-  if( fftProgress < 10 ) return;
+  Debugger.log( "Progress "+ fftProgress.length +"%" );
+  if( fftProgress.length < 10 ) return;
   
   if( sBuffer.length > 0 ) {
 	var idx = ( aidx > aBuffer.length )? aidx: (aBuffer.length-1);
 	for( var i=idx, z=sBuffer.length; i<z; i++ ) {
 		var a=[], f=[], v=[];
-		if( (typeof sBuffer[i] !== 'object') && (!firstBreak) ) {
-			canvasApp.fftLoad(audioName, --fftProgress, true);
-			firstBreak = true;
+		if( (typeof sBuffer[i] !== 'object') ) {
+			Debugger.log( "sBuffer has hole at "+ i +"\n" );
+			for( var p in fftProgress ) {
+				if( (p < 10) && (!fftProgres[p]) )
+				  fftLoad(audioName, p, true);
+			}
 			continue;
-		} else continue;
+		}
 
 		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
 			var afv = sBuffer[i][j].split(',');

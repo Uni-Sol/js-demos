@@ -10,3 +10,6 @@
 [submodule "processing/fractal_music"]
 	path = processing/fractal_music
 	url = https://github.com/Revlin/fractal_music.git
+[submodule "corehtml5canvas"]
+	path = corehtml5canvas
+	url = https://github.com/Revlin/corehtml5canvas.git

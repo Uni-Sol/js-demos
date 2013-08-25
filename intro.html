@@ -111,14 +111,15 @@ function init_processing() {
 <script type='text/javascript'>/*<![CDATA[*/  /*Initiate Processing.js*/ init_processing(); /*]]>*/</script>
 <script type="application/processing" target='can23'>/*<![CDATA[*/  /*via Luis Gonzales*/ int w=255,x,y,q,r,s,c; int u[],v[],uPv[],u2lv[],t[]; void setup(){size(w,w); /* Color Mode should be 'HSB'*/ noStroke(); c=0; u=new Int[w*w]; v=new Int[w*w]; uPv=new Int[w*w]; u2lv=new Int[w*w]; t=new Int[w*w*w]; for(y=0;y<w;q=y++-w/2){ for(x=0;x<w;r=x++-w/2){v[y*w+x]=int(w*atan2(q,r)/PI); u[y*w+x]=int(w*32/sqrt(r*r+q*q)); uPv[y*w+x]=u[y*w+x]+v[y*w+x]; u2lv[y*w+x]=u[y*w+x]*2-v[y*w+x];}} for(s=0;s<w;s++){ for(y=0;y<w;y++){ for(x=0;x<w;x++){ t[(s*w*w)+(y*w)+x]=((s+uPv[y*w+x])^u2lv[y*w+x])&w; }}}  s=0;} void draw(){link("javascript:Debugger.log('Color :'+"+ c +");"); s++; for(y=0;y<w;y++){ for(x=0;x<w;x++){  c=t[((s&w)*w*w)+(y*w)+x]; fill(0,0,c); rect(x,y,1,1); /*set(x++,y,c);*/  } /*stroke(0,0,c); line(0,y,w,y);*/ } } /*]]>*/</script-->
 
-<!--Custom canvasApp-->
-<script type='text/javascript' src='stymaps/canvasIntro.js'></script>
 
+<script type="text/javascript" src="scripts/debugger.js"></script>
+<script type="text/javascript" src="scripts/b64.js"></script>
 <script type="text/javascript" src="jsgif/LZWEncoder.js"></script>
 <script type="text/javascript" src="jsgif/NeuQuant.js"></script>
 <script type="text/javascript" src="jsgif/GIFEncoder.js"></script>
-<script type="text/javascript" src="jsgif/b64.js"></script>
 <script type='text/javascript' src='stymaps/mapscripts.js'></script>
+<!--Custom canvasApp-->
+<script type='text/javascript' src='stymaps/canvasIntro.js'></script>
 
   </body>
 </html> 

@@ -102,6 +102,8 @@ if( appStarted ) return appStarted;
   var aBuffer = canvasApp.aBuffer = [];
   var fBuffer = canvasApp.fBuffer = [];
   var vBuffer = canvasApp.vBuffer = [];
+  var w = canvas.width, h = canvas.height;
+  var hcorrect =  h / 2;
   if( sBuffer.length > 0 ) {
 	for( var i=1, z=sBuffer.length; i<z; i++ ) {
 		var a=[], f=[], v=[];
@@ -122,9 +124,12 @@ if( appStarted ) return appStarted;
 		}
 		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
 			var afv = sBuffer[i][j].split(',');
-			a[j] = afv[0];
+			/* Draw a curve of the amplitude data */
+			var curveh = -afv[0]*hcorrect + hcorrect;
+			a[j] = curveh;
 			f[j] = afv[1];
 			v[j] = afv[2];
+			
 		}
 		aBuffer.push(a);
 		fBuffer.push(f);
@@ -136,9 +141,9 @@ if( appStarted ) return appStarted;
   } else for( var i=0, z=2000; i<z; i++ ) aBuffer.push(0.5);
   var aCanvas = document.createElement('canvas');
   var actx = canvasApp.actx = aCanvas.getContext('2d');
-  aCanvas.width = canvas.width;
+  aCanvas.width = aBuffer[0].length;
   aCanvas.height = canvas.height;
-  //audio.play();
+  audio.play();
  
   /* Draw main function */
   
@@ -152,7 +157,7 @@ if( appStarted ) return appStarted;
 	
 	aidx = canvasApp.aidx = 
 	  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
-	ctx.drawImage(aCanvas, 0, 0);
+	ctx.drawImage(aCanvas, 0, 0, w, h);
 	
 	
 	/* Text */
@@ -211,26 +216,23 @@ if( appStarted ) return appStarted;
 		
 		for( var i=0, z=abuf[idx].length, n=z; i<z; i++ ) {
 			/* Draw a curve of the amplitude data */
-			var curveh = -abuf[idx][i]*hcorrect;
 			if( i > 0 ) ctx.quadraticCurveTo(
-				(i-1)<<2, curveh + hcorrect,
-				i<<2, curveh + hcorrect
+				(i-1), abuf[idx][i],
+				i, abuf[idx][i]
 			);
 			/* Draw bars for the eq levels (fft) data */
-			/*
 			var barh = h - vbuf[idx][i]*h;
 			if( (i <= n) ) {
 				var freq = Math.floor(fbuf[idx][i]);
-				ctx.fillRect( i*6+12, barh, 4, h );
+				ctx.fillRect( i, barh, 1, h );
 				//ctx.fillText( freq, i*24, barh-10 );
 			}
-			*/
 		}
 		ctx.stroke();
 		return ++idx;
 		
 	} catch(e) {
-		Debugger.log( "graphSamples failed: " + e.message );
+		Debugger.log( "graphSamples failed: " + e.message +" at frame "+ aidx );
 		return aidx;
 	}
   }
@@ -280,14 +282,16 @@ if( appStarted ) return appStarted;
   }
 };
 
-canvasApp.updateFFT = function(prog) {
+canvasApp.updateFFT = function(prog) { setTimeout( function(prog) {
   fftProgress[prog] = true;
   Debugger.log( fftProgress[prog] );
-  var aidx = this.aidx;
-  var aBuffer = this.aBuffer;
-  var fBuffer = this.fBuffer;
-  var vBuffer = this.vBuffer;
+  var aidx = canvasApp.aidx;
+  var aBuffer = canvasApp.aBuffer;
+  var fBuffer = canvasApp.fBuffer;
+  var vBuffer = canvasApp.vBuffer;
   var firstBreak = false;
+  var w = canvasApp.cv.width, h = canvasApp.cv.height;
+  var hcorrect =  h / 2;
   if( 
 	  typeof sBuffer !== 'object' ||
 	  typeof aBuffer !== 'object' ||
@@ -321,7 +325,9 @@ canvasApp.updateFFT = function(prog) {
 
 		for( var j=0, n=sBuffer[i].length; j<n; j++ ) {
 			var afv = sBuffer[i][j].split(',');
-			a[j] = afv[0];
+			/* Draw a curve of the amplitude data */
+			var curveh = -afv[0]*hcorrect + hcorrect;
+			a[j] = curveh;
 			f[j] = afv[1];
 			v[j] = afv[2];
 		}
@@ -331,4 +337,4 @@ canvasApp.updateFFT = function(prog) {
 	}
 	Debugger.log( "Total frames: "+ (aBuffer.length) );
   }
-};
+}, 266, prog); };

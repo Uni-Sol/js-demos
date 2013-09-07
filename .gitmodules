@@ -1,9 +1,6 @@
 [submodule "processing/phono_divinoro"]
 	path = processing/phono_divinoro
 	url = https://github.com/Revlin/phono_divinoro.git
-[submodule "jsgif"]
-	path = jsgif
-        url = https://github.com/antimatter15/jsgif.git
 [submodule "canvg"]
 	path = canvg
         url = https://github.com/Revlin/canvg.git

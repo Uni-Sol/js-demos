@@ -48,8 +48,8 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
   var canvas = (typeof canvasApp.cv === "object")? canvasApp.cv: canvasApp.cv = cv ;
   //Debugger.log( "Using canvas '"+ canvas.id +"'\n" );
   canvas.id = "layer1";
-  //canvas.alt = "Rotating Rainbowed Fractal: A Canvas drawing simulating a Koch Snowflake";
-  //canvas.src = "http://"+ window.location.host +"/js-demos/kochflake.png";
+  canvas.alt = "Interactive Audio Visualizer";
+  canvas.src = "http://"+ window.location.host +"/js-demos/visualizer.png";
   canvas.width = "640";
   canvas.height = "360";
   canvas.setAttribute( 'onmouseover', 'canvasApp.mouseOver=true;' );

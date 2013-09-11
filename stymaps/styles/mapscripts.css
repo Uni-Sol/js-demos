@@ -85,10 +85,9 @@ span.title {
   font-variant:		small-caps;
 }
 
-canvas#cv {
+div#header-canvas canvas {
   display: 			block;
-  width: 			768px;
-  height: 			432px;
+  width: 			100%;
   position:			relative;
   margin-left: 		0;
 }

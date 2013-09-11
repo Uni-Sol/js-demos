@@ -1,10 +1,9 @@
   var DEG = Math.PI/180;
   var pc=1, lc=16, ki, kcolor='#FFF', kscale=0.5;
 
-  function load() {
+  function canvasApp( ctx ) {
+    var kcan=document.createElement("canvas");
     var kcurve = defineKoch( document.createElement("canvas"), "#000", lc/2 );
-    var ctx=document.createElement("canvas"), kcan=document.createElement("canvas");
-    var old_cv = document.getElementById("layer1"); 
     ctx.id = "layer1";
     ctx.alt = "Rotating Rainbowed Fractal: A Canvas drawing simulating a Koch Snowflake";
     ctx.src = "http://"+ window.location.host +"/js-demos/kochflake.png";
@@ -18,7 +17,7 @@
     window.tx = 0;
     window.zoomKoch = function(evt){
 		clearInterval(window.zoomEvent);
-		if( mouseOver )	window.zoomEvent = setInterval( function(evt) {
+		if( mouseOver )	window.zoomEvent = setTimeout( function(evt) {
 			var width = window.innerWidth,
 	    		height = window.innerHeight;
 			Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
@@ -36,7 +35,7 @@
 				if( tx !== 0) tx -= kscale*64;
 				if( tx < 0 ) tx = 0;
 			}
-		}, 66, evt);
+		}, 6, evt);
     };
     window.spinKoch = function(){
 		//var ctx = ctx || this;
@@ -45,7 +44,6 @@
 		ctx.translate( -kscale*640, -kscale*360 );
     };
 
-    document.getElementById('uni-sol').replaceChild( ctx, old_cv );
     ctx = ctx.getContext("2d");
     ctx.fillStyle = "#000";
     ctx.fillRect( 0, 0, 640, 360);

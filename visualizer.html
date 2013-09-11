@@ -23,8 +23,8 @@
     <div id="stream" style="text-align: center">
 	<br />
       <audio id="aud1" preload="auto" controls="true">
-        <source src="audio/alias_hendrix.mp3" />
-        <source src="audio/alias_hendrix.ogg" />
+        <source src="audio/fft-track.mp3" />
+        <source src="audio/fft-track.ogg" />
       </audio>
     </div>
 	
@@ -38,7 +38,7 @@
 		canvasApp(window.cv);
 	};
 	if (typeof Debugger === "function") { 
-		Debugger.on = false;
+		Debugger.on = true;
 		return; 
 	} else {
 		window.Debugger = {

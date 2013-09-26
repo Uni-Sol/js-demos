@@ -18,6 +18,7 @@ use strict;
 # Incomplete
 
 #Required Perl modules:
+use Cwd qw(chdir cwd);
 use Fcntl qw(:flock SEEK_END);
 use MIME::Base64;
 use Encode qw(encode);
@@ -33,7 +34,8 @@ sub unlock {
 }
 
 #Note the current directory
-my $wkdir = $ENV{PWD};
+my $wkdir = cwd();
+print "$wkdir\n";
 my ($safe_file_name) = $wkdir =~ /^((\/|\w|\-|\_|.)+)+$/; 
 if ( !$safe_file_name ) { 
   die "Invalid output filename";
@@ -65,7 +67,7 @@ while (my $line = <$inputf>) {
   my $fline = $line;
   chop $fline;
 
-  if ( ($fline =~ /^(<link)/) and ($fline =~ /stylesheet/) and ($fline =~ /(href=){1}(\'?)(\"?)((\w|\-|\_|\/|\.)+)(\'?)(\"?)/) ) {
+  if ( ($fline =~ /(<link)/) and ($fline =~ /stylesheet/) and ($fline =~ /(href=){1}(\'?)(\"?)((\w|\-|\_|\/|\.)+)(\'?)(\"?)/) ) {
     my $resname = $4;
     my $respath = $resname;
     if ( $resname =~ /\.?\.?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\// ) {
@@ -114,11 +116,11 @@ while (my $line = <$inputf>) {
           unlock($base64f);
           close($base64f);
         }
-        print $resline, "\n";
+        #print $resline, "\n";
         print $outputf $resline, "\n";
 
       } else {
-        print $resline, "\n";
+        #print $resline, "\n";
         print $outputf $resline, "\n";
       }
     }
@@ -129,7 +131,7 @@ while (my $line = <$inputf>) {
     close $resf;
     chdir $wkdir;
 
-  } elsif ( ($fline =~ /^(<script)/) and ($fline =~ /(src=){1}(\'?)(\"?)((\w|\-|\_|\/|\.)+)(\'?)(\"?)/) ) {
+  } elsif ( ($fline =~ /(<script)/) and ($fline =~ /(src=){1}(\'?)(\"?)((\w|\-|\_|\/|\.)+)(\'?)(\"?)/) ) {
     my $resname = $4;
     my $respath = $resname;
     if ( $resname =~ /\.?\.?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\/?((\w|\-|\_|\.)+)?\// ) {
@@ -148,7 +150,7 @@ while (my $line = <$inputf>) {
     while ($line = <$resf>) {
       my $resline = $line;
       chop $resline;
-      print $resline, "\n";
+      #print $resline, "\n";
       print $outputf $resline, "\n";
     }
     print "<\/script>\n";

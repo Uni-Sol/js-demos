@@ -5,7 +5,7 @@
     var kcan=document.createElement("canvas");
     var kcurve = defineKoch( document.createElement("canvas"), "#000", lc/2 );
     ctx.id = "layer1";
-    ctx.alt = "Rotating Rainbowed Fractal: A Canvas drawing simulating a Koch Snowflake";
+    ctx.alt = "Rotating Rainbowed Fractal";
     ctx.src = "http://"+ window.location.host +"/js-demos/kochflake.png";
     ctx.width = "640";
     ctx.height = "360";

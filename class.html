@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+    <meta name="viewport" content="user-scalable=no,width=640" />
+    <title>JS Class</title>
+	
+    <script type="text/javascript" src="scripts/debugger.js"></script>
+    <script type="text/javascript" src="scripts/range2.js"></script>
+</head>
+<body>
+	<p id="plog"></p>
+	
+<script type="text/javascript" >
+	Debugger.on = true;
+	Debugger.out = document.getElementById('plog');
+	Debugger.log = function ( m, a) {
+		if( a !== undefined ) m = a.replace(/\$1/, m);
+  		if(Debugger.on) Debugger.out.innerHTML += "<br /><br />\n"+ m;
+	};
+	
+	Debugger.log( "Range is a "+ typeof Range );
+	Debugger.log( "Range.prototype is an "+ typeof Range.prototype );
+    var rng1 = new Range(1,3);
+	Debugger.log( "rng1 is an "+ typeof rng1  );
+	Debugger.log( "rng1 has "+ typeof rng1.includes );
+	Debugger.log( "rng1 is "+ rng1 );
+	Debugger.log( "Does rng1 include 2? "+ rng1.includes(2) );
+	rng1.foreach( Debugger.log, "The number $1 is within rng1." );
+    var rng2 = new Range(10,13);
+	Debugger.log( "rng2 is an "+ typeof rng2  );
+	Debugger.log( "rng2 is "+ rng1 );
+	Debugger.log( "Does rng2 include 2? "+ rng2.includes(2) );
+	rng2.foreach( Debugger.log );
+	Debugger.log( "Is rng1 the same kind as rng2? "+ 
+				 (rng1 instanceof Range && rng2 instanceof Range) );
+	Debugger.log( "Is rng1 the same as rng2? "+ (rng1 === rng2) );
+	
+</script>
+	
+</body></html>

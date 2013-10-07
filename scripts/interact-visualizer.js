@@ -45,7 +45,7 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 /* END Global Vars */
 
   /* Get canvas properties */
-  var canvas = (typeof canvasApp.cv === "object")? canvasApp.cv: canvasApp.cv = cv ;
+  var canvas = canvasApp.cv = (typeof canvasApp.cv === "object")? canvasApp.cv: cv ;
   //Debugger.log( "Using canvas '"+ canvas.id +"'\n" );
   canvas.id = "layer1";
   canvas.alt = "Interactive Audio Visualizer";

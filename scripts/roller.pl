@@ -9,7 +9,7 @@ use strict;
 # and should be called from the same dir in which
 # the .html file is located.
 # This file will be parsed and all external resources,
-# including CSS, Fonts, Images, Media  and Scripts
+# including CSS, Fonts, Images, Media and Scripts
 # will have thier references stripped out and their 
 # contents embedded into the contents of the html file,
 # producing a new, single resource (html + everything).
@@ -17,13 +17,13 @@ use strict;
 #
 # Incomplete
 
-#Required Perl modules:
+# Required Perl modules:
 use Cwd qw(chdir cwd);
 use Fcntl qw(:flock SEEK_END);
 use MIME::Base64;
 use Encode qw(encode);
 
-#subroutines for using flock on data files
+# Subroutines for using flock on data files
 sub lock {
   my ($fh) = @_;
   flock($fh, LOCK_EX) or die "Cannot lock data file - $!\n";
@@ -33,7 +33,7 @@ sub unlock {
   flock($fh, LOCK_UN) or die "Cannot unlock data file - $!\n";
 }
 
-#Note the current directory
+# Note the current directory
 my $wkdir = cwd();
 print "$wkdir\n";
 my ($safe_file_name) = $wkdir =~ /^((\/|\w|\-|\_|.)+)+$/; 
@@ -42,17 +42,14 @@ if ( !$safe_file_name ) {
 } else {
   $wkdir = $safe_file_name;
 }
-#foreach my $env (sort keys %ENV) {
-#  print $env,": ",$ENV{$env},"\n"; 
-#}
 
-#Create file handle and open/lock the input file
+# Create file handle and open/lock the input file
 my $inputf;
 my $file = $ARGV[0] or die "Invalid input filename";
 open $inputf, '<', $file or die "Can't open $file: $!\n";
 lock($inputf);
 
-#Do the same for the output file, but check filename for safe chars
+# Do the same for the output file, but check filename for safe chars
 my $outputf; 
 $file = $ARGV[1] or die "Invalid output filename"; 
 ($safe_file_name) = $file =~ /^(\w+.*)$/; 
@@ -185,7 +182,7 @@ while (my $line = <$inputf>) {
     $/ = $save_line_sep;
     $encodedData = $encodedData . encode("UTF-8", encode_base64($b64line, ''));
     $fline =~ s/$URLline/$encodedData/;
-    print $fline, "\n";
+    #print $fline, "\n";
     print $outputf $fline, "\n";
     unlock($base64f);
     close($base64f);
@@ -218,7 +215,7 @@ while (my $line = <$inputf>) {
     $/ = $save_line_sep;
     $encodedData = $encodedData . encode("UTF-8", encode_base64($b64line, ''));
     $fline =~ s/$URLline/$encodedData/;
-    print $fline, "\n";
+    #print $fline, "\n";
     print $outputf $fline, "\n";
     unlock($base64f);
     close($base64f);

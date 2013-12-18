@@ -18,7 +18,9 @@ statsBox.style.marginTop = "-180px";
 statsBox.style.marginLeft = "42.5%";
 statsBox.style.color = "#FFFFFF";
 statsBox.style.textAlign = "center";
-statsBox.innerHTML = '<img src="http://'+ window.location.host +'/js-demos/images/bw-loader.gif" /><br />Loading... ';
+statsBox.innerHTML = ( (document.getElementById('cvSrc') !== null) && (document.getElementById('cvSrc').src.match(/^js-demos/) !== null) )?
+	'<img src="js-demos/images/bw-loader.gif" /><br />Loading... ':
+	'<img src="images/bw-loader.gif" /><br />Loading... ';
 
 var canvasApp = function canvasApp(cv) {
 
@@ -27,12 +29,14 @@ window.audio = window.aud1;
 window.audioLoad = false; 
 window.audioReady = false;
 window.audioName = audio.children[0].src.match(/[\/|\\]*([\w|\-|]+)\.\w\w\w$/)[1];
-audio.onloadstart = function() { audioLoad = true; };
-audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
+window.audio.onloadstart = (typeof audio.onloadstart === "object")?
+	function() { audioLoad = true; return audioLoad; } : 
+	(function(){ audioLoad = true; return {audioLoad:true}; })();
+window.audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
   function() { 
 	Debugger.log("audio is ready"); 
 	audioReady = true; 
-	return true;
+	return audioReady;
   } : 
   (function() {
 	/*
@@ -40,7 +44,7 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 	return false;
 	*/
 	audioReady = true; 
-	return true;
+	return {audioReady:true};
   })();
 /* END Global Vars */
 
@@ -101,8 +105,12 @@ audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 	} else {
 		var sr = document.createElement('script'),
 			fname = (part < 10)? 
-				"http://"+ window.location.host +"/js-demos/data/"+ aname +"-0"+ part +".js":
-				"http://"+ window.location.host +"/js-demos/data/"+ aname +"-"+ part +".js";	
+				( (document.getElementById('cvSrc') !== null) && (document.getElementById('cvSrc').src.match(/^js-demos/) !== null) )?
+					"js-demos/data/"+ aname +"-0"+ part +".js":
+					"data/"+ aname +"-0"+ part +".js" :
+				( (document.getElementById('cvSrc') !== null) && (document.getElementById('cvSrc').src.match(/^js-demos/) !== null) )?
+					"js-demos/data/"+ aname +"-"+ part +".js":
+					"data/"+ aname +"-"+ part +".js" ;	
 		sr.src = fname;
 		document.body.appendChild(sr);
 		if( (part < 99) && (!single) )

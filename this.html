@@ -1,0 +1,71 @@
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Try 'this'</title>
+	<!--this.html
+	  - Examples quoted from JavaScript Enlightenment by Cody Lindley, O'Reilly
+	  - 
+	  - Exploring the use of 'this' within functions as determined
+	  - by CONTEXT versus the use of properties (vars) within
+	  - functions as determined by SCOPE
+	  - 
+	  -->
+	
+    <script type="text/javascript" src="scripts/debugger.js"></script>
+</head>
+<body>
+	<p id="plog"></p>
+	
+<script type="text/javascript" >
+	Debugger.on = true;
+	Debugger.out = document.getElementById('plog');
+	Debugger.log = function ( m, r) {
+		if( r !== undefined ) m = r.replace(/\$1/, m);
+  		if(Debugger.on) Debugger.out.innerHTML += "<br /><br />\n"+ m;
+	};
+	
+	/* from JavaScript Enlightenment */
+	var foo = 'foo';
+	var myObject = { foo: 'I am myObject.foo' };
+	
+	var sayFoo = function() {
+		Debugger.log( "The value of this['foo']: "+ this['foo'] );
+	}
+	
+	/* Give myObject a sayFoo property and have it point to sayFoo function */
+	myObject.sayFoo = sayFoo;
+	
+	sayFoo(); 				// logs 'foo'
+	myObject.sayFoo(); 		// logs 'I am myObject.foo'
+	
+	/* REV EDIT:
+	 * Now that we've tried 'this' let's look at how properties are scoped within functions.
+	 */
+	
+	var bar = 'bar';
+	var sayBar = function() {
+		Debugger.log( "The value of 'bar': "+ bar );
+	}
+	
+	myObject.bar = 'I am myObject.bar';
+	myObject.sayBar = sayBar;
+	
+	sayBar();				// logs 'bar'
+	myObject.sayBar(); 		// logs 'bar' as well even though...
+	Debugger.log( "The value of myObject.bar: "+ myObject.bar ); // logs 'I am myObject.bar'
+	
+	/* 
+	 * ... and so, the value of the 'bar' property of the sayBar() function is determined
+	 * by scope of the function, NOT by the way (context) in which the function is called.
+	 * The scope of the function is determined by where the function was DEFINED, which 
+	 * means that the value of 'bar' is the value of 'window.bar' because sayBar() was
+	 * defined in the global (window) namespace.
+	 * END EDIT
+	 */
+
+</script>
+
+</body>
+</html>

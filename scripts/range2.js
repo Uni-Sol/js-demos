@@ -20,20 +20,14 @@ function Range( from, to ) {
 	/* Store the start and end points (state) of this new range object.
      * These are non-inherited properties that are unique to this object.
 	 * REV EDIT:
-	 * There are some inconsistencies with using properties of 'this'
-	 * within the class methods defined below, so instead duplicate
-	 * variables are defined, which will be directly accessible in the 
-	 * methods without resorting to the 'this.var' form.
+	 * Be sure to use 'this' in all var references within prototype
+	 * methods because without that term, the method/function may
+	 * use the value that is stored in a property of the prototype 
+	 * (CLASS) rather than the value stored in the INSTANCE property
 	 * END EDIT
 	 */
 	this.from = from;
 	this.to = to;
-	
-	/* Be sure to use 'this' in all var references within prototype
-	 * methods because without that term, the method/function may
-	 * use the value that is stored in a property of the prototype 
-	 * (CLASS) rather than the value stored in the INSTANCE property
-	 */
 	
 	/* All Range objects inherit methods & props from Range.prototype. */
 	Range.prototype.includes = function(x) {

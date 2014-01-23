@@ -12,8 +12,8 @@
 <script type="text/javascript" >
 	Debugger.on = true;
 	Debugger.out = document.getElementById('plog');
-	Debugger.log = function ( m, a) {
-		if( a !== undefined ) m = a.replace(/\$1/, m);
+	Debugger.log = function ( m, r) {
+		if( r !== undefined ) m = r.replace(/\$1/, m);
   		if(Debugger.on) Debugger.out.innerHTML += "<br /><br />\n"+ m;
 	};
 	
@@ -27,12 +27,20 @@
 	rng1.foreach( Debugger.log, "The number $1 is within rng1." );
     var rng2 = new Range(10,13);
 	Debugger.log( "rng2 is an "+ typeof rng2  );
-	Debugger.log( "rng2 is "+ rng1 );
+	Debugger.log( "rng2 is "+ rng2 );
 	Debugger.log( "Does rng2 include 2? "+ rng2.includes(2) );
 	rng2.foreach( Debugger.log );
 	Debugger.log( "Is rng1 the same kind as rng2? "+ 
 				 (rng1 instanceof Range && rng2 instanceof Range) );
 	Debugger.log( "Is rng1 the same as rng2? "+ (rng1 === rng2) );
+    var rng3 = new Range(100,103);
+	Debugger.log( "rng3 is an "+ typeof rng3  );
+	Debugger.log( "rng3 is "+ rng3 );
+	Debugger.log( "Does rng3 include 2? "+ rng3.includes(2) );
+	rng3.foreach( Debugger.log );
+	Debugger.log( "Is rng1 the same kind as rng3? "+ 
+				 (rng1 instanceof Range && rng3 instanceof Range) );
+	Debugger.log( "Is rng1 the same as rng3? "+ (rng1 === rng3) );
 	
 </script>
 	

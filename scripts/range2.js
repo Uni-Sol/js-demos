@@ -3,6 +3,7 @@
  *
  * This is a contructor function that initializes new Range objects. Note that the  
  * function does not create or return an object. It just initializes 'this'
+ *
  * REV EDIT:
  * I'm defining the prototype property from within the Range function declaration,
  * just to make sure that works. If so, it seems like a cleaner class definition.
@@ -25,21 +26,29 @@ function Range( from, to ) {
 	 * methods without resorting to the 'this.var' form.
 	 * END EDIT
 	 */
-	var from = this.from = from,
-		to = this.to = to;
+	this.from = from;
+	this.to = to;
+	
+	/* Be sure to use 'this' in all var references within prototype
+	 * methods because without that term, the method/function may
+	 * use the value that is stored in a property of the prototype 
+	 * (CLASS) rather than the value stored in the INSTANCE property
+	 */
 	
 	/* All Range objects inherit methods & props from Range.prototype. */
 	Range.prototype.includes = function(x) {
 		/* Return true if x is in the range, false otherwise */
-		return ( from <= x && x <= to );
+		return ( this.from <= x && x <= this.to );
 	};
-	Range.prototype.foreach = function( f, a ) {
-		/* Invoke f once for each integer in the range */
-		for(var x=Math.ceil(from); x<=to; x++) f(x,a);
+	Range.prototype.foreach = function( func, arg1 ) {
+		/* Invoke func once for each integer in the range */
+		for(var val=Math.ceil(this.from); val<=this.to; val++) 
+			func(val, arg1);
 	};
-	Range.prototype.toString = function() {
+	/* 'this' refers to Range.prototype in this context */
+	this.toString = function() {
 		/* Retrun a string representation of the range */
-		return "("+ from +"..."+ to +")";
+		return "("+ this.from +"..."+ this.to +")";
 	};
 }
 

@@ -18,7 +18,7 @@ statsBox.style.marginTop = "-180px";
 statsBox.style.marginLeft = "42.5%";
 statsBox.style.color = "#FFFFFF";
 statsBox.style.textAlign = "center";
-statsBox.innerHTML = ( (document.getElementById('cvSrc') !== null) && (document.getElementById('cvSrc').src.match(/^js-demos/) !== null) )?
+statsBox.innerHTML = ( location.pathname.match(/visualizer.html/)!==null )?
 	'<img src="images/bw-loader.gif" /><br />Loading... ':
 	'<img src="js-demos/images/bw-loader.gif" /><br />Loading... ';
 
@@ -105,10 +105,10 @@ window.audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 	} else {
 		var sr = document.createElement('script'),
 			fname = (part < 10)? 
-				( (document.getElementById('cvSrc') !== null) && (document.getElementById('cvSrc').src.match(/^js-demos/) !== null) )?
+				( location.pathname.match(/visualizer.html/) !== null )?
 					"data/"+ aname +"-0"+ part +".js":
 					"js-demos/data/"+ aname +"-0"+ part +".js" :
-				( (document.getElementById('cvSrc') !== null) && (document.getElementById('cvSrc').src.match(/^js-demos/) !== null) )?
+				( location.pathname.match(/visualizer.html/) !== null )?
 					"data/"+ aname +"-"+ part +".js":
 					"js-demos/data/"+ aname +"-"+ part +".js" ;	
 		sr.src = fname;

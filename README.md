@@ -1,3 +1,7 @@
+[![Creative Commons Licence](http://i.creativecommons.org/l/by-sa/3.0/nz/88x31.png)](http://creativecommons.org/licenses/by-sa/3.0/nz/deed.en_GB) 
+
+*These demos by [Revlin John ](mailto:stylogicalmaps@gmail.com) are licensed under the [Creative Commons Attribution-ShareAlike 3.0 New Zealand License 2013 ](http://creativecommons.org/licenses/by-sa/3.0/nz/deed.en_GB)*
+
 js-demos
 ========
 
@@ -16,6 +20,8 @@ Here's an equally loose index of what can be viewed online
 
 [Koch Snowflake ](http://uni-sol.org/js-demos/kochflake.html) 
 (expansion of example from 'Canvas Pocket Reference' by D. Flanagan, 2011)
+[![Koch Snowflake](kochflake.png)](http://uni-sol.org/js-demos/kochflake.html) 
+
 
 [FFT Simple ](http://uni-sol.org/js-demos/fft-simple.html) 
 (first try at music visualization using pre-analyzed fft data)
@@ -25,3 +31,4 @@ Here's an equally loose index of what can be viewed online
 
 [Visualizer (+input) ](http://uni-sol.org/js-demos/visualizer.html)
 (continues exploration of music visualization, adding mouse interaction)
+[![Visualizer+](visualizer.png)](http://uni-sol.org/js-demos/visualizer.html) 

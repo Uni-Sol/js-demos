@@ -9,19 +9,24 @@
 
   <body onload='load();layer1.onmousemove="";'>
 
-	<div id='kochkanvas'>
-    	<div id='layer1' width='640' height='360'>
+	 <div id='kochkanvas'>
+	   <div id='layer1' width='640' height='360'>
          <div id='main-header'>
            <h4>WHERE THE CANVAS AT?!!</h4>
          </div>
        </div><br>
-       <input id='zin' type='button' value='Zoom+' style='display:block;position:relative;margin-top:-160px;'
-             onclick='kscale*=1.30;layer1.getContext("2d").fillRect(0,0,640,360);' /><br>
-       <input id='zout' type='button' value='Zoom-' style='display:block;position:relative;margin-top:-20px;'
-             onclick='kscale*=0.85;layer1.getContext("2d").fillRect(0,0,640,360);' /><br>
+       <input id='zin' type='button' value='Zoom+' 
+			  style='display:block;position:relative;margin-top:-160px;width:120px;'
+			  onclick='kscale*=1.30;//layer1.getContext("2d").fillRect(0,0,640,360);' /><br>
+       <input id='zout' type='button' value='Zoom-' 
+			  style='display:block;position:relative;margin-top:-20px;width:120px;'
+			  onclick='kscale*=0.85;//layer1.getContext("2d").fillRect(0,0,640,360);' /><br>
+       <input id='zspin' type='button' value='Spin(*)'
+			  style='display:block;position:relative;margin-top:-20px;width:120px;'
+			  onclick='setInterval(spinKoch,33);' /><br>
        <input id='stop' type='button' value='STOP' style='display:block;position:relative;margin-top:-0px;'
              onclick='clearInterval(ki)' />
-	</div>
+	 </div>
 
     <script type="text/javascript" src="scripts/koch.js"></script>
   <script type="text/javascript">

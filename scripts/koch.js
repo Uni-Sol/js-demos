@@ -12,6 +12,11 @@
     ctx.setAttribute( 'onmouseover', 'mouseOver=true;' );
     ctx.setAttribute( 'onmouseout', 'clearInterval(window.zoomEvent);mouseOver=false;' );
     ctx.setAttribute( 'onmousemove', 'zoomKoch(event);' );
+    ctx = ctx.getContext("2d");
+    ctx.fillStyle = "#000";
+    ctx.fillRect( 0, 0, 640, 360);
+    kcan.width = 1280;
+    kcan.height = 720;
     window.mouseOver = false;
     window.zoomEvent = 0;
     window.tx = 0;
@@ -23,13 +28,13 @@
 			Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
 			if(evt.clientX > width/2) {
 				kscale*=1.30;
-				ctx.fillStyle = 'rgba(0,0,0,0.25)';
+				ctx.fillStyle = 'rgba(0,0,0,0.5)';
 				ctx.fillRect(0,0,640,360);
 				//ctx.translate(-kscale*64, 0);			
 				tx += kscale*6;
 			} else {
         		kscale*=0.85;
-				ctx.fillStyle = 'rgba(0,0,0,0.25)';
+				ctx.fillStyle = 'rgba(0,0,0,0.5)';
 				ctx.fillRect(0,0,640,360);
 				//ctx.translate(tx, 0);
 				if( tx !== 0) tx -= kscale*64;
@@ -37,18 +42,12 @@
 			}
 		}, 6, evt);
     };
-    window.spinKoch = function(){
-		//var ctx = ctx || this;
+    window.spinKoch = function(evt) {
 		ctx.translate( kscale*640, kscale*360 );
-		ctx.rotate(DEG*(pc*6));
+		ctx.rotate(DEG*(pc/4));
 		ctx.translate( -kscale*640, -kscale*360 );
     };
-
-    ctx = ctx.getContext("2d");
-    ctx.fillStyle = "#000";
-    ctx.fillRect( 0, 0, 640, 360);
-    kcan.width = 1280;
-    kcan.height = 720;   
+   
     var midp = (Math.tan(DEG*30)*kcan.width/4);
     var data = [ {'0':kcan.width/4,'1':(kcan.height/2+midp)-3,'2':kcan.width/2,'3':0},
                         {'0':kcan.width/4+kcan.width/2-2,'1':(kcan.height/2+midp),'2':kcan.width/2,'3':-120},
@@ -129,13 +128,14 @@
     return A;
   }
 
-  var spinKoch = function spinKoch (ctx) {
-    //ctx.translate( kscale*640, kscale*360 );
-    //ctx.rotate(DEG*(pc*6));
-    //ctx.translate( -kscale*640, -kscale*360 );
-  };
+
 
 /*
+  var spinKoch = function spinKoch (ctx) {
+    ctx.translate( kscale*640, kscale*360 );
+    ctx.rotate(DEG*(pc*6));
+    ctx.translate( -kscale*640, -kscale*360 );
+  };
              onclick='kscale*=0.85;ctx.fillRect(0,0,640,360);' /><br>
              onclick='spinKoch=function spinKoch(ctx){document.getElementById("spin").style.display="none";ctx.translate( kscale*640, kscale*360 );ctx.rotate(DEG*(pc*6));ctx.translate( -kscale*640, -kscale*360 );};' />
              onclick='clearInterval(ki)' />

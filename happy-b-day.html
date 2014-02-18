@@ -17,10 +17,10 @@
            Please play in a new web browser, like Firefox or Chrome.
          </div>
        </canvas>
-    </div>
+    </div><a id="aud1_play" href="#" onclick="(function() { audio.play(); this.innerHTML='Now Playing'; } ());">Play</a>
 	
 	<h1 id="text_title">Fathers</h1>
-	<p id="text_copy">
+	<p id="text_copy" style="display:none;">
 	
 		Don't Give Up
 		
@@ -53,15 +53,40 @@
 		As your heart demands
 	</p>
 
-    <div id="stream" style="text-align: center">
+    <div id="stream" style="display:none; text-align:center">
       <video id="aud1" preload="auto"  controls="true">
         <source src="video/fathers.mp4" />
         <source src="video/fathers.ogv" />
       </video>
     </div>
 	
+    <a href="http://www.w3.org/2010/05/video/mediaevents.html" target="_blank">Media Help</a>
+
 	<script type="text/javascript" src="scripts/debugger.js"></script>
-	<script type="text/javascript" src="scripts/fathers-visualizer.js"></script>
-	<script type="text/javascript" src="data/fathers-data.min.js"></script>
+	<script type="text/javascript" id="cvSrc" src="scripts/interact-visualizer.js"></script>
+	<script type="text/javascript">
+(function() { 
+	window.onload = function(){
+		canvasApp(window.cv);
+	};
+	window.aud1_play.style.display = "none";
+	window.aud1.addEventListener( "loadstart", function(evt){
+		setTimeout( function() {
+			window.aud1_play.style.display = "inline";
+		}, 3333 );
+	} );
+	
+	if (typeof Debugger === "function") { 
+		Debugger.on = false;
+		return; 
+	} else {
+		window.Debugger = {
+			log: function() {
+				/* no debugger.js */
+			}
+		};
+	}
+} )();
+	</script>
 	
 </body></html>

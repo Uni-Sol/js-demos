@@ -18,7 +18,7 @@ statsBox.style.marginTop = "-180px";
 statsBox.style.marginLeft = "42.5%";
 statsBox.style.color = "#FFFFFF";
 statsBox.style.textAlign = "center";
-statsBox.innerHTML = ( location.pathname.match(/visualizer.html/)!==null )?
+statsBox.innerHTML = ( location.pathname.match(/(?:visualizer\.html|happy-b-day\.html)/)!==null )?
 	'<img src="images/bw-loader.gif" /><br />Loading... ':
 	'<img src="js-demos/images/bw-loader.gif" /><br />Loading... ';
 
@@ -92,6 +92,7 @@ window.audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
     canvas.parentNode.appendChild(statsBox);
 
   var fftLoad = canvasApp.fftLoad = function fftLoad ( aname, pr, single ) {
+	audio.load();
 	var part;
 	if( pr < 0 ) {
 		fftProgress = [];
@@ -99,16 +100,17 @@ window.audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 	} else {
 		part = pr;
 	}
+	  
 	if( (pr > 99) || (part > 99) ) {
 		clearTimeout(fftLoader);
 		return true;
 	} else {
 		var sr = document.createElement('script'),
 			fname = (part < 10)? 
-				( location.pathname.match(/visualizer.html/) !== null )?
+				( location.pathname.match(/(?:visualizer\.html|happy-b-day\.html)/) !== null )?
 					"data/"+ aname +"-0"+ part +".js":
 					"js-demos/data/"+ aname +"-0"+ part +".js" :
-				( location.pathname.match(/visualizer.html/) !== null )?
+				( location.pathname.match(/(?:visualizer\.html|happy-b-day\.html)/) !== null )?
 					"data/"+ aname +"-"+ part +".js":
 					"js-demos/data/"+ aname +"-"+ part +".js" ;	
 		sr.src = fname;
@@ -210,6 +212,31 @@ if( appStarted ) return appStarted;
 	aidx = canvasApp.aidx = 
 	  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
 	ctx.drawImage(aCanvas, 0, 0, w>>1, h);
+	  
+	/* Draw video input, if any */
+	var video = audio;
+	try {
+  		var vx = 0;
+  		vx =( video !== null )? (canvas.width/2 - video.videoWidth/2): 0;
+		ctx.globalCompositeOperation = "lighter";
+    	if ( (video !== null) && (video.readyState > 2) && (!video.paused) )
+        	ctx.drawImage(video, vx, 0, video.videoWidth, video.videoHeight);
+		/* Composite fill blue background with tranparency tied to bass v */
+		ctx.globalCompositeOperation = "source-atop";
+		ctx.fillStyle = "rgba(0%, 0%, 100%, "+ (0.25 - vBuffer[aidx][0]*4) +")";
+		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
+		/* Now fill red background tied to snare v */
+		ctx.fillStyle = "rgba(100%, 0%, 0%, "+ (0.25 - vBuffer[aidx][5]*4) +")";
+		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
+		/* Now fill green background */
+		ctx.fillStyle = "rgba(0%, 100%, 0%, "+ (0.25 - vBuffer[aidx][12]*4) +")";
+		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
+		ctx.globalCompositeOperation = "source-over";
+    } catch (err) {
+		Debugger.on = true;
+        Debugger.log("Failed to draw "+ video.id +": "+ err.message);
+    }
+	
 	ctx.save();
 	ctx.translate(w, 0);
 	ctx.scale(-1, 1);

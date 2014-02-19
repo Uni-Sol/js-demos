@@ -29,6 +29,9 @@ Here's an equally loose index of what can be viewed online
 (continues exploration of music visualization, adding mouse interaction)
 ![Visualizer+](visualizer.png)
 
+[Visualizer (+VIDEO) ](http://uni-sol.org/js-demos/happy-b-day.html)
+(continues exploration of music visualization, adding real-time compositing of HTML5 video)
+![Visualizer+Video](fathers.png)
 
 ![Creative Commons Licence](http://i.creativecommons.org/l/by-sa/3.0/nz/88x31.png) 
 

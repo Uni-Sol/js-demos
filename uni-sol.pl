@@ -10,7 +10,7 @@ sub getIndex {
 
 sub getReadme {
 	my( $self, $readme ) = @_;
-	my $URL = $self->req->url->base;
+	my $URL = $self->req->url->base);
 	my( $fh, $mh, $save_line_sep );
 	my $mark2html = '';
 	open $mh, '>', \$mark2html;
@@ -47,10 +47,15 @@ sub getReadme {
 	$self->render('readme');
 };
 
-get '/js-demos' => sub {
+get( '/js-demos' => sub {
 	my $self = shift;
 	getReadme($self, 'js-demos/README.md');
-};
+} );
+
+get( '/js-demos/' => sub {
+	my $self = shift;
+	getReadme($self, 'js-demos/README.md');
+} );
 
 get '/vision' => sub {
 	my $self = shift;

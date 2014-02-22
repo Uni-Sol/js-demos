@@ -6,7 +6,7 @@
 	url = https://github.com/Revlin/corehtml5canvas.git
 [submodule "jsgif"]
 	path = jsgif
-	url = https://github.com/antimatter15/jsgif.git
+	url = https://github.com/Revlin/jsgif.git
 [submodule "processing/phono_divinoro"]
 	path = processing/phono_divinoro
 	url = https://github.com/Revlin/phono_divinoro.git

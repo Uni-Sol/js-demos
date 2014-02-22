@@ -9,8 +9,9 @@
 
 <link rel="stylesheet" type="text/css" href='styles/mapscripts.css'></link>
 
-<script src='jquery.1.4.x.min.js'></script>
+<script type='text/javascript' src='jquery.1.4.x.min.js'></script>
 
+<script type='text/javascript' src='debugger.js'></script>
 <script type='text/javascript'>
 /* Onload: */
 var canvasApp=[], drawLoop=[], drawVideo=[], recordGIF={};
@@ -93,12 +94,21 @@ function init_processing() {
        </canvas>
        <canvas id='can23' width='480' height='270' style="image-rendering:optimizespeed ! important;"></canvas>
     </div>
+	<div id="play_controls" style="width:100%">
+		<a href="javascript:recordGIF ()">Record GIF</a>
+		<p class="menulinkleft"><a href="#">&lt;&lt;</a></p>
+		<p class="menulinkright"><a href="#">&gt;&gt;</a></p>
+	</div>
 
     <p id="vstatus"></p>
+	<p id="license" style="color:#fff">
+		<img src="http://i.creativecommons.org/l/by-sa/3.0/nz/88x31.png" alt="Creative Commons Licence"><br />
+		<em>These demos by <a href="mailto:revlin@uni-sol.org">Revlin John </a> are licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/nz/deed.en_GB">Creative Commons Attribution-ShareAlike 3.0 New Zealand License 2013 </a></em>
+	</p>
 
-    <a href="http://www.w3.org/2010/05/video/mediaevents.html" target="_blank">Media Help</a><br />     
-    <video id="vid1" class="standard" style="/*visibility: hidden;*/" preload="auto"  muted="true"><source src="../video/revlin_john.mp4" /><source src="../video/revlin_john.ogv" /></video>
-    <audio id="aud1" class="standard" style="/*visibility: hidden;*/" preload="auto" autoplay=""><source src="../audio/buddha.mp3" /><source src="../audio/buddha.ogg" /></audio>
+    <!--a href="http://www.w3.org/2010/05/video/mediaevents.html" target="_blank">Media Help</a--><br />     
+    <!--video id="vid1" class="standard" style="/*visibility: hidden;*/" preload="auto"  muted="true"><source src="../video/revlin_john.mp4" /><source src="../video/revlin_john.ogv" /></video-->
+    <audio id="aud1" class="standard" style="/*visibility: hidden;*/" preload="auto" autoplay=""><source src="../audio/attention.mp3" /><source src="../audio/attention.ogg" /></audio>
 
 <script src='processing-1.0.0.js' type='text/javascript'></script>
 <script type='text/javascript'>/*<![CDATA[*/  /*Initiate Processing.js*/ init_processing(); /*]]>*/</script>

@@ -24,6 +24,7 @@
 body {
   background-color: #000;
   font-family: 		Comfortaa Arial;
+  text-align: 		center;
 }
 
 body * div, h1, h2, h3, h4, h5, a, p, span, blockquote {
@@ -98,7 +99,7 @@ div#header-canvas canvas {
 	  min-height: 	346px;
 	  max-height:	393px;
 	  margin-top:	2%;
-	  background-image:url("http://4.bp.blogspot.com/_ufKZ7oM8U6k/SfVaFdTfXaI/AAAAAAAAADM/Re0CAlv_Sww/S1600-R/stage_control.jpg");
+	  background-image:url("../images/stage_control.jpg");
 	  background-repeat:no-repeat;
 	  background-position:80% 50%;
 	  font-family:	monotype, arial, sans-serif;

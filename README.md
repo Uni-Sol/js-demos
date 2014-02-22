@@ -33,10 +33,12 @@ Here's an equally loose index of what can be viewed online:
 (continues exploration of music visualization, adding real-time compositing of HTML5 video)
 ![Visualizer+Video](fathers.png)
 
-[Stylogical Maps ]
+Stylogical Maps 
 (these demos are my first efforts with HTML5 Canvas, initially using the Processing.js API. Later demos in the series use direct calls to the Canvas API)
-![Stymaps11](stymaps/images/stymaps11.gif) ![Stymaps12](stymaps/images/stymaps12.gif) 
-![Stymaps15](stymaps/images/stymaps15.gif) ![Stymaps25](stymaps/images/stymaps25.gif)
+![Stymaps11](stymaps/images/stymaps11.gif) 
+![Stymaps12](stymaps/images/stymaps12.gif) 
+![Stymaps15](stymaps/images/stymaps15.gif) 
+![Stymaps25](stymaps/images/stymaps25.gif)
 
 ![Creative Commons Licence](http://i.creativecommons.org/l/by-sa/3.0/nz/88x31.png) 
 

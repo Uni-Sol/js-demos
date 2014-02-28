@@ -34,7 +34,7 @@ Here's an equally loose index of what can be viewed online:
 ![Visualizer+Video](fathers.png)
 
 Stylogical Maps 
-(these demos are my first efforts with HTML5 Canvas, initially using the Processing.js API. Later demos in the series use direct calls to the Canvas API)
+(these demos were my first efforts with HTML5 Canvas, initially using the Processing.js API. Later demos in the series use direct calls to the Canvas API)
 ![Stymaps11](stymaps/images/stymaps11.gif) 	![Stymaps12](stymaps/images/stymaps12.gif) 
 ![Stymaps15](stymaps/images/stymaps15.gif) 	![Stymaps25](stymaps/images/stymaps25.gif)
 

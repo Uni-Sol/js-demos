@@ -5,6 +5,12 @@ These are some very loosely organized experiments, for the purpose of improving 
 
 Here's an equally loose index of what can be viewed online:
 
+
+[Koch Snowflake ](http://uni-sol.org/js-demos/kochflake.html) 
+(expansion of example from 'Canvas Pocket Reference' by D. Flanagan, 2011)
+![Koch Snowflake](kochflake.png)
+
+
 [MOV16 ](http://uni-sol.org/js-demos/mov16.html) 
 (output shows up in console; an emulation of an assembly MOV opperation on a 16-bit microprocessor) 
 
@@ -13,10 +19,6 @@ Here's an equally loose index of what can be viewed online:
 
 [Try 'this' ](http://uni-sol.org/js-demos/this.html) 
 (comparing use of 'this' v.s. vars within methods; partially based on code from 'JavaScript Enlightenment' by C. Lindley, 2012)
-
-[Koch Snowflake ](http://uni-sol.org/js-demos/kochflake.html) 
-(expansion of example from 'Canvas Pocket Reference' by D. Flanagan, 2011)
-![Koch Snowflake](kochflake.png)
 
 
 [FFT Simple ](http://uni-sol.org/js-demos/fft-simple.html) 
@@ -32,6 +34,7 @@ Here's an equally loose index of what can be viewed online:
 [Visualizer (+VIDEO) ](http://uni-sol.org/js-demos/happy-b-day.html)
 (continues exploration of music visualization, adding real-time compositing of HTML5 video)
 ![Visualizer+Video](fathers.png)
+
 
 Stylogical Maps 
 (these demos were my first efforts with HTML5 Canvas, initially using the Processing.js API. Later demos in the series use direct calls to the Canvas API)

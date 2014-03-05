@@ -35,7 +35,7 @@ public class tunnel3d extends PApplet {
   public void draw() {
     if(! spress ) background(100,127,100);
     
-    int fct = 31;  /* Scale factor; smaller number == bigger rows; 
+    int fct = 63;  /* Scale factor; smaller number == bigger rows; 
                      * must be less than 255 */
     int ofs = 64;  /* Start point; must be less than 255-fct */
     strokeWeight(1);

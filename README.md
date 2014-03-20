@@ -11,6 +11,11 @@ Here's an equally loose index of what can be viewed online:
 ![Koch Snowflake](kochflake.png)
 
 
+[Gradient ](http://uni-sol.org/js-demos/gradient.html) 
+(Gradient example converted to Canvas API from [Processing API](http://processing.org/examples/lineargradient.html) )
+![Gradient Example](gradient.png)
+
+
 [MOV16 ](http://uni-sol.org/js-demos/mov16.html) 
 (output shows up in console; an emulation of an assembly MOV opperation on a 16-bit microprocessor) 
 

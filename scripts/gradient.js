@@ -97,7 +97,7 @@ function canvasApp2( ctx ) {
 }
 
 function canvasApp3( ctx ) {
-    /* Second canvas */
+    /* Third canvas */
     ctx.id = "layer2";
     ctx.alt = "Canvas Gradient Example";
     var w = ctx.width = "640";

@@ -6,6 +6,21 @@ These are some very loosely organized experiments, for the purpose of improving 
 Here's an equally loose index of what can be viewed online:
 
 
+[FFT Simple ](http://uni-sol.org/js-demos/fft-simple.html) 
+(first try at music visualization using pre-analyzed fft data)
+
+[FFT More ](http://uni-sol.org/js-demos/fft.html) 
+(continues exploration of music visualization using pre-analyzed fft data)
+
+[Visualizer (+input) ](http://uni-sol.org/js-demos/visualizer.html)
+(continues exploration of music visualization, adding mouse interaction)
+![Visualizer+](visualizer.png)
+
+[Visualizer (+VIDEO) ](http://uni-sol.org/js-demos/happy-b-day.html)
+(continues exploration of music visualization, adding real-time compositing of HTML5 video)
+![Visualizer+Video](fathers.png)
+
+
 [Koch Snowflake ](http://uni-sol.org/js-demos/kochflake.html) 
 (expansion of example from 'Canvas Pocket Reference' by D. Flanagan, 2011)
 ![Koch Snowflake](kochflake.png)
@@ -24,21 +39,6 @@ Here's an equally loose index of what can be viewed online:
 
 [Try 'this' ](http://uni-sol.org/js-demos/this.html) 
 (comparing use of 'this' v.s. vars within methods; partially based on code from 'JavaScript Enlightenment' by C. Lindley, 2012)
-
-
-[FFT Simple ](http://uni-sol.org/js-demos/fft-simple.html) 
-(first try at music visualization using pre-analyzed fft data)
-
-[FFT More ](http://uni-sol.org/js-demos/fft.html) 
-(continues exploration of music visualization using pre-analyzed fft data)
-
-[Visualizer (+input) ](http://uni-sol.org/js-demos/visualizer.html)
-(continues exploration of music visualization, adding mouse interaction)
-![Visualizer+](visualizer.png)
-
-[Visualizer (+VIDEO) ](http://uni-sol.org/js-demos/happy-b-day.html)
-(continues exploration of music visualization, adding real-time compositing of HTML5 video)
-![Visualizer+Video](fathers.png)
 
 
 Stylogical Maps 

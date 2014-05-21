@@ -1,0 +1,28 @@
+{
+  "name": "js-demos",
+  "version": "0.1.1",
+  "description": "Exploring JavaScript, using both core language and client-side scripts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Revlin/js-demos"
+  },
+  "keywords": [
+    "javascript",
+    "ecmascript",
+    "js",
+    "es5"
+  ],
+  "author": "Revlin John",
+  "license": "Creative Commons Attribution-ShareAlike 3.0 New Zealand License 2013 ",
+  "bugs": {
+    "url": "https://github.com/Revlin/js-demos/issues"
+  },
+  "homepage": "https://github.com/Revlin/js-demos",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-jsmin-sourcemap": "^1.10.0"
+  }
+}

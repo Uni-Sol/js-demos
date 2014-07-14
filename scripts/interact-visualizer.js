@@ -1,5 +1,5 @@
 /* Accelerated Visualizing
- * I've had some success with analyzin an audio file and visualizing the output.
+ * I've had some success with analyzing an audio file and visualizing the output.
  * Now I would like to speed up the drawing algorithms
  */
 
@@ -46,6 +46,7 @@ window.audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 	audioReady = true; 
 	return {audioReady:true};
   })();
+window.canvasApp.canDrawVideo = true;
 /* END Global Vars */
 
   /* Get canvas properties */
@@ -68,7 +69,7 @@ window.audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 		if( canvasApp.mouseOver ) window.mouseEvent = setTimeout( function(evt) {
 			var width = window.innerWidth,
 	    		height = window.innerHeight;
-			Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
+			//Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
 			var strokeB, strokeR = canvasApp.strokeStyle.match(/rgba\((\d+)\%/)[1];
 			if( strokeR === null ) { 
 				strokeR = 50;
@@ -83,7 +84,7 @@ window.audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 			} else {
 				canvasApp.strokeStyle = 'rgba('+ (--strokeR)*2 +'%,100%,'+ (++strokeB)*2 +'%,1.0)';
 			}
-			Debugger.log( canvasApp.strokeStyle );
+			//Debugger.log( canvasApp.strokeStyle );
 		}, 33, evt);
     };
   
@@ -136,7 +137,7 @@ if(! fftReady ) {
 		return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
 	}
 } else if(! audioReady ) {
-	Debugger.log( audioReady );
+	//Debugger.log( audioReady );
 	if( audioLoad === false ) audio.load();
 	return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
 } else clearTimeout(appDelay);
@@ -215,7 +216,7 @@ if( appStarted ) return appStarted;
 	  
 	/* Draw video input, if any */
 	var video = audio;
-	try {
+	if( window.canvasApp.canDrawVideo === true ) try {
   		var vx = 0;
   		vx =( video !== null )? (canvas.width/2 - video.videoWidth/2): 0;
 		ctx.globalCompositeOperation = "lighter";
@@ -234,7 +235,8 @@ if( appStarted ) return appStarted;
 		ctx.globalCompositeOperation = "source-over";
     } catch (err) {
 		Debugger.on = true;
-        Debugger.log("Failed to draw "+ video.id +": "+ err.message);
+        Debugger.log("Failed to draw "+ video.id +": "+ err.stack);
+		window.canvasApp.canDrawVideo = false;
     }
 	
 	ctx.save();
@@ -316,7 +318,7 @@ if( appStarted ) return appStarted;
 		return ++idx;
 		
 	} catch(e) {
-		Debugger.log( "graphSamples failed: " + e.message +" at frame "+ aidx );
+		Debugger.log( "graphSamples failed: " + e.message +" at frame "+ aidx +"\n"+ e.stack );
 		return aidx;
 	}
   }

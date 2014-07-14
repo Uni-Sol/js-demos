@@ -1,5 +1,5 @@
 /* Accelerated Visualizing
- * I've had some success with analyzin an audio file and visualizing the output.
+ * I've had some success with analyzing an audio file and visualizing the output.
  * Now I would like to speed up the drawing algorithms
  */
 

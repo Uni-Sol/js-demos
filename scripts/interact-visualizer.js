@@ -20,7 +20,7 @@ statsBox.style.color = "#FFFFFF";
 statsBox.style.textAlign = "center";
 statsBox.innerHTML = ( location.pathname.match(/(?:visualizer\.html|happy-b-day\.html)/)!==null )?
 	'<img src="images/bw-loader.gif" /><br />Loading... ':
-	'<img src="js-demos/images/bw-loader.gif" /><br />Loading... ';
+	'<img src="/js-demos/images/bw-loader.gif" /><br />Loading... ';
 
 var canvasApp = function canvasApp(cv) {
 
@@ -110,10 +110,10 @@ window.canvasApp.canDrawVideo = true;
 			fname = (part < 10)? 
 				( location.pathname.match(/(?:visualizer\.html|happy-b-day\.html)/) !== null )?
 					"data/"+ aname +"-0"+ part +".js":
-					"js-demos/data/"+ aname +"-0"+ part +".js" :
+					"/js-demos/data/"+ aname +"-0"+ part +".js" :
 				( location.pathname.match(/(?:visualizer\.html|happy-b-day\.html)/) !== null )?
 					"data/"+ aname +"-"+ part +".js":
-					"js-demos/data/"+ aname +"-"+ part +".js" ;	
+					"/js-demos/data/"+ aname +"-"+ part +".js" ;	
 		sr.src = fname;
 		document.body.appendChild(sr);
 		if( (part < 99) && (!single) )

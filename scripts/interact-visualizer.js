@@ -93,7 +93,7 @@ window.canvasApp.canDrawVideo = true;
     canvas.parentNode.appendChild(statsBox);
 
   var fftLoad = canvasApp.fftLoad = function fftLoad ( aname, pr, single ) {
-	audio.load();
+	//audio.load();
 	var part;
 	if( pr < 0 ) {
 		fftProgress = [];

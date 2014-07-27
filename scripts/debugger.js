@@ -34,7 +34,7 @@ Debugger.log = function( m, r ) {
 	if( typeof message === 'boolean' ) message = m +"";
 	
 	if( (r !== undefined) && (typeof message === 'string') ) 
-	  message = r.replace(/\$1/, m);
+	  message = r.replace(/\$1/, message);
 	
 	try {
 		console.log( message );

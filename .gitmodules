@@ -13,3 +13,6 @@
 [submodule "processing/fractal_music"]
 	path = processing/fractal_music
 	url = git@github.com:Revlin/fractal_music.git
+[submodule "stymaps"]
+	path = stymaps
+	url = git@uni-sol.org:revlin/stymaps.git

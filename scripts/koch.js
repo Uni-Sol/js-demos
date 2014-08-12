@@ -2,21 +2,25 @@
   var pc=1, lc=16, ki, kcolor='#FFF', kscale=0.5;
 
   function canvasApp( ctx ) {
+	var w, h;
     var kcan=document.createElement("canvas");
     var kcurve = defineKoch( document.createElement("canvas"), "#000", lc/2 );
     ctx.id = "layer1";
     ctx.alt = "Rotating Rainbowed Fractal";
     ctx.src = "http://"+ window.location.host +"/js-demos/kochflake.png";
-    ctx.width = "640";
-    ctx.height = "360";
+    ctx.width = ctx.width || "640";
+    ctx.height = ctx.height || "360";
     ctx.setAttribute( 'onmouseover', 'mouseOver=true;' );
     ctx.setAttribute( 'onmouseout', 'clearInterval(window.zoomEvent);mouseOver=false;' );
     ctx.setAttribute( 'onmousemove', 'zoomKoch(event);' );
+	w = ctx.width;
+	h = ctx.height;
+	
     ctx = ctx.getContext("2d");
     ctx.fillStyle = "#000";
-    ctx.fillRect( 0, 0, 640, 360);
-    kcan.width = 1280;
-    kcan.height = 720;
+    ctx.fillRect( 0, 0, w, h);
+    kcan.width = w*2;
+    kcan.height = h*2;
     window.mouseOver = false;
     window.zoomEvent = 0;
     window.tx = 0;
@@ -29,13 +33,13 @@
 			if(evt.clientX > width/2) {
 				kscale*=1.30;
 				ctx.fillStyle = 'rgba(0,0,0,0.5)';
-				ctx.fillRect(0,0,640,360);
+				ctx.fillRect(0,0,w,h);
 				//ctx.translate(-kscale*64, 0);			
 				tx += kscale*6;
 			} else {
         		kscale*=0.85;
 				ctx.fillStyle = 'rgba(0,0,0,0.5)';
-				ctx.fillRect(0,0,640,360);
+				ctx.fillRect(0,0,w,h);
 				//ctx.translate(tx, 0);
 				if( tx !== 0) tx -= kscale*64;
 				if( tx < 0 ) tx = 0;
@@ -43,9 +47,9 @@
 		}, 6, evt);
     };
     window.spinKoch = function(evt) {
-		ctx.translate( kscale*640, kscale*360 );
+		ctx.translate( kscale*w, kscale*h );
 		ctx.rotate(DEG*(pc/4));
-		ctx.translate( -kscale*640, -kscale*360 );
+		ctx.translate( -kscale*w, -kscale*h );
     };
    
     var midp = (Math.tan(DEG*30)*kcan.width/4);

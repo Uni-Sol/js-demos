@@ -10,7 +10,7 @@
   <body onload='load();layer1.onmousemove="";'>
 
 	 <div id='kochkanvas'>
-	   <div id='layer1' width='640' height='360'>
+	   <div id='layer1' width='1024' height='576'>
          <div id='main-header'>
            <h4>WHERE THE CANVAS AT?!!</h4>
          </div>
@@ -32,6 +32,8 @@
   <script type="text/javascript">
 	function load() {
 		var canvas=document.createElement("canvas");
+		canvas.width = document.getElementById("layer1").getAttribute('width');
+		canvas.height = document.getElementById("layer1").getAttribute('height');
 		document.getElementById('kochkanvas').replaceChild( canvas, document.getElementById("layer1") );
 		canvasApp(canvas);
 		if (typeof Debugger === "function") { 

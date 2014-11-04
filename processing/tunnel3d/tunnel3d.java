@@ -8,7 +8,7 @@ public class tunnel3d extends PApplet {
   static boolean spress=false;
   
   public void setup() { 
-    size(w*3,w);
+    size(2*(w*3),w);
     noStroke(); 
     c=0;
     uPv=new int[w*w]; 
@@ -44,17 +44,17 @@ public class tunnel3d extends PApplet {
       for(x=1;x<w;x++){
         if(! spress ) {
           fill( color((s+uPv[y*w+x])&0xFF, 0, 0) );
-          rect( x, (y-ofs)*(w/fct), 2, w/fct ); 
+          rect( 2*x, (y-ofs)*(w/fct), 4, w/fct ); 
           fill( color(0, 0, (u2lv[y*w+x])&0xFF) );
-          rect( x+w, (y-ofs)*(w/fct), 2, w/fct );
+          rect( 2*(x+w), (y-ofs)*(w/fct), 4, w/fct );
         }
-        //fill( color((s+uPv[y*w+x])&0xFF, 0, (u2lv[y*w+x])&0xFF) );
-        //rect( x+w2, (y-ofs)*(w/fct), 2, w/fct );
-        set( x+w2, (y-ofs)*(w/fct), color((s+uPv[y*w+x])&0xFF, 0, (u2lv[y*w+x])&0xFF) );
+        fill( color((s+uPv[y*w+x])&0xFF, 0, (u2lv[y*w+x])&0xFF) );
+        rect( 2*(x+w2), (y-ofs)*(w/fct), 4, w/fct );
+        //set( x+w2, (y-ofs)*(w/fct), color((s+uPv[y*w+x])&0xFF, 0, (u2lv[y*w+x])&0xFF) );
       } 
       if( fct < 64 ) {
         stroke(100,127,100);
-        line( 0, (y-ofs)*(w/fct)-1, w*3, (y-ofs)*(w/fct)-1 );
+        line( 0, (y-ofs)*(w/fct)-1, 6*w, (y-ofs)*(w/fct)-1 );
       }
     }
     if( spress ) {

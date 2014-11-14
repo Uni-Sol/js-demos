@@ -8,8 +8,8 @@
     ctx.id = "layer1";
     ctx.alt = "Rotating Rainbowed Fractal";
     ctx.src = "http://"+ window.location.host +"/js-demos/kochflake.png";
-    ctx.width = ctx.width || "640";
-    ctx.height = ctx.height || "360";
+    ctx.width = ctx.width || "1024";
+    ctx.height = ctx.height || "576";
     ctx.setAttribute( 'onmouseover', 'mouseOver=true;' );
     ctx.setAttribute( 'onmouseout', 'clearInterval(window.zoomEvent);mouseOver=false;' );
     ctx.setAttribute( 'onmousemove', 'zoomKoch(event);' );
@@ -31,13 +31,13 @@
 	    		height = window.innerHeight;
 			Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
 			if(evt.clientX > width/2) {
-				kscale*=1.30;
+				kscale*=1.03;
 				ctx.fillStyle = 'rgba(0,0,0,0.5)';
 				ctx.fillRect(0,0,w,h);
 				//ctx.translate(-kscale*64, 0);			
 				tx += kscale*6;
 			} else {
-        		kscale*=0.85;
+        		kscale*=0.99;
 				ctx.fillStyle = 'rgba(0,0,0,0.5)';
 				ctx.fillRect(0,0,w,h);
 				//ctx.translate(tx, 0);
@@ -62,7 +62,7 @@
     drawKoch( kcan, kcurve, data, kcolor, ++pc);
     ki = setInterval(function() {
       ctx.save();
-      //spinKoch(ctx);
+      spinKoch(ctx);
       if (data.length < 3072) {
         kcolor = "hsl("+ pc%360 +", 100%, 50%)";
         if( !(pc%4) && (pc%3) && (pc%5) && (pc%7) && (!(Math.sqrt(pc/4)%2)) ) 

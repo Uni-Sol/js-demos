@@ -1,4 +1,7 @@
 function canvasApp( canvas ) {
+	canvas.width = canvas.width || "1024";
+  	canvas.height = canvas.height || "576";
+	
 try {
     var buffer = document.createElement("canvas");
     buffer.width = canvas.width;

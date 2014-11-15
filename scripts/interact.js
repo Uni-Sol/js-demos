@@ -12,8 +12,8 @@ try {
     
     var ball1 = new Ball(buffer);
     	
-    var track1  = new SliderTrack(buffer, 10, 1, 10, 99);    	
-    var track2  = new SliderTrack(buffer, 1, 10, 99, 10);
+    var track1  = new SliderTrack(buffer, 10, 1, 10, 99, 1);    	
+    var track2  = new SliderTrack(buffer, 90, 1, 90, 99, 3);
     
     ball1.accelBall(2000, 500);
     
@@ -26,9 +26,11 @@ try {
 		
 		/* Tracks */
     	track1.renderTrack();
-    	track1.handle.accelHandle( 0.75*ball1.vel.y );
+    	track1.handle.accelHandle( 0.85*ball1.vel.y );
     	track1.handle.moveHandle();
     	track2.renderTrack();
+    	track2.handle.accelHandle( 0.85*ball1.vel.y );
+    	track2.handle.moveHandle();
     	
     	/* Ball */
    		ball1.renderBall();
@@ -36,8 +38,10 @@ try {
    		
    		if( track1.checkCollision(ball1) ) {
    			ball1.accelBall(-ball1.vel.x, ball1.vel.y);
-   			ball1.bounceBall("x");
-   			
+   			ball1.bounceBall("x");	
+   		} else if( track2.checkCollision(ball1) ) {
+   			ball1.accelBall(-ball1.vel.x, ball1.vel.y);
+   			ball1.bounceBall("x");	
    		}
    		
    		/* buffer to on-screen canvas */
@@ -56,14 +60,16 @@ function Ball( canvas ) {
 	this.vel = { x: 0, y: 0 };
 	this.canvas = canvas;
 	
-	this.accelBall = function( x, y ) {
+	Ball.prototype.accelBall = 
+	function( x, y ) {
 		this.vel.x = x;
 		this.vel.y = y;
 		
 		return this.vel;
 	};
 	
-	this.bounceBall = function( axis ) {
+	Ball.prototype.bounceBall = 
+	function( axis ) {
 		if( axis === "y" ) {
 			this.loc.y = this.loc.y + (this.vel.y/250);
 		} else if( axis === "x" ) {
@@ -71,7 +77,8 @@ function Ball( canvas ) {
 		}
 	};
 	
-	this.moveBall = function() {
+	Ball.prototype.moveBall = 
+	function() {
 		this.loc.x = this.loc.x + this.vel.x/1000;
 		this.loc.y = this.loc.y + this.vel.y/1000;
 		
@@ -87,7 +94,7 @@ function Ball( canvas ) {
 		return this.loc;
 	};
 	
-	this.renderBall = 
+	Ball.prototype.renderBall = 
     function() {
     	var ctx = this.canvas.getContext("2d"),
     		w = this.canvas.width,
@@ -107,13 +114,15 @@ function SliderHandle() {
     this.loc = 50;
     this.vel = 0;
     
-    this.accelHandle = function( vel ) {
+    SliderHandle.prototype.accelHandle = 
+	function( vel ) {
 		this.vel = vel;
 		
 		return this.vel;
 	};
     
-    this.moveHandle = function() {
+    SliderHandle.prototype.moveHandle = 
+	function() {
 		this.loc = this.loc + this.vel/1000;
 		
    		if( 90 < this.loc ) {
@@ -125,7 +134,7 @@ function SliderHandle() {
 		return this.loc;
 	};
     
-    this.renderHandle = 
+    SliderHandle.prototype.renderHandle = 
     function( canvas ) {
     	var ctx = canvas.getContext("2d"),
     		w = canvas.width,
@@ -143,41 +152,68 @@ function SliderHandle() {
 	};
 }
 
-function SliderTrack( canvas, x1, y1, x2, y2 ) {
+function SliderTrack( canvas, x1, y1, x2, y2, or ) {
 	/* STATIC */
 	SliderTrack.modes = {
 		"static": 0,
 		"dynamic": 1
 	}
+	SliderTrack.orientation = [ 0, 90, 180, 270 ];
 	
 	/* this INSTANCE */
     this.mode = "static";
     this.a = { x: x1, y: y1 };
     this.b = { x: x2, y: y2 };
     this.canvas = canvas;
+	this.or = or || 0;
     
     this.handle = new SliderHandle();
     
-    this.checkCollision = function( ball ) {
-    	if( (this.handle.loc + 10) > ball.loc.y && 
-    		ball.loc.y > (this.handle.loc - 10) 
-    	) {
-    		if( (this.a.x) > (ball.loc.x-2) ) {
-    			return true;
-    		}
-    	}
-    	if( (this.handle.loc + 10) > ball.loc.x && 
-    		ball.loc.x > (this.handle.loc - 10) 
-    	) {
-    		if( (this.a.y+2) > (ball.loc.y-2) ) {
-    			return true;
-    		}
-    	}
+    SliderTrack.prototype.checkCollision = 
+	function( ball ) {
+		switch( this.or ) {	
+			case 0:
+			break;
+			case 1:
+				if( (this.handle.loc + 10) > ball.loc.y && 
+					ball.loc.y > (this.handle.loc - 10) 
+				) {
+					if( (this.a.x) > (ball.loc.x-2) ) {
+						return true;
+					}
+				}
+				if( (this.handle.loc + 10) > ball.loc.x && 
+					ball.loc.x > (this.handle.loc - 10) 
+				) {
+					if( (this.a.y+2) > (ball.loc.y-2) ) {
+						return true;
+					}
+				}
+			break;
+			case 2:
+			break;
+			case 3:
+				if( (this.handle.loc + 10) > ball.loc.y && 
+					ball.loc.y > (this.handle.loc - 10) 
+				) {
+					if( (this.a.x) < (ball.loc.x+2) ) {
+						return true;
+					}
+				}
+				if( (this.handle.loc + 10) > ball.loc.x && 
+					ball.loc.x < (this.handle.loc - 10) 
+				) {
+					if( (this.a.y+2) > (ball.loc.y-2) ) {
+						return true;
+					}
+				}
+			break;
+		}
     	
     	return false;
     };
     
-    this.renderTrack =
+    SliderTrack.prototype.renderTrack =
     function() {
     	var ctx = this.canvas.getContext("2d"),
     		w = this.canvas.width,
@@ -201,7 +237,7 @@ function SliderTrack( canvas, x1, y1, x2, y2 ) {
     	ctx.restore();
     };
     
-    this.trackPattern = function( ax, ay, bx, by ) {
+    SliderTrack.prototype.trackPattern = function( ax, ay, bx, by ) {
     	var tp = document.createElement("canvas");
     	tp.width = tp.height = 50;
     	tp.ctx = tp.getContext('2d');

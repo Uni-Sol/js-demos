@@ -43,6 +43,7 @@ Here's an equally loose index of what can be viewed online:
 
 [Stylogical Maps ](http://uni-sol.org/js-demos/stymaps/intro.005.html)
 (these demos were my first efforts with HTML5 Canvas, initially using the Processing.js API. Later demos in the series use direct calls to the Canvas API)
+
 ![Stymaps11](http://www.uni-sol.org/js-demos/stymaps/images/stymaps11.gif) 	![Stymaps12](http://www.uni-sol.org/js-demos/stymaps/images/stymaps12.gif) 
 ![Stymaps15](http://www.uni-sol.org/js-demos/stymaps/images/stymaps15.gif) 	![Stymaps25](http://www.uni-sol.org/js-demos/stymaps/images/stymaps25.gif)
 

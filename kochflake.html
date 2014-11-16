@@ -9,24 +9,30 @@
 
   <body onload='load();layer1.onmousemove="";'>
 
-	 <div id='kochkanvas'>
-	   <div id='layer1' width='1024' height='576'>
+	<div id='kochkanvas'>
+	  <div id='layer1' width='1024' height='576'>
          <div id='main-header'>
            <h4>WHERE THE CANVAS AT?!!</h4>
          </div>
-       </div><br>
-       <input id='zin' type='button' value='Zoom+' 
+      </div><br>
+      <input id='zin' type='button' value='Zoom+' 
 			  style='display:block;position:relative;margin-top:-160px;width:120px;'
 			  onclick='kscale*=1.30;//layer1.getContext("2d").fillRect(0,0,640,360);' /><br>
-       <input id='zout' type='button' value='Zoom-' 
+      <input id='zout' type='button' value='Zoom-' 
 			  style='display:block;position:relative;margin-top:-20px;width:120px;'
 			  onclick='kscale*=0.85;//layer1.getContext("2d").fillRect(0,0,640,360);' /><br>
-       <input id='zspin' type='button' value='Spin(*)'
+      <input id='zspin' type='button' value='Spin(*)'
 			  style='display:block;position:relative;margin-top:-20px;width:120px;'
 			  onclick='setInterval(spinKoch,33);' /><br>
-       <input id='stop' type='button' value='STOP' style='display:block;position:relative;margin-top:-0px;'
+      <input id='stop' type='button' value='STOP' style='display:block;position:relative;margin-top:-0px;'
              onclick='clearInterval(ki)' />
-	 </div>
+	</div>
+
+    <p id="vstatus"></p>
+	<p id="license" style="color:#fff">
+		<img src="http://i.creativecommons.org/l/by-sa/3.0/nz/88x31.png" alt="Creative Commons Licence"><br />
+		<em>These demos by <a href="mailto:revlin@uni-sol.org">Revlin John </a> are licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/nz/deed.en_GB">Creative Commons Attribution-ShareAlike 3.0 License, 2009-2012 </a></em>
+	</p>
 
     <script type="text/javascript" src="scripts/koch.js"></script>
   <script type="text/javascript">

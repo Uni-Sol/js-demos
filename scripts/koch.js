@@ -19,6 +19,7 @@
     ctx = ctx.getContext("2d");
     ctx.fillStyle = "#000";
     ctx.fillRect( 0, 0, w, h);
+	//ctx.clearRect( 0, 0, w, h);
     kcan.width = w*2;
     kcan.height = h*2;
     window.mouseOver = false;

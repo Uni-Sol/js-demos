@@ -24,51 +24,51 @@ statsBox.innerHTML = ( location.pathname.match(/(?:visualizer\.html|happy-b-day\
 
 var canvasApp = function canvasApp(cv) {
 
-/* START Global Vars */
-window.audio = window.aud1;
-window.audioLoad = false; 
-window.audioReady = false;
-window.audioName = audio.children[0].src.match(/[\/|\\]*([\w|\-|]+)\.\w\w\w$/)[1];
-window.audio.onloadstart = (typeof audio.onloadstart === "object")?
-	function() { audioLoad = true; return audioLoad; } : 
-	(function(){ audioLoad = true; return {audioLoad:true}; })();
-window.audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
-  function() { 
-	Debugger.log("audio is ready"); 
-	audioReady = true; 
-	return audioReady;
-  } : 
-  (function() {
-	/*
-	Debugger.log( "Inline video is not supported\n" );
-	return false;
-	*/
-	audioReady = true; 
-	return {audioReady:true};
-  })();
-window.canvasApp.canDrawVideo = true;
-/* END Global Vars */
+	/* START Global Vars */
+	window.audio = window.aud1;
+	window.audioLoad = false; 
+	window.audioReady = false;
+	window.audioName = audio.children[0].src.match(/[\/|\\]*([\w|\-|]+)\.\w\w\w$/)[1];
+	window.audio.onloadstart = (typeof audio.onloadstart === "object")?
+		function() { audioLoad = true; return audioLoad; } : 
+		(function(){ audioLoad = true; return {audioLoad:true}; })();
+	window.audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
+	  function() { 
+		Debugger.log("audio is ready"); 
+		audioReady = true; 
+		return audioReady;
+	  } : 
+	  (function() {
+		/*
+		Debugger.log( "Inline video is not supported\n" );
+		return false;
+		*/
+		audioReady = true; 
+		return {audioReady:true};
+	  })();
+	window.canvasApp.canDrawVideo = true;
+	/* END Global Vars */
 
-  /* Get canvas properties */
-  var canvas = canvasApp.cv = (typeof canvasApp.cv === "object")? canvasApp.cv: cv ;
-  //Debugger.log( "Using canvas '"+ canvas.id +"'\n" );
-  canvas.id = "layer1";
-  canvas.alt = "Interactive Audio Visualizer";
-  canvas.src = "http://"+ window.location.host +"/js-demos/visualizer.png";
-  canvas.width = canvas.width || "1024";
-  canvas.height = canvas.height || "576";
-  canvas.setAttribute( 'onmouseover', 'canvasApp.mouseOver=true;' );
-  canvas.setAttribute( 'onmouseout', 'clearInterval(canvasApp.mouseEvent);canvasAppmouseOver=false;' );
-  canvas.setAttribute( 'onmousemove', 'canvasApp.colorChange(event);' );
-    canvasApp.mouseOver = false;
-    canvasApp.mouseEvent = 0;
-    canvasApp.tx = 0;
+	/* Get canvas properties */
+	var canvas = canvasApp.cv = (typeof canvasApp.cv === "object")? canvasApp.cv: cv ;
+	//Debugger.log( "Using canvas '"+ canvas.id +"'\n" );
+	canvas.id = "layer1";
+	canvas.alt = "Interactive Audio Visualizer";
+	canvas.src = "http://"+ window.location.host +"/js-demos/visualizer.png";
+	canvas.width = canvas.width || "1024";
+	canvas.height = canvas.height || "576";
+	canvas.setAttribute( 'onmouseover', 'canvasApp.mouseOver=true;' );
+	canvas.setAttribute( 'onmouseout', 'clearInterval(canvasApp.mouseEvent);canvasAppmouseOver=false;' );
+	canvas.setAttribute( 'onmousemove', 'canvasApp.colorChange(event);' );
+	canvasApp.mouseOver = false;
+	canvasApp.mouseEvent = 0;
+	canvasApp.tx = 0;
 	canvasApp.strokeStyle = 'rgba(50%,100%,50%,1.0)';
-    canvasApp.colorChange = function(evt){
+	canvasApp.colorChange = function(evt){
 		clearInterval(this.mouseEvent);
 		if( canvasApp.mouseOver ) window.mouseEvent = setTimeout( function(evt) {
 			var width = window.innerWidth,
-	    		height = window.innerHeight;
+				height = window.innerHeight;
 			//Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
 			var strokeB, strokeR = canvasApp.strokeStyle.match(/rgba\((\d+)\%/)[1];
 			if( strokeR === null ) { 
@@ -86,7 +86,7 @@ window.canvasApp.canDrawVideo = true;
 			}
 			//Debugger.log( canvasApp.strokeStyle );
 		}, 33, evt);
-    };
+	};
   
   /* Insert loader just after the canvas */
   if( document.getElementById('statBox') === null )
@@ -194,79 +194,101 @@ if( appStarted ) return appStarted;
 	fftLoad(audioName, 10);
 	//Debugger.log( "Total frames: "+ (aBuffer.length) );
   } else for( var i=0, z=2000; i<z; i++ ) aBuffer.push(0.5);
-  var aCanvas = document.createElement('canvas');
-  var actx = canvasApp.actx = aCanvas.getContext('2d');
-  aCanvas.width = aBuffer[0].length;
-  aCanvas.height = canvas.height;
-  //audio.play();
+	
+	var aCanvas = document.createElement('canvas');
+	var bCanvas = document.createElement('canvas');
+	aCanvas.width = aBuffer[0].length;
+	bCanvas.width = canvas.width;
+	aCanvas.height = bCanvas.height = canvas.height;
+	var actx = canvasApp.actx = aCanvas.getContext('2d');
+	var bctx = canvasApp.bctx = bCanvas.getContext('2d');
+	//audio.play();
  
   /* Draw main function */
   
   function draw (ctx,w,h) {
-    //var t = time%32;
-	var actx = canvasApp.actx;
+		//var t = time%32;
+		var actx = canvasApp.actx;
 
-	ctx.globalCompositeOperation = "source-over";
-	ctx.globalAlpha = 1.0;
-    ctx.clearRect(0, 0, w, h);
-	
-	aidx = canvasApp.aidx = 
-	  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
-	ctx.drawImage(aCanvas, 0, 0, w>>1, h);
-	  
-	/* Draw video input, if any */
-	var video = audio;
-	if( window.canvasApp.canDrawVideo === true ) try {
-  		var vx = 0;
-  		vx =( video !== null )? (canvas.width/2 - video.videoWidth/2): 0;
-		ctx.globalCompositeOperation = "lighter";
-    	if ( (video !== null) && (video.readyState > 2) && (!video.paused) )
-        	ctx.drawImage(video, vx, 0, video.videoWidth, video.videoHeight);
-		/* Composite fill blue background with tranparency tied to bass v */
-		ctx.globalCompositeOperation = "source-atop";
-		ctx.fillStyle = "rgba(0%, 0%, 100%, "+ (0.25 - vBuffer[aidx][0]*4) +")";
-		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
-		/* Now fill red background tied to snare v */
-		ctx.fillStyle = "rgba(100%, 0%, 0%, "+ (0.25 - vBuffer[aidx][5]*4) +")";
-		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
-		/* Now fill green background */
-		ctx.fillStyle = "rgba(0%, 100%, 0%, "+ (0.25 - vBuffer[aidx][12]*4) +")";
-		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
 		ctx.globalCompositeOperation = "source-over";
-    } catch (err) {
-		Debugger.on = true;
-        Debugger.log("Failed to draw "+ video.id +": "+ err.stack);
-		window.canvasApp.canDrawVideo = false;
-    }
-	
-	ctx.save();
-	ctx.translate(w, 0);
-	ctx.scale(-1, 1);
-	ctx.drawImage(aCanvas, 0, 0, (w>>1), h);
-	ctx.restore();
-	
-	
-	/* Text */
-    ctx.lineWidth = 2;
-    ctx.fillStyle = "#fff";
-    ctx.strokeStyle = "#fff";
-	//Debugger.log( "aBuffer index: "+ aidx );
-	if( aidx < 100 ) {
-		ctx.font = "bold "+ aidx*2 +"px Comfortaa";
-		if( aidx%2 === 0) { 
-			ctx.fillText(announcement, 24, h>>1);
-		} else ctx.strokeText(announcement, 24, h>>1);
-	} else if( aidx > 300 ) {
-		ctx.font = "bold 12px Verdana";
-		ctx.fillText(title, 24, 128);
-		if( (aidx > 1500) && (aidx < 3500) ) for(var i=0, z=copy.length; i<z; i++)
-			ctx.fillText(copy[i], w>>1, (2500 - aidx) + (i*20) );
-	}
-    
-    time += 1;
-    if (time == "undefined") {
-      time = 0;
-    }
+		ctx.globalAlpha = 0.75;
+		ctx.clearRect(0, 0, w, h);
+		bctx.globalAlpha = 0.50;
+		bctx.drawImage(aCanvas, 0, 0, w>>1, h-4);
+		bctx.save();
+		bctx.translate(w, 0);
+		bctx.scale(-1, 1);
+		bctx.drawImage(aCanvas, 0, 0, (w>>1), h-4);
+		bctx.restore();
+	  	aidx = canvasApp.aidx = 
+		  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
+		bctx.globalAlpha = 0.75;
+		bctx.drawImage(aCanvas, 0, 0, w>>1, h-2);
+		bctx.save();
+		bctx.translate(w, 0);
+		bctx.scale(-1, 1);
+		bctx.drawImage(aCanvas, 0, 0, (w>>1), h-2);
+		bctx.restore();
+	  
+		ctx.drawImage(bCanvas, 0, 0, w, h);
+
+		ctx.globalAlpha = 1.0;
+		aidx = canvasApp.aidx = 
+		  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
+		//ctx.drawImage(bCanvas, 0, 0, w, h-20);
+		ctx.drawImage(aCanvas, 0, 0, w>>1, h);
+		ctx.save();
+		ctx.translate(w, 0);
+		ctx.scale(-1, 1);
+		ctx.drawImage(aCanvas, 0, 0, (w>>1), h);
+		ctx.restore();
+
+		/* Draw video input, if any */
+		var video = audio;
+		if( window.canvasApp.canDrawVideo === true ) try {
+			var vx = 0;
+			vx =( video !== null )? (canvas.width/2 - video.videoWidth/2): 0;
+			ctx.globalCompositeOperation = "lighter";
+			if ( (video !== null) && (video.readyState > 2) && (!video.paused) )
+				ctx.drawImage(video, vx, 0, video.videoWidth, video.videoHeight);
+			/* Composite fill blue background with tranparency tied to bass v */
+			ctx.globalCompositeOperation = "source-atop";
+			ctx.fillStyle = "rgba(0%, 0%, 100%, "+ (0.25 - vBuffer[aidx][0]*4) +")";
+			ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
+			/* Now fill red background tied to snare v */
+			ctx.fillStyle = "rgba(100%, 0%, 0%, "+ (0.25 - vBuffer[aidx][5]*4) +")";
+			ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
+			/* Now fill green background */
+			ctx.fillStyle = "rgba(0%, 100%, 0%, "+ (0.25 - vBuffer[aidx][12]*4) +")";
+			ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
+			ctx.globalCompositeOperation = "source-over";
+		} catch (err) {
+			Debugger.on = true;
+			Debugger.log("Failed to draw "+ video.id +": "+ err.stack);
+			window.canvasApp.canDrawVideo = false;
+		}
+
+		/* Text */
+		ctx.lineWidth = 2;
+		ctx.fillStyle = "#fff";
+		ctx.strokeStyle = "#fff";
+		//Debugger.log( "aBuffer index: "+ aidx );
+		if( aidx < 100 ) {
+			ctx.font = "bold "+ aidx*2 +"px Comfortaa";
+			if( aidx%2 === 0) { 
+				ctx.fillText(announcement, 24, h>>1);
+			} else ctx.strokeText(announcement, 24, h>>1);
+		} else if( aidx > 300 ) {
+			ctx.font = "bold 12px Verdana";
+			ctx.fillText(title, 24, 128);
+			if( (aidx > 1500) && (aidx < 3500) ) for(var i=0, z=copy.length; i<z; i++)
+				ctx.fillText(copy[i], w>>1, (2500 - aidx) + (i*20) );
+		}
+
+		time += 1;
+		if (time == "undefined") {
+		  time = 0;
+		}
   }
   
   /* Graph samples */
@@ -282,15 +304,18 @@ if( appStarted ) return appStarted;
 		}
 		//Debugger.log( "aBuffer index: "+ idx );
 		
-		//ctx.clearRect(0, 0, w, h);
-		ctx.fillStyle = 'rgba(0,0,0,0.25)';
-		ctx.fillRect(0, 0, w, h);
+		ctx.strokeStyle = canvasApp.strokeStyle;
+		ctx.clearRect(0, 0, w, h);
+		//ctx.fillStyle = 'rgba(0,0,0,0.25)';
+		//ctx.save();
+		//ctx.globalAlpha = 0.05;
+		//ctx.fillRect(0, 0, w, h);
+		//ctx.restore();
 		
 		/* Reset canvas ctx properties */
 		ctx.globalCompositeOperation = "source-over";
+		ctx.globalAlpha = 1.0;
 		ctx.font = "bold 10px Verdana";
-		ctx.strokeStyle = canvasApp.strokeStyle;
-		ctx.fillStyle = "#afafaf";
 		ctx.beginPath();
 		var hcorrect =  h / 2;
 		/* Plot each sample on line that moves from left to right
@@ -310,8 +335,9 @@ if( appStarted ) return appStarted;
 			var barh = h - vbuf[idx][i]*h;
 			if( (i <= n) ) {
 				var freq = Math.floor(fbuf[idx][i]);
+				ctx.fillStyle = "hsl("+ (vbuf[idx][i]*360) +", 100%, 50%)";
 				ctx.fillRect( i, barh, 1, h );
-				//ctx.fillText( freq, i*24, barh-10 );
+				//ctx.fillText( vbuf[idx][i]*360, i*24, barh-10 );
 			}
 		}
 		ctx.stroke();

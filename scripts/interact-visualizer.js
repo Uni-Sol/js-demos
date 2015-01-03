@@ -197,8 +197,7 @@ if( appStarted ) return appStarted;
 	
 	var aCanvas = document.createElement('canvas');
 	var bCanvas = document.createElement('canvas');
-	aCanvas.width = aBuffer[0].length;
-	bCanvas.width = canvas.width;
+	aCanvas.width = bCanvas.width = w>>2; //aBuffer[0].length;
 	aCanvas.height = bCanvas.height = canvas.height;
 	var actx = canvasApp.actx = aCanvas.getContext('2d');
 	var bctx = canvasApp.bctx = bCanvas.getContext('2d');
@@ -207,41 +206,50 @@ if( appStarted ) return appStarted;
   /* Draw main function */
   
   function draw (ctx,w,h) {
-		//var t = time%32;
+	  
 		var actx = canvasApp.actx;
+	  	var bctx = canvasApp.bctx;
 
 		ctx.globalCompositeOperation = "source-over";
-		ctx.globalAlpha = 0.75;
-		ctx.clearRect(0, 0, w, h);
-		bctx.globalAlpha = 0.50;
-		bctx.drawImage(aCanvas, 0, 0, w>>1, h-4);
-		bctx.save();
-		bctx.translate(w, 0);
-		bctx.scale(-1, 1);
-		bctx.drawImage(aCanvas, 0, 0, (w>>1), h-4);
-		bctx.restore();
-	  	aidx = canvasApp.aidx = 
-		  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
-		bctx.globalAlpha = 0.75;
-		bctx.drawImage(aCanvas, 0, 0, w>>1, h-2);
-		bctx.save();
-		bctx.translate(w, 0);
-		bctx.scale(-1, 1);
-		bctx.drawImage(aCanvas, 0, 0, (w>>1), h-2);
-		bctx.restore();
-	  
-		ctx.drawImage(bCanvas, 0, 0, w, h);
-
 		ctx.globalAlpha = 1.0;
-		aidx = canvasApp.aidx = 
-		  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
-		//ctx.drawImage(bCanvas, 0, 0, w, h-20);
-		ctx.drawImage(aCanvas, 0, 0, w>>1, h);
-		ctx.save();
-		ctx.translate(w, 0);
-		ctx.scale(-1, 1);
-		ctx.drawImage(aCanvas, 0, 0, (w>>1), h);
-		ctx.restore();
+	  
+	  try {
+	  	if( time%2 ) {
+			bctx.clearRect(0, 0, w, h);
+			
+			aidx = canvasApp.aidx = 
+			  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
+			ctx.drawImage(aCanvas, 0, 0, (w>>1), h);
+			ctx.save();
+			ctx.translate(w, 0);
+			ctx.scale(-1, 1);
+			ctx.drawImage(aCanvas, 0, 0, (w>>1), h);
+			ctx.restore();
+			
+			bctx.drawImage(aCanvas, 1, 2, (w>>2)-1, h-4);
+			bctx.fillStyle = "rgba(50%,50%,100%,0.025)";
+			bctx.fillRect(0, 0, w, h);
+		} else {
+			actx.clearRect(0, 0, w, h);
+			/*
+			aidx = canvasApp.aidx = 
+			  graphSamples(bctx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
+			ctx.drawImage(bCanvas, 0, 0, (w>>1), h);
+			ctx.save();
+			ctx.translate(w, 0);
+			ctx.scale(-1, 1);
+			ctx.drawImage(bCanvas, 0, 0, (w>>1), h);
+			ctx.restore();
+			*/
+			actx.drawImage(bCanvas, 1, 2, (w>>2)-1, h-4);
+			actx.fillStyle = "rgba(50%,50%,100%,0.025)";
+			actx.fillRect(0, 0, w, h);
+		}
+	  } catch(err) {
+		Debugger.on = true;
+		Debugger.log("Failed to draw : "+ err.stack);
+		Debugger.on = false;
+	  }
 
 		/* Draw video input, if any */
 		var video = audio;
@@ -266,11 +274,12 @@ if( appStarted ) return appStarted;
 			Debugger.on = true;
 			Debugger.log("Failed to draw "+ video.id +": "+ err.stack);
 			window.canvasApp.canDrawVideo = false;
+			Debugger.on = false;
 		}
 
 		/* Text */
 		ctx.lineWidth = 2;
-		ctx.fillStyle = "#fff";
+		ctx.fillStyle = "#777";
 		ctx.strokeStyle = "#fff";
 		//Debugger.log( "aBuffer index: "+ aidx );
 		if( aidx < 100 ) {
@@ -285,10 +294,12 @@ if( appStarted ) return appStarted;
 				ctx.fillText(copy[i], w>>1, (2500 - aidx) + (i*20) );
 		}
 
-		time += 1;
+		time++;
 		if (time == "undefined") {
 		  time = 0;
 		}
+	  
+	  	Debugger.log( "time: "+ time );
   }
   
   /* Graph samples */
@@ -304,19 +315,14 @@ if( appStarted ) return appStarted;
 		}
 		//Debugger.log( "aBuffer index: "+ idx );
 		
-		ctx.strokeStyle = canvasApp.strokeStyle;
-		ctx.clearRect(0, 0, w, h);
+		//ctx.clearRect(0, 0, w, h);
 		//ctx.fillStyle = 'rgba(0,0,0,0.25)';
-		//ctx.save();
-		//ctx.globalAlpha = 0.05;
 		//ctx.fillRect(0, 0, w, h);
-		//ctx.restore();
 		
 		/* Reset canvas ctx properties */
 		ctx.globalCompositeOperation = "source-over";
 		ctx.globalAlpha = 1.0;
 		ctx.font = "bold 10px Verdana";
-		ctx.beginPath();
 		var hcorrect =  h / 2;
 		/* Plot each sample on line that moves from left to right
 		 * until we reach the end of the screen or the end of the sample
@@ -325,22 +331,45 @@ if( appStarted ) return appStarted;
 			ctx.moveTo( 0, hcorrect );
 		} else ctx.moveTo( 0, -(abuf[idx][0]*2*hcorrect) + hcorrect  );
 		
+		
+		ctx.beginPath();
 		for( var i=0, z=abuf[idx].length, n=z; i<z; i++ ) {
 			/* Draw a curve of the amplitude data */
-			if( i > 0 ) ctx.quadraticCurveTo(
-				(i-1), abuf[idx][i],
-				i, abuf[idx][i]
-			);
+			if( i > 0 ) {
+				ctx.strokeStyle = "rbg(127,127,255)";
+				ctx.strokeWidth = 24;
+				ctx.quadraticCurveTo(
+					(i-1), abuf[idx][i]-2,
+					i, abuf[idx][i]
+				);
+			} 	
+		}
+		ctx.stroke();
+			
+		ctx.beginPath();
+		for( var i=0, z=abuf[idx].length, n=z; i<z; i++ ) {
+			/* Draw a curve of the amplitude data */
+			if( i > 0 ) {
+				ctx.strokeStyle = canvasApp.strokeStyle;
+				ctx.strokeWidth = canvasApp.strokeWidth;
+				ctx.quadraticCurveTo(
+					(i-1)*4, abuf[idx][i],
+					i*4, abuf[idx][i]
+				);
+			}
 			/* Draw bars for the eq levels (fft) data */
 			var barh = h - vbuf[idx][i]*h;
 			if( (i <= n) ) {
 				var freq = Math.floor(fbuf[idx][i]);
 				ctx.fillStyle = "hsl("+ (vbuf[idx][i]*360) +", 100%, 50%)";
-				ctx.fillRect( i, barh, 1, h );
+				ctx.fillRect( i*4, barh, 4, h );
 				//ctx.fillText( vbuf[idx][i]*360, i*24, barh-10 );
 			}
 		}
+		
+		polygon(ctx, 6, idx%(w)-(w>>3), idx%(h), 50, idx, 0);
 		ctx.stroke();
+		
 		return ++idx;
 		
 	} catch(e) {

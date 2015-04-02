@@ -1,9 +1,9 @@
-#!/usr/bin/perl
-use warnings;
+#!/usr/bin/env perl
+use 5.10.1;
 use strict;
-use feature ':5.14';
-use Math::BigFloat;
+use warnings;
 
+use Math::BigFloat;
 use Audio::Analyzer;
 
 my ( $source, $output, $analyzer, $log, $complete, @pcm, @freqs, @fft, $frameNum, $sampleNum, $frameSampleNum );

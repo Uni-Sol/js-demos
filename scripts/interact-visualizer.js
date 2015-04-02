@@ -92,6 +92,9 @@ var canvasApp = function canvasApp(cv) {
   if( document.getElementById('statBox') === null )
     canvas.parentNode.appendChild(statsBox);
 
+  /* Track fft amplitudes */
+  var amp1=0, amp2=0;
+
   var fftLoad = canvasApp.fftLoad = function fftLoad ( aname, pr, single ) {
 	//audio.load();
 	var part;
@@ -207,103 +210,104 @@ if( appStarted ) return appStarted;
   
   function draw (ctx,w,h) {
 	  
-		var actx = canvasApp.actx;
-	  	var bctx = canvasApp.bctx;
+	var actx = canvasApp.actx;
+	var bctx = canvasApp.bctx;
 
+	ctx.globalCompositeOperation = "source-over";
+	ctx.globalAlpha = 1.0;
+
+  try {
+	if( time%2 ) {
+		bctx.clearRect(0, 0, w, h);
+
+		aidx = canvasApp.aidx = 
+		  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
+		ctx.drawImage(aCanvas, 0, 0, (w>>1), h);
+		ctx.save();
+		ctx.translate(w, 0);
+		ctx.scale(-1, 1);
+		ctx.drawImage(aCanvas, 0, 0, (w>>1), h);
+		ctx.restore();
+
+		bctx.drawImage(aCanvas, 1, 2, (w>>2)-1, h-4);
+		bctx.fillStyle = "rgba(0%,0%,0%,0.025)";
+		bctx.fillRect(0, 0, w, h);
+	} else {
+		actx.clearRect(0, 0, w, h);
+		/*
+		aidx = canvasApp.aidx = 
+		  graphSamples(bctx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
+		ctx.drawImage(bCanvas, 0, 0, (w>>1), h);
+		ctx.save();
+		ctx.translate(w, 0);
+		ctx.scale(-1, 1);
+		ctx.drawImage(bCanvas, 0, 0, (w>>1), h);
+		ctx.restore();
+		*/
+		actx.drawImage(bCanvas, 1, 2, (w>>2)-1, h-4);
+		actx.fillStyle = "rgba(0%,0%,0%,0.025)";
+		actx.fillRect(0, 0, w, h);
+	}
+  } catch(err) {
+	Debugger.on = true;
+	Debugger.log("Failed to draw : "+ err.stack);
+	Debugger.on = false;
+  }
+
+	/* Draw video input, if any */
+	var video = audio;
+	if( window.canvasApp.canDrawVideo === true ) try {
+		var vx = 0;
+		vx =( video !== null )? (canvas.width/2 - video.videoWidth/2): 0;
+		ctx.globalCompositeOperation = "lighter";
+		if ( (video !== null) && (video.readyState > 2) && (!video.paused) )
+			ctx.drawImage(video, vx, 0, video.videoWidth, video.videoHeight);
+		/* Composite fill blue background with tranparency tied to bass v */
+		ctx.globalCompositeOperation = "source-atop";
+		ctx.fillStyle = "rgba(0%, 0%, 100%, "+ (0.25 - vBuffer[aidx][0]*4) +")";
+		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
+		/* Now fill red background tied to snare v */
+		ctx.fillStyle = "rgba(100%, 0%, 0%, "+ (0.25 - vBuffer[aidx][5]*4) +")";
+		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
+		/* Now fill green background */
+		ctx.fillStyle = "rgba(0%, 100%, 0%, "+ (0.25 - vBuffer[aidx][12]*4) +")";
+		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
 		ctx.globalCompositeOperation = "source-over";
-		ctx.globalAlpha = 1.0;
-	  
-	  try {
-	  	if( time%2 ) {
-			bctx.clearRect(0, 0, w, h);
-			
-			aidx = canvasApp.aidx = 
-			  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
-			ctx.drawImage(aCanvas, 0, 0, (w>>1), h);
-			ctx.save();
-			ctx.translate(w, 0);
-			ctx.scale(-1, 1);
-			ctx.drawImage(aCanvas, 0, 0, (w>>1), h);
-			ctx.restore();
-			
-			bctx.drawImage(aCanvas, 1, 2, (w>>2)-1, h-4);
-			bctx.fillStyle = "rgba(50%,50%,100%,0.025)";
-			bctx.fillRect(0, 0, w, h);
-		} else {
-			actx.clearRect(0, 0, w, h);
-			/*
-			aidx = canvasApp.aidx = 
-			  graphSamples(bctx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
-			ctx.drawImage(bCanvas, 0, 0, (w>>1), h);
-			ctx.save();
-			ctx.translate(w, 0);
-			ctx.scale(-1, 1);
-			ctx.drawImage(bCanvas, 0, 0, (w>>1), h);
-			ctx.restore();
-			*/
-			actx.drawImage(bCanvas, 1, 2, (w>>2)-1, h-4);
-			actx.fillStyle = "rgba(50%,50%,100%,0.025)";
-			actx.fillRect(0, 0, w, h);
-		}
-	  } catch(err) {
+	} catch (err) {
 		Debugger.on = true;
-		Debugger.log("Failed to draw : "+ err.stack);
+		Debugger.log("Failed to draw "+ video.id +": "+ err.stack);
+		window.canvasApp.canDrawVideo = false;
 		Debugger.on = false;
-	  }
+	}
 
-		/* Draw video input, if any */
-		var video = audio;
-		if( window.canvasApp.canDrawVideo === true ) try {
-			var vx = 0;
-			vx =( video !== null )? (canvas.width/2 - video.videoWidth/2): 0;
-			ctx.globalCompositeOperation = "lighter";
-			if ( (video !== null) && (video.readyState > 2) && (!video.paused) )
-				ctx.drawImage(video, vx, 0, video.videoWidth, video.videoHeight);
-			/* Composite fill blue background with tranparency tied to bass v */
-			ctx.globalCompositeOperation = "source-atop";
-			ctx.fillStyle = "rgba(0%, 0%, 100%, "+ (0.25 - vBuffer[aidx][0]*4) +")";
-			ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
-			/* Now fill red background tied to snare v */
-			ctx.fillStyle = "rgba(100%, 0%, 0%, "+ (0.25 - vBuffer[aidx][5]*4) +")";
-			ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
-			/* Now fill green background */
-			ctx.fillStyle = "rgba(0%, 100%, 0%, "+ (0.25 - vBuffer[aidx][12]*4) +")";
-			ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
-			ctx.globalCompositeOperation = "source-over";
-		} catch (err) {
-			Debugger.on = true;
-			Debugger.log("Failed to draw "+ video.id +": "+ err.stack);
-			window.canvasApp.canDrawVideo = false;
-			Debugger.on = false;
-		}
+	/* Text */
+	ctx.lineWidth = 2;
+	ctx.fillStyle = "#777";
+	ctx.strokeStyle = "#fff";
+	//Debugger.log( "aBuffer index: "+ aidx );
+	if( aidx < 100 ) {
+		ctx.font = "bold "+ aidx*2 +"px Comfortaa";
+		if( aidx%2 === 0) { 
+			ctx.fillText(announcement, 24, h>>1);
+		} else ctx.strokeText(announcement, 24, h>>1);
+	} else if( aidx > 300 ) {
+		ctx.font = "bold 12px Verdana";
+		ctx.fillText(title, 24, 128);
+		if( (aidx > 1500) && (aidx < 3500) ) for(var i=0, z=copy.length; i<z; i++)
+			ctx.fillText(copy[i], w>>1, (2500 - aidx) + (i*20) );
+	}
 
-		/* Text */
-		ctx.lineWidth = 2;
-		ctx.fillStyle = "#777";
-		ctx.strokeStyle = "#fff";
-		//Debugger.log( "aBuffer index: "+ aidx );
-		if( aidx < 100 ) {
-			ctx.font = "bold "+ aidx*2 +"px Comfortaa";
-			if( aidx%2 === 0) { 
-				ctx.fillText(announcement, 24, h>>1);
-			} else ctx.strokeText(announcement, 24, h>>1);
-		} else if( aidx > 300 ) {
-			ctx.font = "bold 12px Verdana";
-			ctx.fillText(title, 24, 128);
-			if( (aidx > 1500) && (aidx < 3500) ) for(var i=0, z=copy.length; i<z; i++)
-				ctx.fillText(copy[i], w>>1, (2500 - aidx) + (i*20) );
-		}
+	time++;
+	if (time == "undefined") {
+	  time = 0;
+	}
 
-		time++;
-		if (time == "undefined") {
-		  time = 0;
-		}
-	  
-	  	Debugger.log( "time: "+ time );
+	Debugger.log( "time: "+ time );
   }
   
   /* Graph samples */
   function graphSamples( ctx, audio, abuf, fbuf, vbuf, aidx, w, h ) {
+	  
 	try {
 		if( abuf.length < 1 ) return aidx;
 		if( audio.paused ) return aidx;
@@ -347,6 +351,7 @@ if( appStarted ) return appStarted;
 		ctx.stroke();
 			
 		ctx.beginPath();
+		var verts = 6;
 		for( var i=0, z=abuf[idx].length, n=z; i<z; i++ ) {
 			/* Draw a curve of the amplitude data */
 			if( i > 0 ) {
@@ -359,15 +364,18 @@ if( appStarted ) return appStarted;
 			}
 			/* Draw bars for the eq levels (fft) data */
 			var barh = h - vbuf[idx][i]*h;
+			amp2 = amp1;
+			amp1 = (i === 3 && vbuf[idx][i] > 0.05)? vbuf[idx][i] : amp1;
+			verts = (amp2 !== amp1)? parseInt(Math.rand()*10) : verts;
 			if( (i <= n) ) {
 				var freq = Math.floor(fbuf[idx][i]);
-				ctx.fillStyle = "hsl("+ (vbuf[idx][i]*360) +", 100%, 50%)";
+				ctx.fillStyle = "hsl("+ (300 - vbuf[idx][i]*360) +", 100%, 50%)";
 				ctx.fillRect( i*4, barh, 4, h );
 				//ctx.fillText( vbuf[idx][i]*360, i*24, barh-10 );
 			}
 		}
 		
-		polygon(ctx, 6, idx%(w)-(w>>3), idx%(h), 50, idx, 0);
+		polygon(ctx, verts, idx%(w)-(w>>3), idx%(h), (parseFloat(amp2+amp1)/2)*w, idx, 0);
 		ctx.stroke();
 		
 		return ++idx;

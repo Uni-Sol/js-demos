@@ -64,7 +64,7 @@ get '/vision' => sub {
 		header => "Share The Dream",
 		canvasApp => '/js-demos/scripts/interact-visualizer.js'
 	);
-	$self->stash( mediaDIV => '<div id="stream" style="text-align: center"><br /><audio id="aud1" preload="auto" controls="true"><source src="/js-demos/audio/attention.mp3" /><source src="/js-demos/audio/attention.ogg" /></audio></div>' );
+	$self->stash( mediaDIV => '<div id="stream" style="text-align: center"><br /><audio id="aud1" preload="auto" controls="true"><source src="/js-demos/audio/stymaps.mp3" /><source src="/js-demos/audio/stymaps.ogg" /></audio></div>' );
 	$self->render('vision');
 };
 
@@ -89,7 +89,7 @@ get '/visualizer' => sub {
 		version => $version, # stash the url and display in template
 		canvasApp => '/js-demos/scripts/interact-visualizer.js'
 	);
-	$self->stash( mediaDIV => '<div id="stream" style="text-align: center"><br /><audio id="aud1" preload="auto" controls="true"><source src="/js-demos/audio/stymaps.mp3" /><source src="/js-demos/audio/stymaps.ogg" /></audio></div>' );
+	$self->stash( mediaDIV => '<div id="stream" style="text-align: center"><br /><audio id="aud1" preload="auto" controls="true"><source src="/js-demos/audio/The_Map.mp3" /><source src="/js-demos/audio/The_Map.ogg" /></audio></div>' );
 	$self->render('visualizer');
 };
 
@@ -99,7 +99,7 @@ get '/js-demos/visualizer' => sub {
 		version => $version, # stash the url and display in template
 		canvasApp => '/js-demos/scripts/interact-visualizer.js'
 	);
-	$self->stash( mediaDIV => '<div id="stream" style="text-align: center"><br /><audio id="aud1" preload="auto" controls="true"><source src="/js-demos/audio/stymaps.mp3" /><source src="/js-demos/audio/stymaps.ogg" /></audio></div>' );
+	$self->stash( mediaDIV => '<div id="stream" style="text-align: center"><br /><audio id="aud1" preload="auto" controls="true"><source src="/js-demos/audio/The_Map.mp3" /><source src="/js-demos/audio/The_Map.ogg" /></audio></div>' );
 	$self->render('visualizer');
 };
 

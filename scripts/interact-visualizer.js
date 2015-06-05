@@ -35,8 +35,8 @@ var canvasApp = function canvasApp(cv) {
 	window.audio.oncanplaythrough = (typeof audio.oncanplaythrough === "object")?
 	  function() { 
 		Debugger.log("audio is ready"); 
-		audioReady = true; 
-		return audioReady;
+		audioReady = true;
+		return audioReady; 
 	  } : 
 	  (function() {
 		/*
@@ -136,6 +136,7 @@ if(! fftReady ) {
 	} else if( fftProgress.length > 9 ) {
 		fftReady = true;
 		statsBox.parentNode.removeChild(statsBox);
+		setTimeout(function(){ audio.play(); }, 3333);
 	} else {
 		return appDelay = setTimeout(canvasApp, 333, canvasApp.cv);
 	}
@@ -230,20 +231,10 @@ if( appStarted ) return appStarted;
 		ctx.restore();
 
 		bctx.drawImage(aCanvas, 1, 2, (w>>2)-1, h-4);
-		bctx.fillStyle = "rgba(0%,0%,0%,0.025)";
+		bctx.fillStyle = "rgba(0%,0%,0%,0.005)";
 		bctx.fillRect(0, 0, w, h);
 	} else {
 		actx.clearRect(0, 0, w, h);
-		/*
-		aidx = canvasApp.aidx = 
-		  graphSamples(bctx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
-		ctx.drawImage(bCanvas, 0, 0, (w>>1), h);
-		ctx.save();
-		ctx.translate(w, 0);
-		ctx.scale(-1, 1);
-		ctx.drawImage(bCanvas, 0, 0, (w>>1), h);
-		ctx.restore();
-		*/
 		actx.drawImage(bCanvas, 1, 2, (w>>2)-1, h-4);
 		actx.fillStyle = "rgba(0%,0%,0%,0.025)";
 		actx.fillRect(0, 0, w, h);
@@ -264,13 +255,13 @@ if( appStarted ) return appStarted;
 			ctx.drawImage(video, vx, 0, video.videoWidth, video.videoHeight);
 		/* Composite fill blue background with tranparency tied to bass v */
 		ctx.globalCompositeOperation = "source-atop";
-		ctx.fillStyle = "rgba(0%, 0%, 100%, "+ (0.25 - vBuffer[aidx][0]*4) +")";
+		ctx.fillStyle = "rgba(0%, 0%, 100%, "+ (0.5 - vBuffer[aidx][0]*2) +")";
 		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
 		/* Now fill red background tied to snare v */
-		ctx.fillStyle = "rgba(100%, 0%, 0%, "+ (0.25 - vBuffer[aidx][5]*4) +")";
+		ctx.fillStyle = "rgba(100%, 0%, 0%, "+ (0.25 - vBuffer[aidx][5]*2) +")";
 		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
 		/* Now fill green background */
-		ctx.fillStyle = "rgba(0%, 100%, 0%, "+ (0.25 - vBuffer[aidx][12]*4) +")";
+		ctx.fillStyle = "rgba(0%, 100%, 0%, "+ (0.25 - vBuffer[aidx][12]*2) +")";
 		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
 		ctx.globalCompositeOperation = "source-over";
 	} catch (err) {

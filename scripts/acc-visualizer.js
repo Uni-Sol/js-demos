@@ -92,7 +92,7 @@ if( appStarted ) return appStarted;
   
   /* Textual stuff */
   var announcement = document.title;
-  var title = (window.text_title) ? window.text_title.innerHTML: "The Stylogical Map";
+  var title = (window.text_title) ? window.text_title.innerHTML: "Real~Currents";
   //Debugger.log( title );
   var copy = (window.text_copy) ? window.text_copy.innerHTML.split(/[\n|\r]/): "";
   //Debugger.log( copy );

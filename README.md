@@ -6,12 +6,6 @@ These are some very loosely organized experiments, for the purpose of improving 
 Here's an equally loose index of what can be viewed online:
 
 
-[FFT Simple ](http://uni-sol.org/js-demos/fft-simple.html) 
-(first try at music visualization using pre-analyzed fft data)
-
-[FFT More ](http://uni-sol.org/js-demos/fft.html) 
-(continues exploration of music visualization using pre-analyzed fft data)
-
 [Visualizer (+input) ](http://uni-sol.org/js-demos/visualizer.html)
 (continues exploration of music visualization, adding mouse interaction)
 ![Visualizer+](visualizer.png)
@@ -19,6 +13,12 @@ Here's an equally loose index of what can be viewed online:
 [Visualizer (+VIDEO) ](http://uni-sol.org/js-demos/happy-b-day.html)
 (continues exploration of music visualization, adding real-time compositing of HTML5 video)
 ![Visualizer+Video](fathers.png)
+
+[FFT Simple ](http://uni-sol.org/js-demos/fft-simple.html) 
+(first try at music visualization using pre-analyzed fft data)
+
+[FFT More ](http://uni-sol.org/js-demos/fft.html) 
+(continues exploration of music visualization using pre-analyzed fft data)
 
 
 [Koch Snowflake ](http://uni-sol.org/js-demos/kochflake.html) 

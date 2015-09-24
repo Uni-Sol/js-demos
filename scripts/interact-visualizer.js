@@ -303,7 +303,8 @@ if( appStarted ) return appStarted;
 		if( abuf.length < 1 ) return aidx;
 		if( audio.paused ) return aidx;
 		if(! (audio.readyState > 3) ) return aidx;
-		var idx = Math.floor( audio.currentTime*15.02 );
+
+		var idx = Math.floor( audio.currentTime*15.03 ) - 3;
 		if(! abuf[idx] ) {
 			Debugger.log( "abuf["+ idx +"] has not been recieved\n" );
 			return aidx;
@@ -326,21 +327,6 @@ if( appStarted ) return appStarted;
 			ctx.moveTo( 0, hcorrect );
 		} else ctx.moveTo( 0, -(abuf[idx][0]*2*hcorrect) + hcorrect  );
 		
-		
-		ctx.beginPath();
-		for( var i=0, z=abuf[idx].length, n=z; i<z; i++ ) {
-			/* Draw a curve of the amplitude data */
-			if( i > 0 ) {
-				ctx.strokeStyle = "rbg(127,127,255)";
-				ctx.strokeWidth = 24;
-				ctx.quadraticCurveTo(
-					(i-1), abuf[idx][i]-2,
-					i, abuf[idx][i]
-				);
-			} 	
-		}
-		ctx.stroke();
-			
 		ctx.beginPath();
 		var verts = 6;
 		for( var i=0, z=abuf[idx].length, n=z; i<z; i++ ) {

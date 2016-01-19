@@ -1,18 +1,18 @@
 [submodule "canvg"]
 	path = canvg
-    url = git@github.com:Revlin/canvg.git
+    	url = https://github.com/Uni-Sol/canvg.git
 [submodule "corehtml5canvas"]
 	path = corehtml5canvas
-	url = git@github.com:Revlin/corehtml5canvas.git
+	url = https://github.com/Revlin/corehtml5canvas.git
 [submodule "jsgif"]
 	path = jsgif
-	url = git@github.com:Revlin/jsgif.git
+	url = https://github.com/Revlin/jsgif.git
 [submodule "processing/phono_divinoro"]
 	path = processing/phono_divinoro
 	url = git@github.com:Revlin/phono_divinoro.git
 [submodule "processing/fractal_music"]
 	path = processing/fractal_music
-	url = git@github.com:Revlin/fractal_music.git
+	url = https://github.com/Revlin/fractal_music.git
 [submodule "stymaps"]
 	path = stymaps
 	url = git@uni-sol.org:revlin/stymaps.git

@@ -5,19 +5,19 @@ These are some very loosely organized experiments, for the purpose of improving 
 
 Here's an equally loose index of what can be viewed online:
 
+![Visualizer+Video](fathers.png)
+[Visualizer (+VIDEO) ](happy-b-day.html)
+(Exploration of music visualization, adding real-time compositing of HTML5 video)
+
 [FFT Simple ](fft-simple.html) 
 (first try at music visualization using pre-analyzed fft data)
+
+[FFT More ](fft.html) 
+(continues exploration of music visualization using pre-analyzed fft data)
 
 ![Visualizer+](visualizer.png)
 [Visualizer (+input) ](visualizer.html)
 (continues exploration of music visualization, adding mouse interaction)
-
-![Visualizer+Video](fathers.png)
-[Visualizer (+VIDEO) ](happy-b-day.html)
-(continues exploration of music visualization, adding real-time compositing of HTML5 video)
-
-[FFT More ](fft.html) 
-(continues exploration of music visualization using pre-analyzed fft data)
 <br /><br />
 
 

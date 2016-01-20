@@ -9,10 +9,10 @@
 	url = https://github.com/Revlin/jsgif.git
 [submodule "processing/phono_divinoro"]
 	path = processing/phono_divinoro
-	url = git@github.com:Revlin/phono_divinoro.git
+	url = https://github.com/Revlin/phono_divinoro.git
 [submodule "processing/fractal_music"]
 	path = processing/fractal_music
 	url = https://github.com/Revlin/fractal_music.git
 [submodule "stymaps"]
 	path = stymaps
-	url = git@uni-sol.org:revlin/stymaps.git
+	url = https://github.com/Revlin/stymaps.git

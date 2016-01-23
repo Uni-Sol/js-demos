@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+	<title>Oral History</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=800" />
+
+	<link rel="stylesheet" type="text/css" href='stymaps/styles/mapscripts.css' />
+
+</head>
+<body>
+
+    <div id="header-canvas">
+       <canvas id='cv' width='1024' height='576'
+			   style="image-rendering:optimizespeed ! important;">
+         <div id='main-header'>
+           <h1>Oral History</h1>
+           Please play in a new web browser, like Firefox or Chrome.
+         </div>
+       </canvas>
+    </div>
+
+    <div id="stream" style="text-align: center">
+	<br />
+      <audio id="aud1" preload="auto" controls="true">
+        <source src="audio/oral_history.mp3" />
+        <source src="audio/oral_history.ogg" />
+      </audio>
+    </div>
+	
+    <a href="http://www.w3.org/2010/05/video/mediaevents.html" target="_blank">Media Help</a>
+
+    <p id="vstatus"></p>
+	<p id="license" style="color:#fff">
+		<img src="http://i.creativecommons.org/l/by-sa/3.0/nz/88x31.png" alt="Creative Commons Licence"><br />
+		<em>These demos by <a href="mailto:revlin@uni-sol.org">Revlin John </a> are licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/nz/deed.en_GB">Creative Commons Attribution-ShareAlike 3.0 License, 2009-2016</a></em>
+	</p>
+
+	<script type="text/javascript" src="scripts/debugger.js"></script>
+	<script type="text/javascript" id="cvSrc" src="scripts/interact-visualizer.js"></script>
+	<script type="text/javascript">
+(function() { 
+	window.onload = function(){
+		canvasApp(window.cv);
+	};
+	if (typeof Debugger === "function") { 
+		Debugger.on = false;
+		return; 
+	} else {
+		window.Debugger = {
+			log: function() {
+				/* no debugger.js */
+			}
+		};
+	}
+} )();
+	</script>
+	
+</body></html>

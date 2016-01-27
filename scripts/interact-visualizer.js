@@ -221,8 +221,12 @@ if( appStarted ) return appStarted;
 	if( time%2 ) {
 		bctx.clearRect(0, 0, w, h);
 
-		aidx = canvasApp.aidx = 
-		  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
+//		aidx = canvasApp.aidx = 
+//		  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
+        for( var o = 6; o > 0; o-- ) {
+            aidx = canvasApp.aidx = 
+              graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h, o);
+        }
 		ctx.drawImage(aCanvas, 0, 0, (w>>1), h);
 		ctx.save();
 		ctx.translate(w, 0);
@@ -297,15 +301,15 @@ if( appStarted ) return appStarted;
   }
   
   /* Graph samples */
-  function graphSamples( ctx, audio, abuf, fbuf, vbuf, aidx, w, h ) {
+  function graphSamples( ctx, audio, abuf, fbuf, vbuf, aidx, w, h, o ) {
 	  
 	try {
 		if( abuf.length < 1 ) return aidx;
 		if( audio.paused ) return aidx;
 		if(! (audio.readyState > 3) ) return aidx;
 
-		var idx = Math.floor( audio.currentTime*15.03 ) - 3;
-		if(! abuf[idx] ) {
+		var idx = Math.floor( audio.currentTime*15.03 ) - 6;
+		if(! abuf[parseInt(idx + o)] ) {
 			Debugger.log( "abuf["+ idx +"] has not been recieved\n" );
 			return aidx;
 		}
@@ -325,30 +329,30 @@ if( appStarted ) return appStarted;
 		 */
 		if( idx < 1 ) {
 			ctx.moveTo( 0, hcorrect );
-		} else ctx.moveTo( 0, -(abuf[idx][0]*2*hcorrect) + hcorrect  );
+		} else ctx.moveTo( 0, -(abuf[parseInt(idx + o)][0]*2*hcorrect) + hcorrect  );
 		
 		ctx.beginPath();
 		var verts = 6;
-		for( var i=0, z=abuf[idx].length, n=z; i<z; i++ ) {
+		for( var i=0, z=abuf[parseInt(idx + o)].length, n=z; i<z; i++ ) {
 			/* Draw a curve of the amplitude data */
 			if( i > 0 ) {
 				ctx.strokeStyle = canvasApp.strokeStyle;
 				ctx.strokeWidth = canvasApp.strokeWidth;
 				ctx.quadraticCurveTo(
-					(i-1)*4, abuf[idx][i],
-					i*4, abuf[idx][i]
+					(i-1)*4, abuf[parseInt(idx + o)][i] + o,
+					i*4, abuf[parseInt(idx + o)][i] + o
 				);
 			}
 			/* Draw bars for the eq levels (fft) data */
-			var barh = h - vbuf[idx][i]*h;
+			var barh = h - vbuf[parseInt(idx + o)][i]*h;
 			amp2 = amp1;
-			amp1 = (i === 3 && vbuf[idx][i] > 0.05)? vbuf[idx][i] : amp1;
+			amp1 = (i === 3 && vbuf[parseInt(idx + o)][i] > 0.05)? vbuf[parseInt(idx + o)][i] : amp1;
 			verts = (amp2 !== amp1)? parseInt(Math.rand()*10) : verts;
 			if( (i <= n) ) {
-				var freq = Math.floor(fbuf[idx][i]);
-				ctx.fillStyle = "hsl("+ (300 - vbuf[idx][i]*360) +", 100%, 50%)";
+				var freq = Math.floor(fbuf[parseInt(idx + o)][i]);
+				ctx.fillStyle = "hsl("+ (300 - vbuf[parseInt(idx + o)][i]*360) +", 100%, 50%)";
 				ctx.fillRect( i*4, barh, 4, h );
-				//ctx.fillText( vbuf[idx][i]*360, i*24, barh-10 );
+				//ctx.fillText( vbuf[parseInt(idx + o)][i]*360, i*24, barh-10 );
 			}
 		}
 		

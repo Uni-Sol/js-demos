@@ -150,14 +150,20 @@ if( appStarted ) return appStarted;
   function draw (ctx,w,h) {
     //var t = time%32;
 	var actx = canvasApp.actx;
+    actx.clearRect(0, 0, w, h);
 
 	ctx.globalCompositeOperation = "source-over";
 	ctx.globalAlpha = 1.0;
     ctx.clearRect(0, 0, w, h);
 	
-	aidx = canvasApp.aidx = 
-	  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);
-	ctx.drawImage(aCanvas, 0, 0, w, h);
+//	aidx = canvasApp.aidx = 
+//	  graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h);	
+    for( var o=3; o>0; o-- ) {
+        aidx = canvasApp.aidx = 
+            graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h, o);
+    }
+    //actx.stroke();
+    ctx.drawImage(aCanvas, 0, 0, w, h);
 	
 	
 	/* Text */
@@ -186,19 +192,19 @@ if( appStarted ) return appStarted;
   }
   
   /* Graph samples */
-  function graphSamples( ctx, audio, abuf, fbuf, vbuf, aidx, w, h ) {
+  function graphSamples( ctx, audio, abuf, fbuf, vbuf, aidx, w, h, o ) {
 	try {
 		if( abuf.length < 1 ) return aidx;
 		if( audio.paused ) return aidx;
 		if(! (audio.readyState > 3) ) return aidx;
 		var idx = Math.floor( audio.currentTime*15.02 );
-		if(! abuf[idx] ) {
-			Debugger.log( "abuf["+ idx +"] has not been recieved\n" );
+		if(! abuf[parseInt(idx + o)] ) {
+			Debugger.log( "abuf["+ parseInt(idx + o) +"] has not been recieved\n" );
 			return aidx;
 		}
-		//Debugger.log( "aBuffer index: "+ idx );
+		Debugger.log( "aBuffer index: "+ parseInt(idx + o) );
 		
-		ctx.clearRect(0, 0, w, h);
+		//ctx.clearRect(0, 0, w, h);
 		
 		/* Reset canvas ctx properties */
 		ctx.globalCompositeOperation = "source-over";
@@ -212,23 +218,23 @@ if( appStarted ) return appStarted;
 		 */
 		if( idx < 1 ) {
 			ctx.moveTo( 0, hcorrect );
-		} else ctx.moveTo( 0, -(abuf[idx][0]*2*hcorrect) + hcorrect  );
+		} else ctx.moveTo( 0, -(abuf[parseInt(idx + o)][0]*2*hcorrect) + hcorrect  );
 		
-		for( var i=0, z=abuf[idx].length, n=z; i<z; i++ ) {
+		for( var i=0, z=abuf[parseInt(idx + o)].length, n=z; i<z; i++ ) {
 			/* Draw a curve of the amplitude data */
 			if( i > 0 ) ctx.quadraticCurveTo(
-				(i-1), abuf[idx][i],
-				i, abuf[idx][i]
+				(i-1), abuf[parseInt(idx + o)][i],
+				i, abuf[parseInt(idx + o)][i]
 			);
 			/* Draw bars for the eq levels (fft) data */
-			var barh = h - vbuf[idx][i]*h;
+			var barh = h - vbuf[parseInt(idx + o)][i]*h;
 			if( (i <= n) ) {
-				var freq = Math.floor(fbuf[idx][i]);
+				var freq = Math.floor(fbuf[parseInt(idx + o)][i]);
 				ctx.fillRect( i, barh, 1, h );
 				//ctx.fillText( freq, i*24, barh-10 );
 			}
 		}
-		ctx.stroke();
+        ctx.stroke();
 		return ++idx;
 		
 	} catch(e) {

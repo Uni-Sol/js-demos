@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
 	<title>Oral History</title>
@@ -27,7 +27,7 @@
         <source src="audio/oral_history.ogg" />
       </audio>
     </div>
-	
+
     <a href="http://www.w3.org/2010/05/video/mediaevents.html" target="_blank">Media Help</a>
 
     <p id="vstatus"></p>
@@ -37,15 +37,16 @@
 	</p>
 
 	<script type="text/javascript" src="scripts/debugger.js"></script>
+	<!--script type="text/javascript" id="cvSrc" src="scripts/acc-visualizer.js"></script-->
 	<script type="text/javascript" id="cvSrc" src="scripts/interact-visualizer.js"></script>
 	<script type="text/javascript">
-(function() { 
+(function() {
 	window.onload = function(){
 		canvasApp(window.cv);
 	};
-	if (typeof Debugger === "function") { 
+	if (typeof Debugger === "function") {
 		Debugger.on = false;
-		return; 
+		return;
 	} else {
 		window.Debugger = {
 			log: function() {
@@ -55,5 +56,5 @@
 	}
 } )();
 	</script>
-	
+
 </body></html>

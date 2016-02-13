@@ -64,7 +64,7 @@ get '/vision' => sub {
 		header => "Share The Dream",
 		canvasApp => '/js-demos/scripts/interact-visualizer.js'
 	);
-	$self->stash( mediaDIV => '<div id="stream" style="text-align: center"><br /><audio id="aud1" preload="auto" controls="true"><source src="/js-demos/audio/stymaps.mp3" /><source src="/js-demos/audio/stymaps.ogg" /></audio></div>' );
+	$self->stash( mediaDIV => '<div id="stream" style="text-align: center"><br /><audio id="aud1" preload="auto" controls="true"><source src="/js-demos/audio/morning-01.mp3" /><source src="/js-demos/audio/morning-01    .ogg" /></audio></div>' );
 	$self->render('vision');
 };
 

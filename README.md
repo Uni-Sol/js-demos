@@ -5,10 +5,6 @@ These are some very loosely organized experiments, for the purpose of improving 
 
 Here's an equally loose index of what can be viewed online:
 
-![Visualizer+Video](fathers.png)
-[Visualizer (+VIDEO) ](happy-b-day.html)
-(Exploration of music visualization, adding real-time compositing of HTML5 video)
-
 [FFT Simple ](fft-simple.html) 
 (first try at music visualization using pre-analyzed fft data)
 
@@ -18,7 +14,12 @@ Here's an equally loose index of what can be viewed online:
 ![Visualizer+](visualizer.png)
 [Visualizer (+input) ](visualizer.html)
 (continues exploration of music visualization, adding mouse interaction)
-<br /><br />
+<br /><br /><br /><br />
+
+![Visualizer+Video](fathers.png)
+[Visualizer (+VIDEO) ](happy-b-day.html)
+(Exploration of music visualization, adding real-time compositing of HTML5 video)
+<br /><br /><br /><br />
 
 
 [Stylogical Maps ](stymaps/intro.005.html)
@@ -26,17 +27,25 @@ Here's an equally loose index of what can be viewed online:
 
 ![Stymaps11](stymaps/images/stymaps11.gif) 	![Stymaps12](stymaps/images/stymaps12.gif) 
 ![Stymaps15](stymaps/images/stymaps15.gif) 	![Stymaps25](stymaps/images/stymaps25.gif)
-<br /><br />
+<br /><br /><br /><br />
+<br /><br /><br /><br />
+<br /><br /><br /><br />
+<br /><br /><br /><br />
 
 
+![Koch Snowflake](kochflake.png)
 [Koch Snowflake ](kochflake.html) 
 (expansion of example from 'Canvas Pocket Reference' by D. Flanagan, 2011)
-![Koch Snowflake](kochflake.png)
+<br /><br /><br /><br />
 
 
+![Gradient Example](gradient.png)
 [Gradient ](gradient.html) 
 (Gradient example converted to Canvas API from [Processing API](http://processing.org/examples/lineargradient.html) )
-![Gradient Example](gradient.png)
+<br /><br /><br /><br />
+<br /><br /><br /><br />
+<br /><br /><br /><br />
+<br /><br /><br /><br />
 
 
 [MOV16 ](mov16.html) 

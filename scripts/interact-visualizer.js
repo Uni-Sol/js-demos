@@ -65,14 +65,14 @@ var canvasApp = function canvasApp(cv) {
 	canvasApp.mouseOver = false;
 	canvasApp.mouseEvent = 0;
 	canvasApp.tx = 0;
-	canvasApp.strokeStyle = 'rgba(50%,100%,50%,1.0)';
+	canvasApp.strokeStyle = window['foreground01'].style.color || 'rgba(50%,100%,50%,1.0)';
 	canvasApp.colorChange = function(evt){
 		clearInterval(this.mouseEvent);
 		if( canvasApp.mouseOver ) window.mouseEvent = setTimeout( function(evt) {
 			var width = window.innerWidth,
 				height = window.innerHeight;
 			//Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
-			var strokeB, strokeR = canvasApp.strokeStyle.match(/rgba\((\d+)\%/)[1];
+			var strokeB, strokeR = canvasApp.strokeStyle.match(/rgb\((\d+)/)[1]/255;
 			if( strokeR === null ) { 
 				strokeR = 50;
 			} else {
@@ -82,9 +82,9 @@ var canvasApp = function canvasApp(cv) {
 			}
 			strokeB = 50 - strokeR;
 			if(evt.clientX > width/2) {
-				canvasApp.strokeStyle = 'rgba('+ (++strokeR)*2 +'%,100%,'+ (--strokeB)*2 +'%,1.0)';
+				canvasApp.strokeStyle = window['foreground02'].style.color || 'rgba('+ (++strokeR)*2 +'%,100%,'+ (--strokeB)*2 +'%,1.0)';
 			} else {
-				canvasApp.strokeStyle = 'rgba('+ (--strokeR)*2 +'%,100%,'+ (++strokeB)*2 +'%,1.0)';
+				canvasApp.strokeStyle = window['foreground03'].style.color || 'rgba('+ (--strokeR)*2 +'%,100%,'+ (++strokeB)*2 +'%,1.0)';
 			}
 			//Debugger.log( canvasApp.strokeStyle );
 		}, 33, evt);
@@ -253,12 +253,12 @@ if( appStarted ) return appStarted;
             ctx.restore();
 
             bctx.drawImage(aCanvas, 1, 2, (w>>2)-1, h-4);
-            bctx.fillStyle = "rgba(0%,0%,0%,0.005)";
+            bctx.fillStyle = window['background01'].style.color || "rgba(0%,0%,0%,0.005)";
             bctx.fillRect(0, 0, w, h);
         } else {
             actx.clearRect(0, 0, w, h);
             actx.drawImage(bCanvas, 1, 2, (w>>2)-1, h-4);
-            actx.fillStyle = "rgba(0%,0%,0%,0.025)";
+            actx.fillStyle = window['background02'].style.color || "rgba(0%,0%,0%,0.025)";
             actx.fillRect(0, 0, w, h);
         }
           if( window.canvasApp.canDrawVideo === true )
@@ -273,7 +273,7 @@ if( appStarted ) return appStarted;
 
 	/* Text */
 	ctx.lineWidth = 2;
-	ctx.fillStyle = "#777";
+	ctx.fillStyle = "hsl(180, 100%, 100%)";
 	ctx.strokeStyle = "#fff";
 	//Debugger.log( "aBuffer index: "+ aidx );
 	if( aidx < 100 ) {
@@ -311,10 +311,6 @@ if( appStarted ) return appStarted;
 		}
 		//Debugger.log( "aBuffer index: "+ idx );
 		
-		//ctx.clearRect(0, 0, w, h);
-		//ctx.fillStyle = 'rgba(0,0,0,0.25)';
-		//ctx.fillRect(0, 0, w, h);
-		
 		/* Reset canvas ctx properties */
 		ctx.globalCompositeOperation = "source-over";
 		ctx.globalAlpha = 1.0;
@@ -346,7 +342,7 @@ if( appStarted ) return appStarted;
 			verts = (amp2 !== amp1)? parseInt(Math.rand()*10) : verts;
 			if( (i <= n) ) {
 				var freq = Math.floor(fbuf[parseInt(idx + o)][i]);
-				ctx.fillStyle = "hsl("+ (300 - vbuf[parseInt(idx + o)][i]*360) +", 100%, 50%)";
+				ctx.fillStyle = "hsl("+ (200 - vbuf[parseInt(idx + o)][i]*180) +", 100%, 50%)";
 				ctx.fillRect( i*4, barh, 4, h );
 				//ctx.fillText( vbuf[parseInt(idx + o)][i]*360, i*24, barh-10 );
 			}

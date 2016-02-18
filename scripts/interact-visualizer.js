@@ -223,8 +223,23 @@ if( appStarted ) return appStarted;
 
   function draw (ctx,w,h) {
 
-	var actx = canvasApp.actx;
-	var bctx = canvasApp.bctx;
+	var actx = canvasApp.actx,
+        bctx = canvasApp.bctx;
+    
+    function drawPictures( context, pictures ) {
+        if( time%2 ) {
+            //context.globalCompositeOperation = "source-in";
+            context.globalAlpha = 0.75;
+            context.drawImage(pictures[0], (canvas.width/2 - pictures[0].width), -80, pictures[0].width*2, pictures[0].height*2);
+        } else {
+            context.globalCompositeOperation = "multiply";
+            context.globalAlpha = 0.05;
+            context.drawImage(pictures[0], (canvas.width/2 - pictures[0].width), -80, pictures[0].width*2, pictures[0].height*2);
+        }
+        context.globalCompositeOperation = "source-over";
+	    context.globalAlpha = 1.0;
+    }
+      
     function drawVideo( video ) {
 	   /* Draw video input, if any */
 		var vx =( video !== null )? (canvas.width/2 - video.videoWidth/2): 0;
@@ -261,17 +276,26 @@ if( appStarted ) return appStarted;
             ctx.scale(-1, 1);
             ctx.drawImage(aCanvas, 0, 0, (w>>1), h);
             ctx.restore();
+            
+            if( window.pictures && window.pictures.children.length > 0 )
+                drawPictures(ctx, window.pictures.children);
 
             bctx.drawImage(aCanvas, 1, 2, (w>>2)-1, h-4);
             bctx.fillStyle = window['background01'].style.color || "rgba(0%,0%,0%,0.005)";
             bctx.fillRect(0, 0, w, h);
+            
         } else {
             actx.clearRect(0, 0, w, h);
+            
+            if( window.pictures && window.pictures.children.length > 0 )
+                drawPictures(ctx, window.pictures.children);
+            
             actx.drawImage(bCanvas, 1, 2, (w>>2)-1, h-4);
             actx.fillStyle = window['background02'].style.color || "rgba(0%,0%,0%,0.025)";
             actx.fillRect(0, 0, w, h);
         }
-          if( window.canvasApp.canDrawVideo === true )
+        
+        if( window.canvasApp.canDrawVideo === true )
             drawVideo(audio);
 
 	} catch (err) {
@@ -288,12 +312,13 @@ if( appStarted ) return appStarted;
 	//Debugger.log( "aBuffer index: "+ aidx );
 	if( aidx < 100 ) {
 		ctx.font = "bold "+ aidx*2 +"px Comfortaa";
-		if( aidx%2 === 0) {
-			ctx.fillText(announcement, 24, h>>1);
-		} else ctx.strokeText(announcement, 24, h>>1);
+		//if( aidx%2) {
+		//	ctx.fillText(announcement, 24, h>>1);
+		//} else 
+            ctx.strokeText(announcement, 24, h>>1);
 	} else if( aidx > 300 ) {
 		ctx.font = "bold 12px Verdana";
-		ctx.fillText(title, 24, 128);
+		ctx.fillText(title, 64, 128);
 		if( (aidx > 1500) && (aidx < 3500) ) for(var i=0, z=copy.length; i<z; i++)
 			ctx.fillText(copy[i], w>>1, (2500 - aidx) + (i*20) );
 	}

@@ -50,8 +50,12 @@ var canvasApp = function canvasApp(cv) {
 	/* END Global Vars */
 
 	/* Get canvas properties */
-	var canvas = canvasApp.cv = (typeof canvasApp.cv === "object")? canvasApp.cv: cv ;
-	//Debugger.log( "Using canvas '"+ canvas.id +"'\n" );
+	var canvas = 
+        canvasApp.cv = (typeof canvasApp.cv === "object")? 
+                        canvasApp.cv: 
+                        cv;
+    
+	Debugger.log( "Using canvas '"+ canvas.id +"'\n" );
 	canvas.id = "layer1";
 	canvas.alt = "Interactive Audio Visualizer";
 	canvas.src = (location.pathname.match(/(\.html)/) !== null)?
@@ -66,38 +70,38 @@ var canvasApp = function canvasApp(cv) {
 	canvasApp.mouseEvent = 0;
 	canvasApp.tx = 0;
 	canvasApp.strokeStyle = window['foreground01'].style.color || 'rgb(127,255,127)';
-	canvasApp.blockStyle = 'rgb(127,255,127)';
-	var strokeR = (window['foreground02'].style.color)?
-					window['foreground02'].style.color.match(/rgb\((\d+)/)[1]:
-					canvasApp.blockStyle.match(/rgb\((\d+)/)[1],
-		strokeB = (window['foreground03'].style.color)?
-					window['foreground03'].style.color.match(/rgb\(\d+,[\s|\d]+,([\s|\d]+)/)[1]:
-					canvasApp.blockStyle.match(/rgb\(\d+,\d+,(\d+)/)[1];
+	canvasApp.blockStyle = 'hsla(150,100%,100%,1.0)';
+//	var strokeR = (window['foreground02'].style.color)?
+//					window['foreground02'].style.color.match(/rgb\((\d+)/)[1]:
+//					canvasApp.blockStyle.match(/rgb\((\d+)/)[1],
+//		strokeB = (window['foreground03'].style.color)?
+//					window['foreground03'].style.color.match(/rgb\(\d+,[\s|\d]+,([\s|\d]+)/)[1]:
+//					canvasApp.blockStyle.match(/rgb\(\d+,\d+,(\d+)/)[1];
 
 	canvasApp.colorChange = function(evt){
-		// clearInterval(this.mouseEvent);
-		// if( canvasApp.mouseOver ) window.mouseEvent = setTimeout( function(evt) {
-		// 	var width = window.innerWidth,
-		// 		height = window.innerHeight;
-		// 	//Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
-		// 	if(! strokeR ) {
-		// 		strokeR = 127;
-		// 		strokeB = 255;
-		// 	} else {
-		// 		strokeR = parseInt(strokeR/2);
-		// 		if( strokeR > 127 ) strokeR--;
-		// 		if( strokeR < 1 ) strokeR++;
-		// 		strokeB = parseInt(strokeB);
-		// 		if( strokeB > 255 ) strokeB--;
-		// 		if( strokeB < 1 ) strokeB++;
-		// 	}
-		// 	if(evt.clientX > width/2) {
-		// 		canvasApp.blockStyle = 'rgb('+ (strokeR++) +',127,'+ (strokeB++) +')';
-		// 	} else {
-		// 		canvasApp.blockStyle = 'rgb('+ (strokeR--) +',127,'+ (strokeB--) +')';
-		// 	}
-		// 	Debugger.log( canvasApp.strokeStyle );
-		// }, 33, evt);
+//		 clearInterval(this.mouseEvent);
+//		 if( canvasApp.mouseOver ) window.mouseEvent = setTimeout( function(evt) {
+//		 	var width = window.innerWidth,
+//		 		height = window.innerHeight;
+//		 	//Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
+//		 	if(! strokeR ) {
+//		 		strokeR = 127;
+//		 		strokeB = 255;
+//		 	} else {
+//		 		strokeR = parseInt(strokeR/2);
+//		 		if( strokeR > 127 ) strokeR--;
+//		 		if( strokeR < 1 ) strokeR++;
+//		 		strokeB = parseInt(strokeB);
+//		 		if( strokeB > 255 ) strokeB--;
+//		 		if( strokeB < 1 ) strokeB++;
+//		 	}
+//		 	if(evt.clientX > width/2) {
+//		 		canvasApp.blockStyle = 'rgb('+ (strokeR++) +',127,'+ (strokeB++) +')';
+//		 	} else {
+//		 		canvasApp.blockStyle = 'rgb('+ (strokeR--) +',127,'+ (strokeB--) +')';
+//		 	}
+//		 	Debugger.log( canvasApp.strokeStyle );
+//		 }, 33, evt);
 	};
 
   /* Insert loader just after the canvas */
@@ -359,7 +363,9 @@ if( appStarted ) return appStarted;
 		var verts = 6,
 			hidx = parseInt(idx + o);
 		ctx.beginPath();
-		ctx.fillStyle = canvasApp.blockStyle.replace(/,\s?0\.\d+\)/, ",1.0)");
+        if( aidx%6 ) canvasApp.blockStyle = window['foreground02'].style.color;
+        else canvasApp.blockStyle = window['foreground03'].style.color;
+        ctx.fillStyle = canvasApp.blockStyle.replace(/,\s?0\.\d+\)/, ",1.0)");
 		for( var i=0, z=abuf[hidx].length, n=z; i<z; i++ ) {
 			/* Draw a curve of the amplitude data */
 			if( i > 0 ) {
@@ -378,7 +384,13 @@ if( appStarted ) return appStarted;
 			if( (i <= n) ) {
 				var freq = Math.floor(fbuf[hidx][i]);
 				//ctx.fillStyle = "hsl("+ (200 - vbuf[parseInt(idx + o)][i]*180) +", 100%, 50%)";
-				ctx.fillStyle = canvasApp.blockStyle.replace(/,\s?127,/, ","+ parseInt(vbuf[hidx][i]*127) +",");
+				ctx.fillStyle = canvasApp.blockStyle.replace(
+                                    /,\s?0\.\d+\)/, 
+                                    ",1.0)"
+                                ).replace(
+                                    /hsla\((150),\s?(100)\%,\s?(70)\%/,
+                                    "hsla($1, "+ (vbuf[parseInt(idx + o)][i]*50) +"%, $3%"
+                                ); 
 				ctx.fillRect( i*4, barh, 4, h );
 			}
 		}

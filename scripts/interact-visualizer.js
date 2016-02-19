@@ -47,6 +47,15 @@ var canvasApp = function canvasApp(cv) {
 		return {audioReady:true};
 	  })();
 	window.canvasApp.canDrawVideo = true;
+    window.addEventListener('keydown', function(event) {
+        if(!event) var event = window.event; // cross-browser shenanigans
+        if(event.keyCode === 32) { // this is the spacebar
+            if( window.audio.paused ) window.audio.play();
+            else window.audio.pause();
+            event.preventDefault();
+        }
+        return true; // treat all other keys normally;
+    });
 	/* END Global Vars */
 
 	/* Get canvas properties */
@@ -231,9 +240,24 @@ if( appStarted ) return appStarted;
         bctx = canvasApp.bctx;
     
     function drawPictures( context, pictures ) {
-        context.globalCompositeOperation = "source-in";
-        context.globalAlpha = 1.0;
-        context.drawImage(pictures[0], (canvas.width/2 - pictures[0].width), -80, pictures[0].width*2, pictures[0].height*2);
+        var pidx = 0,
+            change = 223;
+        
+        if( aidx > change ) pidx = parseInt(aidx/change)%32;
+        if( aidx < 10 ) {
+            context.globalCompositeOperation = "source-out";
+            context.globalAlpha = 0.05;
+        } else if( aidx%change < 3 || (change - 3) < aidx%change) {
+            context.globalCompositeOperation = "source-out";
+            context.globalAlpha = 0.25;
+        } else if( aidx%change < 6 || (change - 6) < aidx%change) {
+            context.globalCompositeOperation = "screen";
+            context.globalAlpha = 0.50;
+        } else {
+            context.globalCompositeOperation = "source-in";
+            context.globalAlpha = 1.0;
+        }
+        context.drawImage(pictures[pidx], (canvas.width/2 - pictures[pidx].width), -40, pictures[pidx].width*2, pictures[pidx].height*2);
         context.globalCompositeOperation = "source-over";
         context.globalAlpha = 1.0;
     }

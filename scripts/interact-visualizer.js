@@ -243,7 +243,7 @@ if( appStarted ) return appStarted;
         var pidx = 0,
             change = 223;
         
-        if( aidx > change ) pidx = parseInt(aidx/change)%32;
+        if( aidx > change ) pidx = parseInt(aidx/change)%(pictures.length);
         if( aidx < 10 ) {
             context.globalCompositeOperation = "source-out";
             context.globalAlpha = 0.05;

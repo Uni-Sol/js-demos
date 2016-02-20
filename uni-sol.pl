@@ -57,6 +57,65 @@ get '/js-demos' => sub {
 	getReadme($self, 'js-demos/README.md');
 };
 
+get '/js-demos/apsara' => sub {
+	my $self = shift;
+	$self->stash( 
+		version => $version, # stash the url and display in template
+		header => "Apsara, My Love",
+		canvasApp => '/js-demos/scripts/interact-visualizer.js'
+	);
+	$self->stash( mediaDIV => <<HTML );
+	<span id="background01" style="display:none; color:hsla(53,8%,37%,0.005)"></span>
+	<span id="background02" style="display:none; color:hsla(168,15%,65%,0.025)"></span>
+	<span id="background03" style="display:none; color:hsla(0%,0%,0%,1.0)"></span>
+    
+	<span id="foreground01" style="display:none; color:rgb(255,255,255)"></span>
+	<span id="foreground02" style="display:none; color:hsla(210, 100%, 70%, 1.0)"></span>
+	<span id="foreground03" style="display:none; color:hsla(150, 100%, 70%, 1.0)"></span>
+    
+    <div id="pictures" style="display:none;">
+        <img src="images/apsara-00.png" />
+        <img src="images/apsara-03.png" />
+        <img src="images/apsara-05.png" />
+        <img src="images/apsara-07.png" />
+        <img src="images/apsara-08.png" />
+        <img src="images/apsara-09.png" />
+        <img src="images/apsara-10.png" />
+        <img src="images/apsara-11.png" />
+        <img src="images/apsara-12.png" />
+        <img src="images/apsara-13.png" />
+        <img src="images/apsara-14.png" />
+        <img src="images/apsara-15.png" />
+        <img src="images/apsara-16.png" />
+        <img src="images/apsara-17.png" />
+        <img src="images/apsara-18.png" />
+        <img src="images/apsara-19.png" />
+        <img src="images/apsara-20.png" />
+        <img src="images/apsara-21.png" />
+        <img src="images/apsara-22.png" />
+        <img src="images/apsara-23.png" />
+        <img src="images/apsara-24.png" />
+        <img src="images/apsara-25.png" />
+        <img src="images/apsara-26.png" />
+        <img src="images/apsara-27.png" />
+        <img src="images/apsara-28.png" />
+        <img src="images/apsara-29.png" />
+        <img src="images/apsara-30.png" />
+        <img src="images/apsara-31.png" />
+    </div>
+
+    <div id="stream" style="text-align: center">
+	<br />
+      <audio id="aud1" preload="auto" controls="true" loop="true">
+        <source src="audio/guru-ganesha.mp3" />
+        <source src="audio/guru-ganesha.ogg" />
+      </audio>
+    </div>   
+HTML
+
+	$self->render('apsara');
+};
+
 get '/vision' => sub {
 	my $self = shift;
 	$self->stash( 
@@ -64,7 +123,7 @@ get '/vision' => sub {
 		header => "Share The Dream",
 		canvasApp => '/js-demos/scripts/interact-visualizer.js'
 	);
-	$self->stash( mediaDIV => '<div id="stream" style="text-align: center"><br /><audio id="aud1" preload="auto" controls="true"><source src="/js-demos/audio/morning-01.mp3" /><source src="/js-demos/audio/morning-01    .ogg" /></audio></div>' );
+	$self->stash( mediaDIV => '<div id="stream" style="text-align: center"><br /><audio id="aud1" preload="auto" controls="true"><source src="/js-demos/audio/morning-01.mp3" /><source src="/js-demos/audio/morning-01.ogg" /></audio></div>' );
 	$self->render('vision');
 };
 

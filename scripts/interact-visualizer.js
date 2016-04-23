@@ -78,39 +78,44 @@ var canvasApp = function canvasApp(cv) {
 	canvasApp.mouseOver = false;
 	canvasApp.mouseEvent = 0;
 	canvasApp.tx = 0;
-	canvasApp.strokeStyle = window['foreground01'].style.color || 'rgb(127,255,127)';
+	canvasApp.strokeStyle = (window['foreground01']) ? window['foreground01'].style.color : 'rgb(127,255,127)';
 	canvasApp.blockStyle = 'hsla(150,100%,100%,1.0)';
-//	var strokeR = (window['foreground02'].style.color)?
-//					window['foreground02'].style.color.match(/rgb\((\d+)/)[1]:
-//					canvasApp.blockStyle.match(/rgb\((\d+)/)[1],
-//		strokeB = (window['foreground03'].style.color)?
-//					window['foreground03'].style.color.match(/rgb\(\d+,[\s|\d]+,([\s|\d]+)/)[1]:
-//					canvasApp.blockStyle.match(/rgb\(\d+,\d+,(\d+)/)[1];
-
+	var strokeR = (window['foreground02']) ?
+				    window['foreground02'].style.color.match(/rgb\((\d+)/)[1] :
+					(canvasApp.blockStyle && canvasApp.blockStyle.match(/rgb\((\d+)/) !== null)?
+                    canvasApp.blockStyle.match(/rgb\((\d+)/)[1] :
+                    "hsl(180, 100%, 100%)",
+		strokeB = (window['foreground03']) ?
+					window['foreground03'].style.color.match(/rgb\(\d+,[\s|\d]+,([\s|\d]+)/)[1] :
+					(canvasApp.blockStyle && canvasApp.blockStyle.match(/rgb\((\d+)/) !== null)?
+                    canvasApp.blockStyle.match(/rgb\((\d+)/)[1] :
+                    "hsl(180, 100%, 100%)";
 	canvasApp.colorChange = function(evt){
-//		 clearInterval(this.mouseEvent);
-//		 if( canvasApp.mouseOver ) window.mouseEvent = setTimeout( function(evt) {
-//		 	var width = window.innerWidth,
-//		 		height = window.innerHeight;
-//		 	//Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
-//		 	if(! strokeR ) {
-//		 		strokeR = 127;
-//		 		strokeB = 255;
-//		 	} else {
-//		 		strokeR = parseInt(strokeR/2);
-//		 		if( strokeR > 127 ) strokeR--;
-//		 		if( strokeR < 1 ) strokeR++;
-//		 		strokeB = parseInt(strokeB);
-//		 		if( strokeB > 255 ) strokeB--;
-//		 		if( strokeB < 1 ) strokeB++;
-//		 	}
-//		 	if(evt.clientX > width/2) {
-//		 		canvasApp.blockStyle = 'rgb('+ (strokeR++) +',127,'+ (strokeB++) +')';
-//		 	} else {
-//		 		canvasApp.blockStyle = 'rgb('+ (strokeR--) +',127,'+ (strokeB--) +')';
-//		 	}
+		 clearInterval(this.mouseEvent);
+		 if( canvasApp.mouseOver ) window.mouseEvent = setTimeout( function(evt) {
+		 	var width = window.innerWidth,
+		 		height = window.innerHeight;
+//		 	Debugger.log( "width: "+ width +" mouse x: "+ evt.clientX );
+		 	if(! strokeR ) {
+		 		strokeR = 127;
+		 		strokeB = 255;
+		 	} else {
+		 		strokeR = parseInt(strokeR/2);
+		 		if( strokeR > 127 ) strokeR--;
+		 		if( strokeR < 1 ) strokeR++;
+		 		strokeB = parseInt(strokeB);
+		 		if( strokeB > 255 ) strokeB--;
+		 		if( strokeB < 1 ) strokeB++;
+		 	}
+		 	if(evt.clientX > width/2) {
+		 		canvasApp.blockStyle = 'rgb('+ (strokeR++) +',127,'+ (strokeB++) +')';
+		 	} else {
+		 		canvasApp.blockStyle = 'rgb('+ (strokeR--) +',127,'+ (strokeB--) +')';
+		 	}
 //		 	Debugger.log( canvasApp.strokeStyle );
-//		 }, 33, evt);
+		 }, 33, evt);
+        
+        return true;
 	};
 
   /* Insert loader just after the canvas */
@@ -234,7 +239,7 @@ if( appStarted ) return appStarted;
 
   /* Draw main function */
 
-  function draw (ctx,w,h) {
+  function draw (ctx, w, h) {
 
 	var actx = canvasApp.actx,
         bctx = canvasApp.bctx;
@@ -258,15 +263,14 @@ if( appStarted ) return appStarted;
             context.globalAlpha = 1.0;
         }
         context.drawImage(pictures[pidx], (canvas.width/2 - pictures[pidx].width), -40, pictures[pidx].width*2, pictures[pidx].height*2);
-        context.globalCompositeOperation = "source-over";
-        context.globalAlpha = 1.0;
+
     }
       
     function drawVideo( video ) {
 	   /* Draw video input, if any */
 		var vx =( video !== null )? (canvas.width/2 - video.videoWidth/2): 0;
 		ctx.globalCompositeOperation = "lighter";
-		if ( (video !== null) && (video.readyState > 2) && (!video.paused) )
+		if ( (video !== null) && (video.readyState > 2) && (!video.paused) && typeof ctx.drawImage === "function" )
 			ctx.drawImage(video, vx, 0, video.videoWidth, video.videoHeight);
 		/* Composite fill blue background with tranparency tied to bass v */
 		ctx.globalCompositeOperation = "source-atop";
@@ -287,13 +291,18 @@ if( appStarted ) return appStarted;
 
     try {
         if( time%2 ) {
-            bctx.clearRect(0, 0, w, h);    
-
-            if( window.pictures && window.pictures.children.length > 0 )
+            //Debugger.on = true;
+            
+            bctx.clearRect(0, 0, w, h);
+            context.globalCompositeOperation = "source-over";
+            context.globalAlpha = 1.0;
+            
+            if( window.pictures && window.pictures.children.length > 0 ) {
                 drawPictures(ctx, window.pictures.children);
-
-            ctx.globalCompositeOperation = "multiply";
-            ctx.globalAlpha = 0.05;
+                ctx.globalCompositeOperation = "multiply";
+                ctx.globalAlpha = 0.05;
+            }
+            
             for( var o = 6; o > 0; o-- ) {
                 aidx = canvasApp.aidx =
                   graphSamples(actx, audio, aBuffer, fBuffer, vBuffer, aidx, w, h, o);
@@ -314,7 +323,7 @@ if( appStarted ) return appStarted;
             actx.clearRect(0, 0, w, h);
             
             actx.drawImage(bCanvas, 1, 2, (w>>2)-1, h-4);
-            actx.fillStyle = window['background02'].style.color || "rgba(0%,0%,0%,0.025)";
+            actx.fillStyle = (window['background02']) ? window['background02'].style.color : "rgba(0%,0%,0%,0.025)";
             actx.fillRect(0, 0, w, h);
         }
         
@@ -322,6 +331,10 @@ if( appStarted ) return appStarted;
             drawVideo(audio);
 
 	} catch (err) {
+
+        ctx.globalCompositeOperation = "source-over";
+        ctx.globalAlpha = 1.0;
+        
 		Debugger.on = true;
 		Debugger.log("Failed to draw: "+ err.stack);
 		window.canvasApp.canDrawVideo = false;
@@ -333,8 +346,8 @@ if( appStarted ) return appStarted;
 
 	/* Text */
 	ctx.lineWidth = 2;
-	ctx.fillStyle =  window['foreground01'].style.color || "hsl(180, 100%, 100%)";
-	ctx.strokeStyle = window['foreground02'].style.color || "#fff";
+	ctx.fillStyle =  (window['foreground01']) ? window['foreground01'].style.color : "hsl(180, 100%, 100%)";
+	ctx.strokeStyle = (window['foreground02']) ? window['foreground02'].style.color : "#fff";
 	//Debugger.log( "aBuffer index: "+ aidx );
 	if( aidx < 100 ) {
 		ctx.font = "bold "+ aidx*2 +"px Comfortaa";
@@ -386,9 +399,11 @@ if( appStarted ) return appStarted;
 
 		var verts = 6,
 			hidx = parseInt(idx + o);
+        
 		ctx.beginPath();
-        if( aidx%6 ) canvasApp.blockStyle = window['foreground02'].style.color;
-        else canvasApp.blockStyle = window['foreground03'].style.color;
+        if( aidx%6 ) canvasApp.blockStyle = (window['foreground02']) ? window['foreground02'].style.color : "hsl(180, 100%, 100%)";
+        else canvasApp.blockStyle = (window['foreground03']) ? window['foreground03'].style.color : "hsl(180, 100%, 100%)";
+        
         ctx.fillStyle = canvasApp.blockStyle.replace(/,\s?0\.\d+\)/, ",1.0)");
 		for( var i=0, z=abuf[hidx].length, n=z; i<z; i++ ) {
 			/* Draw a curve of the amplitude data */
@@ -465,7 +480,7 @@ if( appStarted ) return appStarted;
   try {
     var context = canvas.getContext('2d');
 	time = 0;
-    drawLoop = setInterval(draw,31,context,canvas.width,canvas.height);
+    drawLoop = setInterval(draw, 31, context, canvas.width, canvas.height);
     Debugger.log("Draw loop started");
 	appStarted = true;
 	return appStarted;

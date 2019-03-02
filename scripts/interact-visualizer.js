@@ -244,7 +244,7 @@ if( appStarted ) return appStarted;
 	var actx = canvasApp.actx,
         bctx = canvasApp.bctx;
     
-    function drawPictures( context, pictures ) {
+    function drawPictures (context, pictures) {
         var pidx = 0,
             change = 223;
         
@@ -266,23 +266,60 @@ if( appStarted ) return appStarted;
 
     }
       
-    function drawVideo( video ) {
-	   /* Draw video input, if any */
-		var vx =( video !== null )? (canvas.width/2 - video.videoWidth/2): 0;
-		ctx.globalCompositeOperation = "lighter";
-		if ( (video !== null) && (video.readyState > 2) && (!video.paused) && typeof ctx.drawImage === "function" )
-			ctx.drawImage(video, vx, 0, video.videoWidth, video.videoHeight);
-		/* Composite fill blue background with tranparency tied to bass v */
-		ctx.globalCompositeOperation = "source-atop";
-		ctx.fillStyle = "rgba(0%, 0%, 100%, "+ (0.5 - vBuffer[aidx][0]*2) +")";
-		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
-		/* Now fill red background tied to snare v */
-		ctx.fillStyle = "rgba(100%, 0%, 0%, "+ (0.25 - vBuffer[aidx][5]*2) +")";
-		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
-		/* Now fill green background */
-		ctx.fillStyle = "rgba(0%, 100%, 0%, "+ (0.25 - vBuffer[aidx][12]*2) +")";
-		ctx.fillRect(vx, 0, video.videoWidth, video.videoHeight);
-		ctx.globalCompositeOperation = "source-over";
+    function drawVideo (context, video) {
+         var pidx = 0,
+             change = 223;
+
+         if( aidx < 10 ) {
+             context.globalCompositeOperation = "source-out";
+             context.globalAlpha = 0.05;
+         } else if( aidx%change < 3 || (change - 3) < aidx%change) {
+             context.globalCompositeOperation = "source-out";
+             context.globalAlpha = 0.25;
+         } else if( aidx%change < 6 || (change - 6) < aidx%change) {
+             context.globalCompositeOperation = "screen";
+             context.globalAlpha = 0.50;
+         } else {
+             context.globalCompositeOperation = "source-in";
+             context.globalAlpha = 1.0;
+         }
+
+        /* Draw video input, if any */
+        if( window.canvasApp.canDrawVideo === true ) try {
+            var cCanvas = document.createElement('canvas');
+            var cctx = cCanvas.getContext('2d');
+            var vx = 0;
+
+            cCanvas.width = w/2;
+            cCanvas.height = video.videoHeight;
+            cctx.globalAlpha = 1.0
+
+            vx =( video !== null )? (canvas.width/2 - video.videoWidth/2): 0;
+            if ( (video !== null) && (video.readyState > 2) && (!video.paused) )
+                cctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+
+            ctx.globalAlpha = 1.0;
+            ctx.save();
+            ctx.drawImage(cCanvas, 0, 0, w/2, video.videoHeight);
+//            setTimeout(function () {
+                ctx.translate(w, 0);
+                ctx.scale(-1, 1);
+                ctx.drawImage(cCanvas, 0, 0, w/2, video.videoHeight);
+                ctx.restore();
+//            }, 1);
+
+//            cctx.drawImage(aCanvas, 1, 2, (w>>2)-1, h-4);
+//            cctx.fillStyle = "rgba(0%,0%,0%,0.005)";
+//            cctx.fillRect(0, 0, w, h);
+
+        } catch (err) {
+            Debugger.on = true;
+            Debugger.log("Failed to draw "+ video.id +": "+ err.stack);
+            window.canvasApp.canDrawVideo = false;
+            Debugger.on = false;
+        }
+
+        Debugger.log( "time: "+ time );
     }
 
 	ctx.globalCompositeOperation = "source-over";
@@ -292,7 +329,7 @@ if( appStarted ) return appStarted;
     try {
         if( time%2 ) {
             //Debugger.on = true;
-            
+
             bctx.clearRect(0, 0, w, h);
             context.globalCompositeOperation = "source-over";
             context.globalAlpha = 1.0;
@@ -301,6 +338,11 @@ if( appStarted ) return appStarted;
                 drawPictures(ctx, window.pictures.children);
                 ctx.globalCompositeOperation = "multiply";
                 ctx.globalAlpha = 0.05;
+
+            } else if( window.canvasApp.canDrawVideo === true ) {
+                drawVideo(actx, audio);
+                ctx.globalCompositeOperation = "multiply";
+                ctx.globalAlpha = 0.5;
             }
             
             for( var o = 6; o > 0; o-- ) {
@@ -321,14 +363,11 @@ if( appStarted ) return appStarted;
             
         } else {
             actx.clearRect(0, 0, w, h);
-            
+
             actx.drawImage(bCanvas, 1, 2, (w>>2)-1, h-4);
             actx.fillStyle = (window['background02']) ? window['background02'].style.color : "rgba(0%,0%,0%,0.025)";
             actx.fillRect(0, 0, w, h);
         }
-        
-        if( window.canvasApp.canDrawVideo === true )
-            drawVideo(audio);
 
 	} catch (err) {
 

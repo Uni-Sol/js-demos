@@ -20,7 +20,7 @@ sub getReadme {
 			output => $mh
 		)
 	);
-	
+
 	open $fh, '<'.$readme;
 	$save_line_sep = $/; # Save line seperator vaule
     undef $/; # Allows one pass input of entire file
@@ -28,26 +28,26 @@ sub getReadme {
     $/ = $save_line_sep; # Restore line seprator
 	close $fh;
 	close $mh;
-	
+
 	my( $apppath ) = $readme =~ /([\w\-]+\/)\w+\.md/;
 	$apppath = $URL.'/'.$apppath if( $apppath );
 	$apppath = $URL unless( defined $apppath );
-	$mark2html = rel2AbsURI( 
-		$mark2html, 
+	$mark2html = rel2AbsURI(
+		$mark2html,
 		$URL.'/',
 		$apppath
 	);
-	
+
 	($readme) = $readme =~ /(\w+)\//;
 	#$log->debug( $readme ."\n" );
 	$mark2html = "\n<div class=\"$readme\">\n". $mark2html ."\n</div>\n";
 	#$log->debug( $mark2html ."\n" );
-	
-	$self->stash( 
+
+	$self->stash(
 		url => $URL,
 		version => $version,
 		mark2html => $mark2html,
-		canvasApp => '/js-demos/scripts/koch.js' 
+		canvasApp => '/js-demos/scripts/koch.js'
 	);
 	$self->render('readme');
 };
@@ -59,7 +59,7 @@ get '/js-demos' => sub {
 
 get '/js-demos/apsara' => sub {
 	my $self = shift;
-	$self->stash( 
+	$self->stash(
 		version => $version, # stash the url and display in template
 		header => "Apsara, My Love",
 		canvasApp => '/js-demos/scripts/interact-visualizer.js'
@@ -68,11 +68,11 @@ get '/js-demos/apsara' => sub {
 	<span id="background01" style="display:none; color:hsla(53,8%,37%,0.005)"></span>
 	<span id="background02" style="display:none; color:hsla(168,15%,65%,0.025)"></span>
 	<span id="background03" style="display:none; color:hsla(0%,0%,0%,1.0)"></span>
-    
+
 	<span id="foreground01" style="display:none; color:rgb(255,255,255)"></span>
 	<span id="foreground02" style="display:none; color:hsla(210, 100%, 70%, 1.0)"></span>
 	<span id="foreground03" style="display:none; color:hsla(150, 100%, 70%, 1.0)"></span>
-    
+
     <div id="pictures" style="display:none;">
         <img src="images/apsara-00.png" />
         <img src="images/apsara-03.png" />
@@ -110,7 +110,7 @@ get '/js-demos/apsara' => sub {
         <source src="audio/guru-ganesha.mp3" />
         <source src="audio/guru-ganesha.ogg" />
       </audio>
-    </div>   
+    </div>
 HTML
 
 	$self->render('apsara');
@@ -118,22 +118,42 @@ HTML
 
 get '/vision' => sub {
 	my $self = shift;
-	$self->stash( 
+	$self->stash(
 		version => $version, # stash the url and display in template
 		header => "Share The Dream",
 		canvasApp => '/js-demos/scripts/interact-visualizer.js'
 	);
-	$self->stash( mediaDIV => '<div id="stream" style="text-align: center"><br /><audio id="aud1" preload="auto" controls="true"><source src="/js-demos/audio/morning-01.mp3" /><source src="/js-demos/audio/morning-01.ogg" /></audio></div>' );
+	$self->stash( mediaDIV => <<HTML );
+	<h1 id="text_title">The Word</h1>
+	<p id="text_copy" style="display:none;">
+	</p>
+
+    <span id="background01" style="display:none; color:hsla(53,8%,37%,0.005)"></span>
+    <span id="background02" style="display:none; color:hsla(168,15%,65%,0.025)"></span>
+    <span id="background03" style="display:none; color:hsla(0%,0%,0%,1.0)"></span>
+
+    <span id="foreground01" style="display:none; color:rgb(255,255,255)"></span>
+    <span id="foreground02" style="display:none; color:hsla(210, 100%, 70%, 1.0)"></span>
+    <span id="foreground03" style="display:none; color:hsla(150, 100%, 70%, 1.0)"></span>
+
+    <div id="stream" style="display:none; text-align:center">
+      <video id="aud1" preload="auto"  controls="true">
+        <source src="https://s3-us-west-1.amazonaws.com/real-currents/js-demos/video/the_word.mp4" />
+        <source src="https://s3-us-west-1.amazonaws.com/real-currents/js-demos/video/the_word.ogx" />
+      </video>
+    </div> 
+HTML
+
 	$self->render('vision');
 };
 
 get '/fathers' => sub {
 	my $self = shift;
-	$self->stash( 
+	$self->stash(
 		version => $version, # stash the url and display in template
 		canvasApp => '/js-demos/scripts/interact-visualizer.js'
 	);
-	$self->stash( 
+	$self->stash(
 		mediaDIV => q[<div id="stream" style="display:none; text-align:center"><video id="aud1" preload="auto"  controls="true"> <source src="/js-demos/video/fathers.mp4" /> <source src="/js-demos/video/fathers.ogv" /> </video></div> <a id="aud1_play" href="" onclick="(function() { audio.play(); jQuery('#home_screen').fadeOut(5333); jQuery('#transparent_background').fadeOut(5333); jQuery('#aud1_play').html('Now Playing'); } ());">Play</a> <script type="text/javascript">(function() { window.aud1_play.style.display = "none"; window.aud1.addEventListener( "loadstart", function(evt){ setTimeout( function() { window.aud1_play.style.display = "inline"; }, 15333 ); } );} ());</script>].
 					q[<h1 id="text_title">Fathers</h1><p id="text_copy" style="display:none;">].
 					qq[\nDon't Give Up\n\nOn Yourself\n\nOn Your Dreams\n\nThis is the moment\n\nYour power has never been greater\n\nYour priviledge has never stood higher\n\nYour influence is without measure\n\nOnly your fear\n\nOnly your lost spirit\n\nCan keep you from the promised land\n\nThe land of your ancestors\n\nThe land of your children\n\nWhere you would join them\n\nIf you would lead and follow\n\nAs your heart demands\n].
@@ -144,7 +164,7 @@ get '/fathers' => sub {
 
 get '/visualizer' => sub {
 	my $self = shift;
-	$self->stash( 
+	$self->stash(
 		version => $version, # stash the url and display in template
 		canvasApp => '/js-demos/scripts/interact-visualizer.js'
 	);
@@ -154,7 +174,7 @@ get '/visualizer' => sub {
 
 get '/js-demos/visualizer' => sub {
 	my $self = shift;
-	$self->stash( 
+	$self->stash(
 		version => $version, # stash the url and display in template
 		canvasApp => '/js-demos/scripts/interact-visualizer.js'
 	);

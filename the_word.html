@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+	<title>The Word</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=800" />
+
+	<link rel="stylesheet" type="text/css" href='stymaps/styles/mapscripts.css' />
+
+</head>
+<body>
+
+    <div id="header-canvas">
+       <canvas id='cv' width='640' height='360'  style="image-rendering:optimizespeed ! important;">
+         <div id='main-header'>
+           <h1>The Word</h1>
+           Please play in a new web browser, like Firefox or Chrome.
+         </div>
+       </canvas>
+    </div><a id="aud1_play" href="#" onclick="(function() { aud1_play.play(); this.innerHTML='Now Playing'; } ());">Play</a>
+
+	<h1 id="text_title">The Word</h1>
+	<p id="text_copy" style="display:none;">
+	</p>
+
+    <span id="background01" style="display:none; color:hsla(53,8%,37%,0.005)"></span>
+    <span id="background02" style="display:none; color:hsla(168,15%,65%,0.025)"></span>
+    <span id="background03" style="display:none; color:hsla(0%,0%,0%,1.0)"></span>
+
+    <span id="foreground01" style="display:none; color:rgb(255,255,255)"></span>
+    <span id="foreground02" style="display:none; color:hsla(210, 100%, 70%, 1.0)"></span>
+    <span id="foreground03" style="display:none; color:hsla(150, 100%, 70%, 1.0)"></span>
+
+    <div id="stream" style="display:none; text-align:center">
+      <video id="aud1" preload="auto"  controls="true">
+        <source src="https://s3-us-west-1.amazonaws.com/real-currents/js-demos/video/the_word.mp4" />
+        <source src="https://s3-us-west-1.amazonaws.com/real-currents/js-demos/video/the_word.ogx" />
+      </video>
+    </div>
+
+    <a href="http://www.w3.org/2010/05/video/mediaevents.html" target="_blank">Media Help</a>
+
+    <p id="vstatus"></p>
+	<p id="license" style="color:#fff">
+		<img src="http://i.creativecommons.org/l/by-sa/3.0/nz/88x31.png" alt="Creative Commons Licence"><br />
+        <em>These demos by <a href="mailto:john@real-currents.com">John </a> are licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/nz/deed.en_GB">Creative Commons Attribution-ShareAlike 3.0 License, 2009-2012 </a></em>
+	</p>
+
+	<script type="text/javascript" src="scripts/debugger.js"></script>
+	<script type="text/javascript" id="cvSrc" src="scripts/interact-visualizer.js"></script>
+	<script type="text/javascript">
+(function() {
+	window.onload = function(){
+		canvasApp(window.cv);
+	};
+	window.aud1_play.style.display = "block";
+	window.aud1.addEventListener( "loadstart", function(evt){
+		setTimeout( function() {
+			window.aud1_play.style.display = "inline";
+		}, 15333 );
+	} );
+
+	if (typeof Debugger === "function") {
+		Debugger.on = false;
+		return;
+	} else {
+		window.Debugger = {
+			log: function() {
+				/* no debugger.js */
+			}
+		};
+	}
+} )();
+	</script>
+
+</body></html>
